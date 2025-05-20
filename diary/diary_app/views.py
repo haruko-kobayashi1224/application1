@@ -1,3 +1,7 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 
-# Create your views here.
+def portforlio(request):
+    return render(
+        request, 'portforlio.html'              
+    )
