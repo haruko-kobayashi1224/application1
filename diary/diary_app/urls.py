@@ -4,5 +4,5 @@ from .import views
 app_name = 'diary_app'
 
 urlpatterns = [
-    path('', views.portforlio, name= 'portforlio'),
+    path('', views.portfolio, name= 'portfolio'),
 ]
