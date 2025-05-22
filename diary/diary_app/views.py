@@ -1,6 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-
+from .forms import UserForm
 def portfolio(request):
     return render(
         request, 'portfolio.html'              
@@ -8,5 +7,11 @@ def portfolio(request):
     
 def login(request):
     return render(
-        request, 'users/login.html'              
+        request, 'user/login.html'              
     )    
+    
+def regist(request):
+    user_form = UserForm(request.POST or None)
+    return render(request, 'user/registration.html', context={
+        'user_form': user_form,   
+    })
