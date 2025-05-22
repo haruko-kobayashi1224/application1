@@ -1,13 +1,28 @@
-<h1>作品No.1できたこと日記</h1>
+{% extends "base.html" %}
+{% block content %}
 
-<p>できたこと日記は、今日1日で達成したことやできたことを毎日書くことで、ユーザーが自信や人生の充実感を得ることができるアプリです。
-    このアプリを利用することで、ボタン式でその日にできたことを記録していくので、忙しい人でも毎日続けることができます。
-    更に、明日の目標を書くスペースがあるので、目標達成できると感じることもできます。1週間・1か月でできたことを振り返る機能もあるため、
-    自分の成長を実感できます。</p>
-    
-    <p>企画書</p> 
-    <p>画面設計図</p> 
-    <p>画面遷移図</p> 
-    <p>ER図</p>
+<div class="container text-center mt-5">
+    <h3 class="mb-4">作品No.1できたこと日記</h3>
+    <div class="row my-4">
+        <div class="col-md-4"><img src="#" class="img-fluid" alt="サンプル画像1"></div>
+        <div class="col-md-4"><img src="#" class="img-fluid" alt="サンプル画像2"></div>
+        <div class="col-md-4"><img src="#" class="img-fluid" alt="サンプル画像3"></div>
+    </div>
 
-    <a href="{% url 'diary_app:login' %}">このアプリにアクセス</a>
+        <p>できたこと日記は、今日1日で達成したことやできたことを毎日書くことで、ユーザーが自信や人生の充実感を得ることができるアプリです。</p>
+        <p>更に、明日の目標を書くスペースがあるので、目標達成できると感じることもできます。</p>
+        <p>1週間・1か月でできたことを振り返る機能もあるため、 自分の成長を実感できます。</p>
+        
+        
+        <h3 class="mb-3">資料リンク</h3>
+        <p>
+            <a href="#" target="_blank">企画書・画面設計図</a> | 
+            <a href="#" target="_blank">画面遷移図（PDF）</a> | 
+            <a href="#" target="_blank">ER図（PDF）</a>
+        </p>
+        
+        <a href="{% url 'diary_app:login' %}" class="btn btn-lg btn-primary mt-3">アプリにアクセス</a>
+</div>
+
+
+{% endblock %}
