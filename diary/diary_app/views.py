@@ -27,7 +27,7 @@ def regist(request):
               'user_form': user_form,   
            })
         user.set_password(password)
-        user.seve()
+        user.save()
         
     return render(request, 'user/registration.html', context={
         'user_form': user_form,   
