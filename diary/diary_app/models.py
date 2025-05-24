@@ -13,7 +13,7 @@ class TimeStampedModel(models.Model):
 class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     username = models.CharField(max_length=64)
     email =models.EmailField(max_length=128,unique=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     image_url = models.CharField(max_length=255, null=True, blank=True)
 
@@ -22,3 +22,15 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
     class Meta:
         db_table = 'users'
+        
+class UserActivateToken(models.Model):
+    token = models.UUIDField(db_index=True, unique=True) 
+    expired = models.DateTimeField()
+    user = models.OneToOneField(
+        'User',
+        on_delete=models.CASCADE,
+        related_name='user_activate_token',
+    )  
+    
+    class Meta:
+        db_table = 'user_activate_token'     

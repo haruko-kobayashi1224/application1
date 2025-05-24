@@ -32,4 +32,12 @@ class RegistForm(forms.ModelForm):
             validate_password(password, self.instance) 
         except ValidationError as e:
             self.add_error('password', e)
-            return cleaned_data  
+            return cleaned_data 
+    
+    def save(self, commit=False):
+        user =super().save(commit=False) 
+        user.set_password(self.cleaned_data['password'])
+        if commit:
+            user.save()
+        return user    
+                

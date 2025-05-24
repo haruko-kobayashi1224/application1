@@ -29,6 +29,8 @@ def regist(request):
             'regist_form': regist_form,   
         }
     )
+def activate_user(request, token):
+    pass    
     #     password =user_form.cleaned_data.get('password', '')
     #     try:
     #         validate_password(password)
@@ -39,6 +41,4 @@ def regist(request):
     # user_form = UserCreationForm(request.POST or None)  
     # if user_form.is_valid(): 
     #     user_form.save()
-    return render(request, 'user/registration.html', context={
-        'user_form': user_form,   
-    })
+   
