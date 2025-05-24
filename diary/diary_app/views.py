@@ -9,6 +9,11 @@ def portfolio(request):
         request, 'portfolio.html'              
     )
     
+def home(request):
+    return render(
+        request, 'home.html'
+    )    
+    
 def login(request):
     return render(
         request, 'user/login.html'              
