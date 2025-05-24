@@ -3,7 +3,7 @@
 <h1>登録画面</h1>
 <form method="POST">
     {% csrf_token %}
-    {{ user_form.as_p }}
-    <input type="submit" value"登録">
+    {{ regist_form.as_p }}
+    <input type="submit" value"ユーザー登録">
 </form>    
 {% endblock %}
