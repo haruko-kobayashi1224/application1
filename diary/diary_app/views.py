@@ -3,6 +3,8 @@ from . import forms
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
+from .models import UserActivateToken
+from django.contrib import messages
 
 def portfolio(request):
     return render(
@@ -30,7 +32,16 @@ def regist(request):
         }
     )
 def activate_user(request, token):
-    pass    
+    activate_form = forms.UserActivateForm(request.POST or None)
+    if activate_form.is_valid():
+        UserActivateToken.objects.activate_user_by_token(token) #ユーザーを有効化
+        messages.success(request,'ユーザーを有効化しました')
+    activate_form.initial['token'] = token
+    return render(
+        request, 'user/activate_user.html', context={
+            'activate_form': activate_form,
+        }
+    )  
     #     password =user_form.cleaned_data.get('password', '')
     #     try:
     #         validate_password(password)

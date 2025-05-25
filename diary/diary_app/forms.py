@@ -39,5 +39,9 @@ class RegistForm(forms.ModelForm):
         user.set_password(self.cleaned_data['password'])
         if commit:
             user.save()
-        return user    
+        return user  
+
+class UserActivateForm(forms.Form):
+    token = forms.CharField(widget=forms.HiddenInput())
+           
                 
