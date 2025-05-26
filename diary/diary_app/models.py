@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from uuid import uuid4
 from django.utils import timezone
 from datetime import timedelta
+from django.contrib.auth.models import UserManager
 
 
 class TimeStampedModel(models.Model):
@@ -22,6 +23,8 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     image_url = models.CharField(max_length=255, null=True, blank=True)
+
+    objects = UserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']

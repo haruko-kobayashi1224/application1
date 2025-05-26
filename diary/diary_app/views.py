@@ -5,6 +5,8 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 from .models import UserActivateToken
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required 
 
 def portfolio(request):
     return render(
@@ -16,10 +18,6 @@ def home(request):
         request, 'home.html'
     )    
     
-def login(request):
-    return render(
-        request, 'user/login.html'              
-    )    
     
 def regist(request):
     regist_form = forms.RegistForm(request.POST or None)
@@ -42,6 +40,26 @@ def activate_user(request, token):
             'activate_form': activate_form,
         }
     )  
+def user_login(request):
+    login_form = forms.LoginForm(request.POST or None)
+    if login_form.is_valid():
+        email = login_form['email']
+        password =login_form[ 'password']
+        user = authenticate(email=email, password=password)
+        if user:
+            login(request, user)
+            return redirect('diary_app:home')
+        else:
+            messages.warning(request, 'ログインに失敗しました')
+    return render(
+        request, 'user/user_login.html', context={
+            'login_form': login_form
+        }              
+    )    
+@login_required    
+def user_logout(request):    
+    logout(request)    
+    return redirect('diary_app:user_login')
     #     password =user_form.cleaned_data.get('password', '')
     #     try:
     #         validate_password(password)
