@@ -13,11 +13,6 @@ def portfolio(request):
         request, 'portfolio.html'              
     )
     
-def home(request):
-    return render(
-        request, 'home.html'
-    )    
-    
     
 def regist(request):
     regist_form = forms.RegistForm(request.POST or None)
@@ -71,4 +66,20 @@ def user_logout(request):
     # user_form = UserCreationForm(request.POST or None)  
     # if user_form.is_valid(): 
     #     user_form.save()
-   
+    
+def today_diary(request):
+    return render(
+        request, 'today_diary.html'
+    )   
+
+def reflection(request):
+    return render(
+        request, 'reflection.html'
+    )    
+    
+def my_page(request):
+    return render(
+        request, 'my_page.html'
+    )    
+             
+       
