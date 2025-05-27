@@ -4,9 +4,9 @@
         <meta charset="utf-8">
     </head>    
     <body>
-        <nav>
+        {% comment %} <nav>
             <a href="{% url 'diary_app:regist' %}">登録画面</a>
-        </nav>
+        </nav> {% endcomment %}
         <!-- <p> {{ user }}: {{ user.is_authenticated }}</p>-->
         <div> 
             {% block content %}

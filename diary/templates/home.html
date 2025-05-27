@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-ホーム画面です。
 {% if user.is_authenticated %}
-    <a class="navbar-brand" href="{% url 'diary_app:logout' %}">ログアウト</a>
-{% else %} 
-    <a class="navbar-brand" href="{% url 'diary_app:login' %}">ログイン</a>   
+    {% comment %} <a class="navbar-brand" href="{% url 'diary_app:login' %}">ログアウト</a> {% endcomment %}
+<p>ホーム画面です。</p>    
+{% comment %} {% else %} 
+    <a class="navbar-brand" href="{% url 'diary_app:login' %}">ログイン</a>   {% endcomment %}
+{% endif %}     
 {% endblock %}

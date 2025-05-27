@@ -1,8 +1,9 @@
-{% extends "base.html" %}
+{% extends "user/user_base.html" %}
 {% block content %}
+<p>ログイン画面</p>
 {% if messages %}
     {% for message in messages %}
-    <p>{{ message.message }}</p>
+        <p>{{ message.message }}</p>
     {% endfor %}
 {% endif %}
 <form method="POST">    
@@ -10,5 +11,7 @@
 {{ login_form.as_p }}
 <input type="submit" value="ログイン">
 </form>    
-<p>ログイン画面</p>
+<nav>
+     <a href="{% url 'diary_app:regist' %}">登録画面</a>
+</nav>
 {% endblock %}

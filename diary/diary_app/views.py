@@ -40,11 +40,12 @@ def activate_user(request, token):
             'activate_form': activate_form,
         }
     )  
+    
 def user_login(request):
     login_form = forms.LoginForm(request.POST or None)
     if login_form.is_valid():
-        email = login_form['email']
-        password =login_form[ 'password']
+        email = login_form.cleaned_data['email']
+        password =login_form.cleaned_data['password']
         user = authenticate(email=email, password=password)
         if user:
             login(request, user)
@@ -53,7 +54,7 @@ def user_login(request):
             messages.warning(request, 'ログインに失敗しました')
     return render(
         request, 'user/user_login.html', context={
-            'login_form': login_form
+            'login_form': login_form,
         }              
     )    
 @login_required    
