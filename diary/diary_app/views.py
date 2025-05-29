@@ -67,6 +67,11 @@ def user_logout(request):
     # if user_form.is_valid(): 
     #     user_form.save()
     
+def home(request):
+    return render(
+        request, 'home.html'
+    )   
+        
 def today_diary(request):
     return render(
         request, 'today_diary.html'
