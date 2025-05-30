@@ -1,4 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-<p>マイページ</P>
+<p>ログイン画面</p>
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message.message }}</p>
+    {% endfor %}
+{% endif %}
+<form method="POST" enctype="multipart/form-data">    
+{% csrf_token %}
+{{ my_page_form.as_p }}
+<input type="submit" value="更新">
+</form>    
+<a href="{% url 'diary_app:change_password' %}">パスワード変更</a>
 {% endblock %}

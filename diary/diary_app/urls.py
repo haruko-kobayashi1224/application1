@@ -13,4 +13,5 @@ urlpatterns = [
     path('today_diary/', views.today_diary, name='today_diary'),
     path('reflection/', views.reflection, name='reflection'),
     path('my_page/', views.my_page, name='my_page'),
+     path('change_password/', views.change_password, name='change_password'),
 ]

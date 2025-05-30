@@ -82,9 +82,35 @@ def reflection(request):
         request, 'reflection.html'
     )    
     
+# def my_page(request):
+#     return render(
+#         request, 'my_page.html'
+    # ) 
+@login_required
 def my_page(request):
+    my_page_form =forms.UserMyPageForm(
+        request.POST or None, request.FILES or None,instance=request.user
+    ) 
+    if my_page_form.is_valid():
+       my_page_form.save()
+       messages.success(request, '更新完了しました')
+    return render(request, 'my_page.html',context={
+        'my_page_form': my_page_form,
+    })     
+
+@login_required
+def change_password(request):
+    password_change_form = forms.PasswordChangeForm(
+        request.POST or None, instance=request.user
+        )
+    if password_change_form.is_valid():
+        password_change_form.save(commit=True)
+        messages.success(request, 'パスワードを更新しました')
     return render(
-        request, 'my_page.html'
+        request, 'diary_app/change_password.html',context={
+            'password_change_form': password_change_form
+        }
     )    
+        
              
        
