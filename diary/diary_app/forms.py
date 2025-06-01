@@ -50,8 +50,8 @@ class LoginForm(forms.Form):
 
 class UserMyPageForm(forms.ModelForm):
     
-    class Mea:
-        model= User
+    class Meta:
+        model = User
         fields = ('username', 'email', 'image_url')
         labels = {
             'usernama': '名前',

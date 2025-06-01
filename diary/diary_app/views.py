@@ -107,7 +107,7 @@ def change_password(request):
         password_change_form.save(commit=True)
         messages.success(request, 'パスワードを更新しました')
     return render(
-        request, 'diary_app/change_password.html',context={
+        request, 'change_password.html',context={
             'password_change_form': password_change_form
         }
     )    
