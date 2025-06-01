@@ -40,7 +40,7 @@ def user_login(request):
     login_form = forms.LoginForm(request.POST or None)
     if login_form.is_valid():
         email = login_form.cleaned_data['email']
-        password =login_form.cleaned_data['password']
+        password = login_form.cleaned_data['password']
         user = authenticate(email=email, password=password)
         if user:
             login(request, user)
@@ -103,14 +103,18 @@ def change_password(request):
     password_change_form = forms.PasswordChangeForm(
         request.POST or None, instance=request.user
         )
+    
     if password_change_form.is_valid():
         password_change_form.save(commit=True)
-        messages.success(request, 'パスワードを更新しました')
+        messages.success(request, 'パスワードを変更しました')
+        return redirect('diary_app:login') 
     return render(
-        request, 'change_password.html',context={
-            'password_change_form': password_change_form
-        }
+    request, 'change_password.html',context={
+        'password_change_form': password_change_form
+    }
     )    
+    
+    
         
              
        
