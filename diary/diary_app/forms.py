@@ -15,7 +15,7 @@ class RegistForm(forms.ModelForm):
         model = User
         fields = ('username', 'email', 'password')
         labels = {
-            'username': '名前',
+            'username':'名前',
             'email':'メールアドレス',
             'password':'パスワード',
         }
@@ -52,26 +52,26 @@ class UserMyPageForm(forms.ModelForm):
     
     class Meta:
         model = User
-        fields = ('username', 'email', 'image_url')
+        fields = ('user_image','username', 'email',)
         labels = {
-            'usernama': '名前',
-            'email' : 'メールアドレス',
-            'image_url': '写真',
+            #'user_image':'画像',
+            'username':'名前',
+            'email':'メールアドレス',
         }
-        required = {
-            'image_url': False,
-        }
+        #required = {
+        #     'user_image': False,
+        # }
 class PasswordChangeForm(forms.ModelForm):
     
     confirm_password = forms.CharField(
-        label='パスワード再設定', widget=forms.PasswordInput()
+        label='新しいパスワード再入力', widget=forms.PasswordInput()
     )
          
     class Meta:
         model = User
         fields = ('password',)
         labels ={
-            'password': 'パスワード',
+            'password': '新しいパスワード',
         }
         widgets = {
             'password': forms.PasswordInput()  

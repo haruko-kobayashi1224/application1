@@ -92,10 +92,10 @@ def my_page(request):
         request.POST or None, request.FILES or None,instance=request.user
     ) 
     if my_page_form.is_valid():
-       my_page_form.save()
-       messages.success(request, '更新完了しました')
+        my_page_form.save()
+        messages.success(request, '更新完了しました')
     return render(request, 'my_page.html',context={
-        'my_page_form': my_page_form,
+        'my_page_form': my_page_form, 
     })     
 
 @login_required

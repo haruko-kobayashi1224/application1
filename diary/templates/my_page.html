@@ -6,10 +6,14 @@
         <p>{{ message.message }}</p>
     {% endfor %}
 {% endif %}
-<form method="POST" enctype="multipart/form-data">    
-{% csrf_token %}
-{{ my_page_form.as_p }}
-<input type="submit" value="更新">
-</form>    
+    <form method="POST" enctype="multipart/form-data">    
+        {% csrf_token %}
+         {% if user %} 
+           <img src="{{ user.user_image.url }}">
+        {% endif %}
+        {{ my_page_form.as_p }}
+        <input type="submit" value="更新">
+    </form>   
 <a href="{% url 'diary_app:change_password' %}">パスワード変更</a>
+<a href="{% url 'diary_app:home' %}">ホーム画面に戻る</a>
 {% endblock %}

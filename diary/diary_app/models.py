@@ -22,7 +22,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     email =models.EmailField(max_length=128,unique=True)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    image_url = models.CharField(max_length=255, null=True, blank=True)
+    user_image = models.FileField(upload_to='media/',null=True, blank=True)
 
     objects = UserManager()
 
