@@ -1,9 +1,13 @@
 {% extends "base.html" %}
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<div class="container" mt-3>
 {% block content %}
 {% if user.is_authenticated %}
+
     {% comment %} <a class="navbar-brand" href="{% url 'diary_app:login' %}">ログアウト</a> {% endcomment %}
 <p>ホーム画面です。</p>    
 {% comment %} {% else %} 
     <a class="navbar-brand" href="{% url 'diary_app:login' %}">ログイン</a>   {% endcomment %}
 {% endif %}     
 {% endblock %}
+</div>
