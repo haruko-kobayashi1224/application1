@@ -13,6 +13,7 @@ class BaseCalendarMixin:
         week_names =deque(self.week_names)
         week_names.rotate(-self.first_weekday)
         return week_names   
+
 class MonthCalendarMixin(BaseCalendarMixin):
     
     def get_previous_month(self, date):

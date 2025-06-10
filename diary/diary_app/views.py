@@ -7,6 +7,8 @@ from .models import UserActivateToken
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required 
+from django.views import generic
+from . import mixins
 
 def portfolio(request):
     return render(
@@ -67,10 +69,7 @@ def user_logout(request):
     # if user_form.is_valid(): 
     #     user_form.save()
     
-def home(request):
-    return render(
-        request, 'home.html'
-    )   
+
         
 def today_diary(request):
     return render(
@@ -114,6 +113,19 @@ def change_password(request):
     }
     )    
     
+class MonthCalendar(mixins.MonthCalendarMixin, generic.TemplateView):
+    template_name ='home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        calendar_context = self.get_month_calendar()
+        context.update(calendar_context)
+        return context
+
+def home(request):
+    return render(
+        request, 'home.html' 
+    )       
     
         
              
