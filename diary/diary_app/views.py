@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required 
 from django.views import generic
 from . import mixins
-import datetime
+from datetime import date
 
 
 def portfolio(request):
@@ -48,7 +48,7 @@ def user_login(request):
         user = authenticate(email=email, password=password)
         if user:
             login(request, user)
-            today = datetime.date.today()
+            today = date.today()
             return redirect('diary_app:month', year=today.year, month=today.month )
         else:
             messages.warning(request, 'ログインに失敗しました')
@@ -75,14 +75,21 @@ def user_logout(request):
 
         
 def today_diary(request):
+    today = date.today()
     return render(
-        request, 'today_diary.html'
+        request, 'today_diary.html', context={
+            'today':date.today(), 
+        }
     )   
 
 def reflection(request):
+    today = date.today()
     return render(
-        request, 'reflection.html'
-    )    
+        request, 'reflection.html',context={
+            'today':date.today(), 
+        }
+    )   
+
     
 # def my_page(request):
 #     return render(
@@ -90,6 +97,7 @@ def reflection(request):
     # ) 
 @login_required
 def my_page(request):
+    today = date.today()
     my_page_form =forms.UserMyPageForm(
         request.POST or None, request.FILES or None,instance=request.user
     ) 
@@ -98,23 +106,24 @@ def my_page(request):
         messages.success(request, '更新完了しました')
     return render(request, 'my_page.html',context={
         'my_page_form': my_page_form, 
+        'today':date.today(), 
     })     
 
 @login_required
 def change_password(request):
+    today = date.today()
     password_change_form = forms.PasswordChangeForm(
         request.POST or None, instance=request.user
-        )
+    )
     
     if password_change_form.is_valid():
         password_change_form.save(commit=True)
         messages.success(request, 'パスワードを変更しました')
         return redirect('diary_app:login') 
-    return render(
-    request, 'change_password.html',context={
-        'password_change_form': password_change_form
-    }
-    )    
+    return render(request, 'change_password.html',context={
+        'password_change_form': password_change_form,
+        'today':date.today(), 
+    })    
    
 class MonthCalendar(mixins.MonthCalendarMixin, generic.TemplateView):
     template_name ='home.html'
@@ -123,7 +132,7 @@ class MonthCalendar(mixins.MonthCalendarMixin, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         calendar_context = self.get_month_calendar()
         context.update(calendar_context)
-        context['today'] = datetime.date.today() 
+        context['today'] = date.today() 
         return context
 
 # def home(request):
