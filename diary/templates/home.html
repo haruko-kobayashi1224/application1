@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<div class="container" mt-3>
 {% block content %}
 {% if user.is_authenticated %}
+<div class="container" mt-3>
 
     {% comment %} <a class="navbar-brand" href="{% url 'diary_app:login' %}">ログアウト</a> {% endcomment %}
 <p>ホーム画面です。</p>    
-    <a href="{% url 'app:monoth' month_previous.year monoth_previous.month %}">前月</a>
+    <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}">前月</a>
     {{ month_current | date:"Y年m月"}}
-    <a href="{% url 'app:month' month_next.year month_next.month %}">次月</a>
+    <a href="{% url 'diary_app:month' month_next.year month_next.month %}">次月</a>
 
      <table class="table">
         <thead>

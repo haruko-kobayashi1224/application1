@@ -7,7 +7,7 @@ class BaseCalendarMixin:
     week_names =['月', '火', '水', '木', '金', '土', '日']
     
     def setup_calendar(self):
-       self._calendar = calendar.Calender(self.first_weekday) 
+       self._calendar = calendar.Calendar(self.first_weekday) 
     
     def get_week_names(self):
         week_names =deque(self.week_names)
@@ -43,12 +43,12 @@ class MonthCalendarMixin(BaseCalendarMixin):
     def get_month_calendar(self):
         self.setup_calendar()
         current_month =self.get_current_month()
-        calendar_date = {
+        calendar_data = {
             'now': datetime.date.today(),
             'month_days': self.get_month_days(current_month),
             'month_current': current_month,
             'month_previous': self.get_previous_month(current_month),
             'month_next': self.get_next_month(current_month),
-            'weel_names' :self.get_week_names(),
+            'week_names' :self.get_week_names(),
         }
-                    
+        return calendar_data          

@@ -9,6 +9,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required 
 from django.views import generic
 from . import mixins
+import datetime
+
 
 def portfolio(request):
     return render(
@@ -46,7 +48,8 @@ def user_login(request):
         user = authenticate(email=email, password=password)
         if user:
             login(request, user)
-            return redirect('diary_app:home')
+            today = datetime.date.today()
+            return redirect('diary_app:month', year=today.year, month=today.month )
         else:
             messages.warning(request, 'ログインに失敗しました')
     return render(
@@ -112,7 +115,7 @@ def change_password(request):
         'password_change_form': password_change_form
     }
     )    
-    
+   
 class MonthCalendar(mixins.MonthCalendarMixin, generic.TemplateView):
     template_name ='home.html'
 
@@ -120,12 +123,13 @@ class MonthCalendar(mixins.MonthCalendarMixin, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         calendar_context = self.get_month_calendar()
         context.update(calendar_context)
+        context['today'] = datetime.date.today() 
         return context
 
-def home(request):
-    return render(
-        request, 'home.html' 
-    )       
+# def home(request):
+#     return render(
+#         request, 'home.html' 
+#     )       
     
         
              
