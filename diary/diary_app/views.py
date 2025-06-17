@@ -139,7 +139,17 @@ class MonthCalendar(mixins.MonthCalendarMixin, generic.TemplateView):
 #     return render(
 #         request, 'home.html' 
 #     )       
-    
-        
-             
-       
+#できたことを入力する 
+@login_required   
+def today_input(request):        
+    if today_input_form.is_valid():
+        today_input_form.instance.user =request.user         
+        create_theme_form.save() 
+        messages.success(request, '今日の日記を作成しました')
+        return redirect('diary_app:month') 
+    return render(
+        request, 'today_input.html', context={
+            'today_input_form':today_input_form,
+            
+        }
+    )   

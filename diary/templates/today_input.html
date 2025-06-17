@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>今日できたこと</h3>
+<form method="POST">    
+{% csrf_token %}
+{{ today_input_form.as_p }}
+<input type="submit" value="作成">
+</form>    
+<a href="{% url 'diary_app:month' year=today.year month=today.month %}">ホーム画面に戻る</a>    
+{% endblock %}
