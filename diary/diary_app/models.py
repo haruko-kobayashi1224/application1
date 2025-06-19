@@ -76,4 +76,17 @@ def publish_token(sender, instance, created, **kwargs):
     user_activate_token =UserActivateToken.objects.create_or_update_token(instance)
     print(
         f'http://127.0.0.1:8000/diary_app/activate_user/{user_activate_token.token}'
-    )          
+    )     
+
+class Diary(models.Model):
+    tomottow_goal = models.CharField(max_length=50)
+    user = models.ForeignKey(
+        User,on_delete=models.CASCADE,
+    )  
+    week_reflection = models.ForeignKey(
+        User,on_delete=models.CASCADE,
+    )  
+    
+    class Meta:
+        db_table = 'diaries'
+            

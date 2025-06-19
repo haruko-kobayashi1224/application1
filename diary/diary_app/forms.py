@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from .models import Diary
 
 User = get_user_model()
 
@@ -94,4 +95,12 @@ class PasswordChangeForm(forms.ModelForm):
         if commit:
             user.save()
         return user  
-                
+
+class TodayInputForm(forms.ModelForm):
+        
+   class meta:
+       model = Diary
+       fielsds =('title',) 
+       labels = {
+           'title': 'タイトル',
+       }            
