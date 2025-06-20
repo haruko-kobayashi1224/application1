@@ -78,15 +78,62 @@ def publish_token(sender, instance, created, **kwargs):
         f'http://127.0.0.1:8000/diary_app/activate_user/{user_activate_token.token}'
     )     
 
-class Diary(models.Model):
+
+
+
+class Diary(models.Model,TimeStampedModel):
     tomottow_goal = models.CharField(max_length=50)
     user = models.ForeignKey(
         User,on_delete=models.CASCADE,
     )  
     week_reflection = models.ForeignKey(
-        User,on_delete=models.CASCADE,
+        WeekReflection,on_delete=models.CASCADE,
     )  
     
     class Meta:
         db_table = 'diaries'
+
+class DiarySuccess(models.Model,TimeStampedModel):
+    success = models.CharField(max_length=50)
+    diary = models.ForeignKey(
+        Diary,on_delete=models.CASCADE,
+    )    
+    
+    class Meta:
+        db_table = 'diary_successes'
+        
+class MonthReflection(models.Model,TimeStampedModel):
+    year_number = models.CharField(max_length=50)
+    month_number = models.CharField(max_length=50)
+    common_ground = models.CharField(max_length=50)
+    my_values = models.CharField(max_length=50)
+    awareness = models.CharField(max_length=50)
+    user = models.ForeignKey(
+        User,on_delete=models.CASCADE,
+    )     
+    
+    class Meta:
+        db_table = 'month_reflections' 
+        
+class WeekReflection(models.Model,TimeStampedModel):
+    week_number = models.CharField(max_length=50)
+    highlight = models.CharField(max_length=50)
+    reason = models.CharField(max_length=50)
+    next_plan = models.CharField(max_length=50)
+    diary = models.ForeignKey(
+        Diary,on_delete=models.CASCADE,
+    )   
+    user = models.ForeignKey(
+        User,on_delete=models.CASCADE,
+    )   
+    month_reflection = models.ForeignKey(
+        MonthReflection,on_delete=models.CASCADE,
+    )    
+    
+    class Meta:
+        db_table = 'week_reflections'        
+        
+        
+
+             
             
