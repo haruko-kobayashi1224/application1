@@ -42,8 +42,8 @@ class RegistForm(forms.ModelForm):
             user.save()
         return user  
 
-class UserActivateForm(forms.Form):
-    token = forms.CharField(widget=forms.HiddenInput())
+# class UserActivateForm(forms.Form):
+#     token = forms.CharField(widget=forms.HiddenInput())
            
 class LoginForm(forms.Form):
     email = forms.EmailField(label="メールアドレス")
@@ -96,11 +96,38 @@ class PasswordChangeForm(forms.ModelForm):
             user.save()
         return user  
 
-class TodayInputForm(forms.ModelForm):
+# class TodayInputForm(forms.ModelForm):
         
-   class meta:
+#    class Meta:
+#        model = Diary
+#        fields =('tomottow_goal',) 
+#        labels = {
+#           'tomottow_goal': '明日の目標',
+#        }    
+       
+class TodayInputForm(forms.ModelForm): # あなたのフォームクラス名を適切なものに置き換えてください
+    diary_choices = [
+        ('breakfast', '朝食が食べられた'),
+        ('washing', '洗濯ができた'),
+        ('throw_away', 'ごみを捨てられた'),
+        ('sleep_more_than_six_hours', '6時間以上寝られた'),
+        ('cooking', '自炊をした'),
+        # 他の選択肢があればここに追加
+    ]
+
+    今日できたこと = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        choices=diary_choices,
+    )        
+    
+    class Meta:
        model = Diary
-       fielsds =('title',) 
+       fields =('tomorrow_goal',) 
+       widgets = {
+          'tomorrow_goal' : forms.Textarea(
+              attrs={ 'rows': 5, 'cols':60},
+          )
+       }
        labels = {
-           'title': 'タイトル',
-       }            
+          'tomorrow_goal': '',
+       }        

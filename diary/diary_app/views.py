@@ -3,7 +3,7 @@ from . import forms
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
-from .models import UserActivateToken
+# from .models import UserActivateToken
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required 
@@ -20,25 +20,26 @@ def portfolio(request):
     
 def regist(request):
     regist_form = forms.RegistForm(request.POST or None)
+    today = date.today()
     if regist_form.is_valid():
        regist_form.save(commit=True)
-       return redirect('diary_app:home')
+       return redirect('diary_app:month', year=today.year, month=today.month )
     return render(
         request, 'user/registration.html', context={
             'regist_form': regist_form,   
         }
     )
-def activate_user(request, token):
-    activate_form = forms.UserActivateForm(request.POST or None)
-    if activate_form.is_valid():
-        UserActivateToken.objects.activate_user_by_token(token) #ユーザーを有効化
-        messages.success(request,'ユーザーを有効化しました')
-    activate_form.initial['token'] = token
-    return render(
-        request, 'user/activate_user.html', context={
-            'activate_form': activate_form,
-        }
-    )  
+# def activate_user(request, token):
+#     activate_form = forms.UserActivateForm(request.POST or None)
+#     if activate_form.is_valid():
+#         UserActivateToken.objects.activate_user_by_token(token) #ユーザーを有効化
+#         messages.success(request,'ユーザーを有効化しました')
+#     activate_form.initial['token'] = token
+#     return render(
+#         request, 'user/activate_user.html', context={
+#             'activate_form': activate_form,
+#         }
+#     )  
     
 def user_login(request):
     login_form = forms.LoginForm(request.POST or None)
@@ -73,14 +74,13 @@ def user_logout(request):
     #     user_form.save()
     
 
-        
 def today_diary(request):
     today = date.today()
     return render(
-        request, 'today_diary.html', context={
+        request, 'today_diary.html',context={
             'today':date.today(), 
         }
-    )   
+    )          
 
 def reflection(request):
     today = date.today()
@@ -141,16 +141,20 @@ class MonthCalendar(mixins.MonthCalendarMixin, generic.TemplateView):
 #     )       
 #できたことを入力する 
 @login_required   
-def today_input(request):
+def today_input(request, year, month, day):
+    today_input_form = date(year, month, day)
     today_input_form = forms.TodayInputForm(request.POST or None)       
     if today_input_form.is_valid():
         today_input_form.instance.user =request.user         
         today_input_form.save() 
         messages.success(request, '今日の日記を作成しました')
-        return redirect('diary_app:month') 
+        return redirect('diary_app:month', year=year, month=month) 
     return render(
         request, 'today_input.html', context={
             'today_input_form':today_input_form,
-            
+            'year' : year,
+            'month': month,
+            'day':day,
+            'today':date.today(), 
         }
     )   

@@ -20,9 +20,11 @@ class TimeStampedModel(models.Model):
 class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     username = models.CharField(max_length=64)
     email =models.EmailField(max_length=128,unique=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    user_image = models.FileField(upload_to='media/',null=True, blank=True)
+    user_image = models.FileField(upload_to='media/',null=True, blank=True)   
+     
+
 
     objects = UserManager()
 
@@ -32,106 +34,105 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     class Meta:
         db_table = 'users'
 
-class UserActivateTokenManager(models.Manager):
+# class UserActivateTokenManager(models.Manager):
     
-    def activate_user_by_token(self, token):
-        user_activate_token =self.filter(
-            token=token,
-            expired_at__gte=timezone.now()
-        ).first()
-        if not user_activate_token:
-            raise ValueError('トークンが存在しません')
+#     def activate_user_by_token(self, token):
+#         user_activate_token =self.filter(
+#             token=token,
+#             expired_at__gte=timezone.now()
+#         ).first()
+#         if not user_activate_token:
+#             raise ValueError('トークンが存在しません')
         
-        user = user_activate_token.user
-        user.is_active = True
-        user.save()
-        return user
+#         user = user_activate_token.user
+#         user.is_active = True
+#         user.save()
+#         return user
         
         
-    def create_or_update_token(self, user):  
-        token =str(uuid4()) #トークンの発行      
-        expired_at = timezone.now() + timedelta(days=1) #トークンの期限（1日後）
-        user_token, created = self.update_or_create(
-            user=user,
-            defaults={'token': token, 'expired_at': expired_at,}
-        )
-        return user_token
+#     def create_or_update_token(self, user):  
+#         token =str(uuid4()) #トークンの発行      
+#         expired_at = timezone.now() + timedelta(days=1) #トークンの期限（1日後）
+#         user_token, created = self.update_or_create(
+#             user=user,
+#             defaults={'token': token, 'expired_at': expired_at,}
+#         )
+#         return user_token
         
-class UserActivateToken(models.Model):
-    token = models.UUIDField(db_index=True, unique=True) 
-    expired_at = models.DateTimeField()
-    user = models.OneToOneField(
-        'User',
-        on_delete=models.CASCADE,
-        related_name='user_activate_token',
-    )  
+# class UserActivateToken(models.Model):
+#     token = models.UUIDField(db_index=True, unique=True) 
+#     expired_at = models.DateTimeField()
+#     user = models.OneToOneField(
+#         'User',
+#         on_delete=models.CASCADE,
+#         related_name='user_activate_token',
+#     )  
     
-    objects: UserActivateTokenManager = UserActivateTokenManager()
+#     objects: UserActivateTokenManager = UserActivateTokenManager()
     
-    class Meta:
-        db_table = 'user_activate_token'   
+#     class Meta:
+#         db_table = 'user_activate_token'   
 
-@receiver(post_save, sender=User)
-def publish_token(sender, instance, created, **kwargs):        
-    user_activate_token =UserActivateToken.objects.create_or_update_token(instance)
-    print(
-        f'http://127.0.0.1:8000/diary_app/activate_user/{user_activate_token.token}'
-    )     
-
-
+# @receiver(post_save, sender=User)
+# def publish_token(sender, instance, created, **kwargs):        
+#     user_activate_token =UserActivateToken.objects.create_or_update_token(instance)
+#     print(
+#         f'http://127.0.0.1:8000/diary_app/activate_user/{user_activate_token.token}'
+#     )     
 
 
-class Diary(models.Model,TimeStampedModel):
-    tomottow_goal = models.CharField(max_length=50)
+
+class Diary(TimeStampedModel):
+    tomorrow_goal = models.CharField(max_length=50)  
     user = models.ForeignKey(
-        User,on_delete=models.CASCADE,
-    )  
+        'User',on_delete=models.CASCADE,
+    ) 
     week_reflection = models.ForeignKey(
-        WeekReflection,on_delete=models.CASCADE,
-    )  
-    
+        'WeekReflection',on_delete=models.CASCADE,
+        related_name='week_reflections'
+    ) 
     class Meta:
         db_table = 'diaries'
 
-class DiarySuccess(models.Model,TimeStampedModel):
-    success = models.CharField(max_length=50)
+class DiarySuccess(TimeStampedModel):
+    success = models.CharField(max_length=50) 
     diary = models.ForeignKey(
-        Diary,on_delete=models.CASCADE,
-    )    
+        'Diary',on_delete=models.CASCADE,
+    ) 
     
     class Meta:
         db_table = 'diary_successes'
+
+class WeekReflection(TimeStampedModel):
+    week_number = models.IntegerField()
+    highlight = models.CharField(max_length=50)
+    reason = models.CharField(max_length=50)
+    next_plan = models.CharField(max_length=50)   
+    user = models.ForeignKey(
+        'User',on_delete=models.CASCADE,   
+    )  
+    month_reflection = models.ForeignKey(
+        'MonthReflection',on_delete=models.CASCADE,
+        related_name='month_reflections'
+    ) 
+   
+    class Meta:
+        db_table = 'week_reflections'         
         
-class MonthReflection(models.Model,TimeStampedModel):
-    year_number = models.CharField(max_length=50)
-    month_number = models.CharField(max_length=50)
+class MonthReflection(TimeStampedModel):
+    year_number = models.IntegerField()
+    month_number = models.IntegerField()
     common_ground = models.CharField(max_length=50)
     my_values = models.CharField(max_length=50)
-    awareness = models.CharField(max_length=50)
+    awareness = models.CharField(max_length=50)   
     user = models.ForeignKey(
-        User,on_delete=models.CASCADE,
-    )     
+        'User',on_delete=models.CASCADE,
+    ) 
     
     class Meta:
         db_table = 'month_reflections' 
         
-class WeekReflection(models.Model,TimeStampedModel):
-    week_number = models.CharField(max_length=50)
-    highlight = models.CharField(max_length=50)
-    reason = models.CharField(max_length=50)
-    next_plan = models.CharField(max_length=50)
-    diary = models.ForeignKey(
-        Diary,on_delete=models.CASCADE,
-    )   
-    user = models.ForeignKey(
-        User,on_delete=models.CASCADE,
-    )   
-    month_reflection = models.ForeignKey(
-        MonthReflection,on_delete=models.CASCADE,
-    )    
-    
-    class Meta:
-        db_table = 'week_reflections'        
+       
         
         
 

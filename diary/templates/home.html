@@ -33,13 +33,13 @@
                             {% else %}
                         <td>
                     {% endif %}
-                    
-                {% if month_current.month != day.month %}
-                    {{ day | date:"m/d" }}
-                {% else %}
-                    {{ day.day }}
-                {% endif %}
-                
+                    <a href="{% url 'diary_app:today_input' year=day.year month=day.month day=day.day %}">
+                        {% if month_current.month != day.month %}
+                            {{ day | date:"m/d" }}
+                        {% else %}
+                            {{ day.day }}   
+                    {% endif %}
+                    </a>                 
                 </td>
                 {% endfor %}
             </tr>

@@ -1,9 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
 <h3>今日できたこと</h3>
+<h2>{{ year }}年{{ month }}月{{ day }}日</h2>
 <form method="POST">    
 {% csrf_token %}
-{{ today_input_form.as_p }}
+<h3>今日できたこと</h3>
+{{ today_input_form.今日できたこと.label_tag }} 
+{{ today_input_form.今日できたこと }}
+<button name="btn_add" type="submit">追加する </button>
+
+<h3>明日の目標</h3>
+{{ today_input_form.tomorrow_goal.label_tag }}
+{{ today_input_form.tomorrow_goal }}
+
+
 <input type="submit" value="作成">
 </form>    
 <a href="{% url 'diary_app:month' year=today.year month=today.month %}">ホーム画面に戻る</a>    

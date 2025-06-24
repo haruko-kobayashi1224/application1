@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container  text-center">
-        <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}">前月</a>
+        {% comment %} <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}">前月</a>
         {{ month_current | date:"Y年m月"}}
-        <a href="{% url 'diary_app:month' month_next.year month_next.month %}">次月</a>
+        <a href="{% url 'diary_app:month' month_next.year month_next.month %}">次月</a> {% endcomment %}
 </div>
 <p>今日できたこと</P>
 <a href="{% url 'diary_app:month' year=today.year month=today.month %}">ホーム画面に戻る</a>    
