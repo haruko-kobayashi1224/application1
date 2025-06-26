@@ -10,6 +10,10 @@ from django.contrib.auth.decorators import login_required
 from django.views import generic
 from . import mixins
 from datetime import date
+from django.forms import formset_factory
+from .models import DiarySuccess
+from .forms import RegistForm, LoginForm, UserMyPageForm, PasswordChangeForm, OtherSuccessForm, TodayInputForm
+
 
 
 def portfolio(request):
@@ -19,7 +23,7 @@ def portfolio(request):
     
     
 def regist(request):
-    regist_form = forms.RegistForm(request.POST or None)
+    regist_form = RegistForm(request.POST or None)
     today = date.today()
     if regist_form.is_valid():
        regist_form.save(commit=True)
@@ -42,7 +46,7 @@ def regist(request):
 #     )  
     
 def user_login(request):
-    login_form = forms.LoginForm(request.POST or None)
+    login_form = LoginForm(request.POST or None)
     if login_form.is_valid():
         email = login_form.cleaned_data['email']
         password = login_form.cleaned_data['password']
@@ -98,7 +102,7 @@ def reflection(request):
 @login_required
 def my_page(request):
     today = date.today()
-    my_page_form =forms.UserMyPageForm(
+    my_page_form =UserMyPageForm(
         request.POST or None, request.FILES or None,instance=request.user
     ) 
     if my_page_form.is_valid():
@@ -112,7 +116,7 @@ def my_page(request):
 @login_required
 def change_password(request):
     today = date.today()
-    password_change_form = forms.PasswordChangeForm(
+    password_change_form = PasswordChangeForm(
         request.POST or None, instance=request.user
     )
     
@@ -142,13 +146,33 @@ class MonthCalendar(mixins.MonthCalendarMixin, generic.TemplateView):
 #できたことを入力する 
 @login_required   
 def today_input(request, year, month, day):
-    today_input_form = date(year, month, day)
-    today_input_form = forms.TodayInputForm(request.POST or None)       
-    if today_input_form.is_valid():
-        today_input_form.instance.user =request.user         
-        today_input_form.save() 
+    # selected_date = date(year, month, day)
+    OtherSuccessFormSet = formset_factory(OtherSuccessForm, can_delete=True)
+   
+    if request.method == 'POST':
+        today_input_form = TodayInputForm(request.POST)
+        formset = OtherSuccessFormSet(request.POST)   
+
+        if today_input_form.is_valid() and formset.is_valid():
+            diary = today_input_form.save(commit=False)
+            diary.user = request.user
+            # form.instance.date = selected_date
+            diary.save()  
+            
+        for success in today_input_form.cleaned_data['successes']:
+                DiarySuccess.objects.create(success=success, diary=diary) 
+        
+        # for f in formset.cleaned_data:
+        #         if f and f.get('other_success'):
+        #             DiarySuccess.objects.create(success=f['other_success'], diary=diary)
+                    
         messages.success(request, '今日の日記を作成しました')
-        return redirect('diary_app:month', year=year, month=month) 
+        return redirect('diary_app:month', year=year, month=month)        
+    
+    else:
+        today_input_form = TodayInputForm()
+        formset = OtherSuccessFormSet()
+        
     return render(
         request, 'today_input.html', context={
             'today_input_form':today_input_form,
@@ -156,5 +180,6 @@ def today_input(request, year, month, day):
             'month': month,
             'day':day,
             'today':date.today(), 
+            'formset':formset,
         }
     )   

@@ -114,20 +114,39 @@ class TodayInputForm(forms.ModelForm): # あなたのフォームクラス名を
         ('cooking', '自炊をした'),
         # 他の選択肢があればここに追加
     ]
-
-    今日できたこと = forms.MultipleChoiceField(
+    
+    successes = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,
         choices=diary_choices,
-    )        
+        required=False,
+        label='今日できたこと'
+    )
     
+
+        
+    # 今日できたこと = forms.MultipleChoiceField(
+    #     widget=forms.CheckboxSelectMultiple,
+    #     choices=diary_choices,
+    # )        
     class Meta:
-       model = Diary
-       fields =('tomorrow_goal',) 
-       widgets = {
-          'tomorrow_goal' : forms.Textarea(
-              attrs={ 'rows': 5, 'cols':60},
-          )
-       }
-       labels = {
-          'tomorrow_goal': '',
-       }        
+        model = Diary
+        fields =('tomorrow_goal',) 
+        widgets = {
+           'tomorrow_goal' : forms.Textarea(
+               attrs={ 'rows': 5, 'cols':60},
+           )
+        }
+        labels = {
+           'tomorrow_goal': '',
+        }          
+class OtherSuccessForm(forms.Form):
+    other_success =forms.CharField(
+        required=False,
+        label='その他',
+        widget=forms.TextInput(attrs={'placeholder': 'その他にできたことを書いてください'})
+    )
+
+
+
+    
+      

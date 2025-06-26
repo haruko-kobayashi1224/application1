@@ -1,6 +1,8 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 <p>マイページ</p>
+<div class="container  text-center">
 {% if messages %}
     {% for message in messages %}
         <p>{{ message.message }}</p>
@@ -8,12 +10,15 @@
 {% endif %}
     <form method="POST" enctype="multipart/form-data">    
         {% csrf_token %}
-         {% if user %} 
-           <img src="{{ user.user_image.url }}">
+         {% if user.user_image and user.user_image.name %} 
+           <img src="{{ user.user_image.url }}" width="80px">
+         {% else %}
+           <img src="{% static 'images/noimage.png' %}" alt="画像未設定">  
         {% endif %}
         {{ my_page_form.as_p }}
         <input type="submit" value="更新">
-    </form>   
+    </form> 
+</div>      
 <a href="{% url 'diary_app:change_password' %}">パスワード変更</a>
 <a href="{% url 'diary_app:month' year=today.year month=today.month %}">ホーム画面に戻る</a>
 {% endblock %}

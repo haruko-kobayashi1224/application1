@@ -87,10 +87,10 @@ class Diary(TimeStampedModel):
     user = models.ForeignKey(
         'User',on_delete=models.CASCADE,
     ) 
-    week_reflection = models.ForeignKey(
-        'WeekReflection',on_delete=models.CASCADE,
-        related_name='week_reflections'
-    ) 
+    # week_reflection = models.ForeignKey(
+    #     'WeekReflection',on_delete=models.CASCADE,
+    #     related_name='week_reflections'
+    # ) 
     class Meta:
         db_table = 'diaries'
 
