@@ -11,9 +11,9 @@
 
     {% comment %} <a class="navbar-brand" href="{% url 'diary_app:login' %}">ログアウト</a> {% endcomment %}
     <div class="container  text-center">
-        <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}">前月</a>
+       <h3> <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}">前月</a>
         {{ month_current | date:"Y年m月"}}
-        <a href="{% url 'diary_app:month' month_next.year month_next.month %}">次月</a>
+        <a href="{% url 'diary_app:month' month_next.year month_next.month %}">次月</a></h3>
     </div>
 
     <table class="table">
