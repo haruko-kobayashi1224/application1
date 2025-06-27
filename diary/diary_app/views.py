@@ -12,7 +12,7 @@ from . import mixins
 from datetime import date
 from django.forms import formset_factory
 from .models import DiarySuccess
-from .forms import RegistForm, LoginForm, UserMyPageForm, PasswordChangeForm, OtherSuccessForm, TodayInputForm
+from .forms import RegistForm, LoginForm, UserMyPageForm, PasswordChangeForm, OtherSuccessFormSet, TodayInputForm
 
 
 
@@ -147,8 +147,6 @@ class MonthCalendar(mixins.MonthCalendarMixin, generic.TemplateView):
 @login_required   
 def today_input(request, year, month, day):
     # selected_date = date(year, month, day)
-    OtherSuccessFormSet = formset_factory(OtherSuccessForm, can_delete=True)
-   
     if request.method == 'POST':
         today_input_form = TodayInputForm(request.POST)
         formset = OtherSuccessFormSet(request.POST)   
