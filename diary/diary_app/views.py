@@ -96,10 +96,31 @@ class DiaryInspectionListView(ListView):
         selected_date = date(year, month, day)
         start_datetime = datetime.combine(selected_date, datetime.min.time())
         end_datetime = datetime.combine(selected_date, datetime.max.time())
-
-        return Diary.objects.filter(
-            created_at__range=(start_datetime, end_datetime)
+        
+        success_map = {
+        'breakfast': '朝食が食べられた',
+        'washing': '洗濯ができた',
+        'throw_away': 'ごみを捨てられた',
+        'sleep_more_than_six_hours': '6時間以上寝られた',
+        'cooking': '自炊をした',
+        }
+        diaries = Diary.objects.filter(
+        created_at__range=(start_datetime, end_datetime)
         ).order_by('-created_at')
+
+        
+        for diary in diaries:
+            success_list = []
+            for s in diary.diarysuccess_set.all():
+                    s.label = success_map.get(s.success, s.success)
+                    success_list.append(s)
+            diary.success_list = success_list
+
+        return diaries
+
+        # return Diary.objects.filter(
+        #     created_at__range=(start_datetime, end_datetime)
+        # ).order_by('-created_at')
         
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

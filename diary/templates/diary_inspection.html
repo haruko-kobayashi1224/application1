@@ -12,25 +12,34 @@
 </div> 
     
 </div>
-<p>今日できたこと</P>
-
-       
-
-    <tbody>
-        {% for diary in diaries %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-              {% for success in  diary.diarysuccess_set.all %}
-                  <td>{{ success_label_map[success.success] }}</td>
-          {% comment %} <td>{{ inspection.diary.user.username }}</td> {% endcomment %}
-              {% endfor %}
-<p>明日の目標</p>      
-         <td>{{ diary.tomorrow_goal }}</td>      
-        </tr> 
+<h4>今日できたこと</h4>
+<table>
+  <tbody>
+    {% if diaries %}
+      {% for diary in diaries %}
+        {% for success in diary.success_list %}
+          <tr>
+            {% comment %} <td>{{ forloop.parentloop.counter }}</td> {% endcomment %}
+            <td>{{ success.label }}</td>
+          </tr>
         {% endfor %}
-    </tbody>  
-    {% comment %} <a class="navbar-brand" href="{% url 'editing' %}">編集する</a>         {% endcomment %}
+      {% endfor %}
+    {% else %}
+      <tr><td colspan="2">今日の記録はまだありません。</td></tr>
+    {% endif %}
+  </tbody>
+</table>
 
-<a href="{% url 'diary_app:month' year=today.year month=today.month %}">ホーム画面に戻る</a>    
+<h4>明日の目標</h4>
+<ul>
+  {% if diaries %}
+    {% for diary in diaries %}
+      <li>{{ diary.tomorrow_goal }}</li>
+    {% endfor %}
+  {% else %}
+    <li>まだ登録されていません</li>
+  {% endif %}
+</ul>
+
+<a href="{% url 'diary_app:month' year=today.year month=today.month %}">ホーム画面に戻る</a>
 {% endblock %}
-
