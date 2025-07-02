@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import(
-    AbstractBaseUser, PermissionsMixin
+    BaseUserManager,AbstractBaseUser, PermissionsMixin
 )
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -16,20 +16,40 @@ class TimeStampedModel(models.Model):
 
     class Meta:
         abstract = True 
+        
+class UserManager(BaseUserManager):
+    def create_user(self, email, username, password=None, **extra_fields):
+        if not email:
+            raise ValueError('メールアドレスは必須です')  
+        if not username:
+            raise ValueError('ユーザー名は必須です')
+        email = self.normalize_email(email)
+        user = self.model(email=email, username=username, **extra_fields) 
+        user.set_password(password)  
+        user.save()
+        return user
+    
+    def create_superuser(self, email, username, password=None, **extra_fields):  
+         extra_fields['is_staff'] = True
+         extra_fields['is_active'] = True
+         extra_fields['is_superuser'] = True
+         return self.create_user(email, username, password, **extra_fields)
+         
 
 class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     username = models.CharField(max_length=64)
     email =models.EmailField(max_length=128,unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    user_image = models.FileField(upload_to='media/',null=True, blank=True)   
+    user_image = models.FileField(upload_to='user_images',null=True, blank=True)   
      
-
-
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+    
+    def __str__(self):
+        return self.email
 
     class Meta:
         db_table = 'users'
