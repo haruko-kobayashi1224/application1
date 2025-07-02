@@ -238,9 +238,9 @@ def today_input(request, year, month, day):
         for success in today_input_form.cleaned_data['successes']:
                 DiarySuccess.objects.create(success=success, diary=diary) 
         
-        # for f in formset.cleaned_data:
-        #         if f and f.get('other_success'):
-        #             DiarySuccess.objects.create(success=f['other_success'], diary=diary)
+        for f in formset.cleaned_data:
+                 if f and f.get('other_success'):
+                     DiarySuccess.objects.create(success=f['other_success'], diary=diary)
                     
         messages.success(request, '今日の日記を作成しました')
         return redirect('diary_app:month', year=year, month=month)        
