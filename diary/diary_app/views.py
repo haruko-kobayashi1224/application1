@@ -7,13 +7,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required 
-from django.views import generic
+from django.views import generic 
 from . import mixins
-from datetime import date
+from datetime import date, timedelta, datetime
 from django.forms import formset_factory
-from .models import DiarySuccess
+from .models import DiarySuccess, Diary
 from .forms import RegistForm, LoginForm, UserMyPageForm, PasswordChangeForm, OtherSuccessFormSet, TodayInputForm
-
+from django.views.generic import ListView
 
 
 def portfolio(request):
@@ -76,21 +76,80 @@ def user_logout(request):
     # user_form = UserCreationForm(request.POST or None)  
     # if user_form.is_valid(): 
     #     user_form.save()
-    
 
-def today_diary(request):
-    today = date.today()
-    return render(
-        request, 'today_diary.html',context={
-            'today':date.today(), 
-        }
-    )          
+class DiaryInspectionListView(ListView):
+    queryset = Diary.objects.all()
+    template_name ='diary_inspection.html'
+    context_object_name = 'diaries'
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['today'] = date.today() 
+    #     return context 
+
+    
+    def get_queryset(self):
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        day = self.kwargs.get('day')
+
+        selected_date = date(year, month, day)
+        start_datetime = datetime.combine(selected_date, datetime.min.time())
+        end_datetime = datetime.combine(selected_date, datetime.max.time())
+
+        return Diary.objects.filter(
+            created_at__range=(start_datetime, end_datetime)
+        ).order_by('-created_at')
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        selected_date = date(
+            self.kwargs.get('year'),
+            self.kwargs.get('month'),
+            self.kwargs.get('day'),
+        )
+        context['today'] = date.today()
+        context['year'] = selected_date.year
+        context['month'] = selected_date.month
+        context['day'] = selected_date.day
+
+        # 前日・翌日を計算して渡す
+        context['prev_date'] = selected_date - timedelta(days=1)
+        context['next_date'] = selected_date + timedelta(days=1)
+        return context    
+        # date_str = self.request.GET.get('date')
+        # if date_str:
+        #     try:
+        #         selected_date = timezone.datetime.strptime(date_str, '%Y-%m-%d').date()
+        #     except ValueError:
+        #         selected_date = timezone.localdate()
+        # else:
+        #     selected_date = timezone.localdate()
+
+        # # その日付のDiaryだけに絞る
+        # start_datetime = timezone.datetime.combine(selected_date, timezone.datetime.min.time())
+        # end_datetime = timezone.datetime.combine(selected_date, timezone.datetime.max.time())
+        # qs = Diary.objects.filter(created_at__range=(start_datetime, end_datetime)).order_by('-created_at')
+        # return qs
+        # qs = super().get_queryset()
+        # return qs  
+
+# def diary_inspection(request):
+#     today = date.today()
+#     diary = Diary.objects.fetch_all_inspection()
+#     return render(
+#         request, 'diary_inspection.html',context={
+#             'today':date.today(), 
+#             'diary':diary,
+#         }
+#     )          
 
 def reflection(request):
-    today = date.today()
+    
     return render(
         request, 'reflection.html',context={
             'today':date.today(), 
+            
         }
     )   
 
@@ -101,7 +160,6 @@ def reflection(request):
     # ) 
 @login_required
 def my_page(request):
-    today = date.today()
     my_page_form =UserMyPageForm(
         request.POST or None, request.FILES or None,instance=request.user
     ) 
@@ -115,7 +173,6 @@ def my_page(request):
 
 @login_required
 def change_password(request):
-    today = date.today()
     password_change_form = PasswordChangeForm(
         request.POST or None, instance=request.user
     )

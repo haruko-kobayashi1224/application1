@@ -1,4 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
 <p>振り返り</P>
-{% endblock %}
+<p>今日できたこと</P>
+<table>
+    <tbody>
+        
+        
+        </tr>
+    </tbody>    
+</table>           
+
+
+<p>        
+    <a class="navbar-brand" href="{% url 'editing' %}">編集する</a>        
+</p>
+<a href="{% url 'diary_app:month' year=today.year month=today.month %}">ホーム画面に戻る</a>    
+{% endblock %}    
+

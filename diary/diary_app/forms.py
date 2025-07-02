@@ -139,6 +139,13 @@ class TodayInputForm(forms.ModelForm): # あなたのフォームクラス名を
         labels = {
            'tomorrow_goal': '',
         }          
+        
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['tomorrow_goal'].required = False
+    
+        
 class OtherSuccessForm(forms.Form):
     other_success =forms.CharField(
         required=False,

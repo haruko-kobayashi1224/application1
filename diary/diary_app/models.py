@@ -80,10 +80,13 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 #         f'http://127.0.0.1:8000/diary_app/activate_user/{user_activate_token.token}'
 #     )     
 
+# class DiaryManager(models.Manager):
+#     def fetch_all_inspection(self):
+#         return self.order_by('id').all()    
 
 
 class Diary(TimeStampedModel):
-    tomorrow_goal = models.CharField(max_length=50)  
+    tomorrow_goal = models.CharField(max_length=50,null=True, blank=True)  
     user = models.ForeignKey(
         'User',on_delete=models.CASCADE,
     ) 
@@ -91,14 +94,20 @@ class Diary(TimeStampedModel):
     #     'WeekReflection',on_delete=models.CASCADE,
     #     related_name='week_reflections'
     # ) 
+    
+    
     class Meta:
         db_table = 'diaries'
+        
+    
+# objects: DiaryManager = DiaryManager()    
 
 class DiarySuccess(TimeStampedModel):
     success = models.CharField(max_length=50) 
     diary = models.ForeignKey(
         'Diary',on_delete=models.CASCADE,
     ) 
+      
     
     class Meta:
         db_table = 'diary_successes'

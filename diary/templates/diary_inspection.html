@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container  text-center">
+        {% comment %} <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}">前月</a>
+        {{ month_current | date:"Y年m月"}}
+        <a href="{% url 'diary_app:month' month_next.year month_next.month %}">次月</a> {% endcomment %}
+    {% comment %} <h3>{{ day.grouper|date:"Y年m月d日" }}</h3> {% endcomment %}
+<div class="navigation">
+  <h3><a href="{% url 'diary_app:diary_inspection' year=prev_date.year month=prev_date.month day=prev_date.day %}">前の日</a> 
+  {{ year }}年{{ month }}月{{ day }}日
+  <a href="{% url 'diary_app:diary_inspection' year=next_date.year month=next_date.month day=next_date.day %}">次の日</a></h3>
+</div> 
+    
+</div>
+<p>今日できたこと</P>
+
+       
+
+    <tbody>
+        {% for diary in diaries %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+              {% for success in  diary.diarysuccess_set.all %}
+                  <td>{{ success_label_map[success.success] }}</td>
+          {% comment %} <td>{{ inspection.diary.user.username }}</td> {% endcomment %}
+              {% endfor %}
+<p>明日の目標</p>      
+         <td>{{ diary.tomorrow_goal }}</td>      
+        </tr> 
+        {% endfor %}
+    </tbody>  
+    {% comment %} <a class="navbar-brand" href="{% url 'editing' %}">編集する</a>         {% endcomment %}
+
+<a href="{% url 'diary_app:month' year=today.year month=today.month %}">ホーム画面に戻る</a>    
+{% endblock %}
+
