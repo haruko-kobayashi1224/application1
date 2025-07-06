@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from . import forms
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
@@ -15,6 +15,7 @@ from .models import DiarySuccess, Diary
 from .forms import RegistForm, LoginForm, UserMyPageForm, PasswordChangeForm, OtherSuccessFormSet, TodayInputForm
 from django.views.generic import ListView, TemplateView
 from collections import defaultdict
+from django.http import Http404
 
 
 def portfolio(request):
@@ -250,7 +251,23 @@ class DiaryInspectionListView(ListView):
 #             'today':date.today(), 
 #             'diary':diary,
 #         }
-#     )          
+#     )     
+@login_required   
+def edit_diary(request, pk,  year, month, day):
+    diary = get_object_or_404(Diary, pk=pk)
+    if diary.user.pk != request.user.pk:
+        raise Http404
+    edit_diary_form = forms.TodayInputForm(
+        request.POST or None, instance=diary
+    )
+    if edit_diary_form.is_valid():
+        edit_diary_form.save()
+        messages.success(request, '今日の日記を更新しました')
+        return redirect('diary_app:diary_inspection', year=year, month=month, day=day)
+    return render(
+        request, 'edit_diary.html'
+    ) 
+     
 
 class ReflectionListView(ListView):
     template_name ='reflection.html'
