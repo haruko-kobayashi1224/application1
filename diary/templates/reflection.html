@@ -1,19 +1,62 @@
 {% extends "base.html" %}
 {% block content %}
-<p>振り返り</P>
-<p>今日できたこと</P>
-<table>
-    <tbody>
-        
-        
+<div class="container  text-center">
+        {% comment %} <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}">前月</a>
+        {{ month_current | date:"Y年m月"}}
+        <a href="{% url 'diary_app:month' month_next.year month_next.month %}">次月</a> {% endcomment %}
+    {% comment %} <h3>{{ day.grouper|date:"Y年m月d日" }}</h3> {% endcomment %}
+<div class="navigation">
+  <h3> <a href="{% url 'diary_app:reflection' month_previous.year month_previous.month %}">前月</a>
+  {{ month_current | date:"Y年m月"}}
+  <a href="{% url 'diary_app:reflection' month_next.year month_next.month %}">次月</a></h3>
+</div> 
+    
+</div>
+<h4>今日できたこと</h4>
+<table border="1"> 
+    <thead>              
+        <tr>
+          <th>週</th>  
+          <th>1日目</th>
+          <th>2日目</th>
+          <th>3日目</th>
+          <th>4日目</th>
+          <th>5日目</th>
+          <th>6日目</th>
+          <th>7日目</th>
+          <th>今週のハイライト</th>
+          <th>できた理由</th>
+          <th>今後はどのような工夫をしたらよいか</th>
         </tr>
-    </tbody>    
-</table>           
+    </thead>
+    <tbody>
+         {% for week_num, data in weeks.items %}
+          <tr>
+              <td>{{ week_num }}週目</td>
+              {% for diary in data.diaries %}
+                  {% if diary %}
+                    <td>
+                      {% comment %} <strong>{{ diary.created_at|date:"n/j (D)" }}</strong><br>     {% endcomment %}
+                      {% for success in diary.success_list %}
+                         ・{{ success.label }}<br>
+                      {% endfor %}
+                   </td>
+                  {% else %}
+                    <td></td>
+                  {% endif %}  
+              {% endfor %}    
+             
+                <td></td>  <!-- 今週のハイライト -->
+                <td></td>  <!-- できた理由 -->
+                <td></td>  <!-- 空白セルで埋める -->
+          </tr>
+           
+          {% endfor %}
+    </tbody>
+</table>
 
 
-<p>        
-    <a class="navbar-brand" href="{% url 'editing' %}">編集する</a>        
-</p>
-<a href="{% url 'diary_app:month' year=today.year month=today.month %}">ホーム画面に戻る</a>    
-{% endblock %}    
+<a href="{% url 'diary_app:month' year=today.year month=today.month %}">ホーム画面に戻る</a>
+{% endblock %}
+
 

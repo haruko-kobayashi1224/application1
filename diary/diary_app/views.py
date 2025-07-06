@@ -13,7 +13,8 @@ from datetime import date, timedelta, datetime
 from django.forms import formset_factory
 from .models import DiarySuccess, Diary
 from .forms import RegistForm, LoginForm, UserMyPageForm, PasswordChangeForm, OtherSuccessFormSet, TodayInputForm
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
+from collections import defaultdict
 
 
 def portfolio(request):
@@ -77,108 +78,8 @@ def user_logout(request):
     # if user_form.is_valid(): 
     #     user_form.save()
 
-class DiaryInspectionListView(ListView):
-    queryset = Diary.objects.all()
-    template_name ='diary_inspection.html'
-    context_object_name = 'diaries'
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['today'] = date.today() 
-    #     return context 
-
+  
     
-    def get_queryset(self):
-        year = self.kwargs.get('year')
-        month = self.kwargs.get('month')
-        day = self.kwargs.get('day')
-
-        selected_date = date(year, month, day)
-        start_datetime = datetime.combine(selected_date, datetime.min.time())
-        end_datetime = datetime.combine(selected_date, datetime.max.time())
-        
-        success_map = {
-        'breakfast': '朝食が食べられた',
-        'washing': '洗濯ができた',
-        'throw_away': 'ごみを捨てられた',
-        'sleep_more_than_six_hours': '6時間以上寝られた',
-        'cooking': '自炊をした',
-        }
-        diaries = Diary.objects.filter(
-        created_at__range=(start_datetime, end_datetime)
-        ).order_by('-created_at')
-
-        
-        for diary in diaries:
-            success_list = []
-            for s in diary.diarysuccess_set.all():
-                    s.label = success_map.get(s.success, s.success)
-                    success_list.append(s)
-            diary.success_list = success_list
-
-        return diaries
-
-        # return Diary.objects.filter(
-        #     created_at__range=(start_datetime, end_datetime)
-        # ).order_by('-created_at')
-        
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        selected_date = date(
-            self.kwargs.get('year'),
-            self.kwargs.get('month'),
-            self.kwargs.get('day'),
-        )
-        context['today'] = date.today()
-        context['year'] = selected_date.year
-        context['month'] = selected_date.month
-        context['day'] = selected_date.day
-
-        # 前日・翌日を計算して渡す
-        context['prev_date'] = selected_date - timedelta(days=1)
-        context['next_date'] = selected_date + timedelta(days=1)
-        return context    
-        # date_str = self.request.GET.get('date')
-        # if date_str:
-        #     try:
-        #         selected_date = timezone.datetime.strptime(date_str, '%Y-%m-%d').date()
-        #     except ValueError:
-        #         selected_date = timezone.localdate()
-        # else:
-        #     selected_date = timezone.localdate()
-
-        # # その日付のDiaryだけに絞る
-        # start_datetime = timezone.datetime.combine(selected_date, timezone.datetime.min.time())
-        # end_datetime = timezone.datetime.combine(selected_date, timezone.datetime.max.time())
-        # qs = Diary.objects.filter(created_at__range=(start_datetime, end_datetime)).order_by('-created_at')
-        # return qs
-        # qs = super().get_queryset()
-        # return qs  
-
-# def diary_inspection(request):
-#     today = date.today()
-#     diary = Diary.objects.fetch_all_inspection()
-#     return render(
-#         request, 'diary_inspection.html',context={
-#             'today':date.today(), 
-#             'diary':diary,
-#         }
-#     )          
-
-def reflection(request):
-    
-    return render(
-        request, 'reflection.html',context={
-            'today':date.today(), 
-            
-        }
-    )   
-
-    
-# def my_page(request):
-#     return render(
-#         request, 'my_page.html'
-    # ) 
 @login_required
 def my_page(request):
     my_page_form =UserMyPageForm(
@@ -207,7 +108,7 @@ def change_password(request):
         'today':date.today(), 
     })    
    
-class MonthCalendar(mixins.MonthCalendarMixin, generic.TemplateView):
+class MonthCalendar(mixins.MonthCalendarMixin, TemplateView):
     template_name ='home.html'
 
     def get_context_data(self, **kwargs):
@@ -259,3 +160,194 @@ def today_input(request, year, month, day):
             'formset':formset,
         }
     )   
+    
+class DiaryInspectionListView(ListView):
+    queryset = Diary.objects.all()
+    template_name ='diary_inspection.html'
+    context_object_name = 'diaries'
+
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['today'] = date.today() 
+    #     return context 
+
+    
+    def get_queryset(self):
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        day = self.kwargs.get('day')
+
+        selected_date = date(year, month, day)
+        start_datetime = datetime.combine(selected_date, datetime.min.time())
+        end_datetime = datetime.combine(selected_date, datetime.max.time())
+        
+        success_map = {
+         'breakfast': '朝食が食べられた',
+         'washing': '洗濯ができた',
+         'throw_away': 'ごみを捨てられた',
+         'sleep_more_than_six_hours': '6時間以上寝られた',
+         'cooking': '自炊をした',
+         }
+        diaries = Diary.objects.filter(
+        created_at__range=(start_datetime, end_datetime)
+        ).order_by('-created_at')
+        
+
+        
+        for diary in diaries:
+             success_list = []
+             for s in diary.diarysuccess_set.all():
+                     s.label = success_map.get(s.success, s.success)
+                     success_list.append(s)
+             diary.success_list = success_list
+
+        return diaries
+
+        # return Diary.objects.filter(
+        #     created_at__range=(start_datetime, end_datetime)
+        # ).order_by('-created_at')
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        selected_date = date(
+            int(self.kwargs.get('year')),
+            int(self.kwargs.get('month')),
+            int(self.kwargs.get('day')),
+        )
+        
+        context['today'] = date.today()
+        context['year'] = selected_date.year
+        context['month'] = selected_date.month
+        context['day'] = selected_date.day
+
+        # 前日・翌日を計算して渡す
+        context['prev_date'] = selected_date - timedelta(days=1)
+        context['next_date'] = selected_date + timedelta(days=1)
+        return context    
+        # date_str = self.request.GET.get('date')
+        # if date_str:
+        #     try:
+        #         selected_date = timezone.datetime.strptime(date_str, '%Y-%m-%d').date()
+        #     except ValueError:
+        #         selected_date = timezone.localdate()
+        # else:
+        #     selected_date = timezone.localdate()
+
+        # # その日付のDiaryだけに絞る
+        # start_datetime = timezone.datetime.combine(selected_date, timezone.datetime.min.time())
+        # end_datetime = timezone.datetime.combine(selected_date, timezone.datetime.max.time())
+        # qs = Diary.objects.filter(created_at__range=(start_datetime, end_datetime)).order_by('-created_at')
+        # return qs
+        # qs = super().get_queryset()
+        # return qs  
+
+# def diary_inspection(request):
+#     today = date.today()
+#     diary = Diary.objects.fetch_all_inspection()
+#     return render(
+#         request, 'diary_inspection.html',context={
+#             'today':date.today(), 
+#             'diary':diary,
+#         }
+#     )          
+
+class ReflectionListView(ListView):
+    template_name ='reflection.html'
+    context_object_name = 'reflections'
+    
+    def get_queryset(self):
+        year = self.kwargs['year']
+        month = self.kwargs['month']
+
+        
+        success_map = {
+        'breakfast': '朝食が食べられた',
+        'washing': '洗濯ができた',
+        'throw_away': 'ごみを捨てられた',
+        'sleep_more_than_six_hours': '6時間以上寝られた',
+        'cooking': '自炊をした',
+        }
+        
+        diaries = Diary.objects.filter(
+            created_at__year=year,
+            created_at__month=month,
+            user=self.request.user
+        ).order_by('created_at')
+
+        weeks = defaultdict(list)
+        
+        for diary in diaries:
+            week_num = (diary.created_at.day - 1) // 7 + 1
+            success_list = []
+            for s in diary.diarysuccess_set.all():
+                    s.label = success_map.get(s.success, s.success)
+                    success_list.append(s)
+            diary.success_list = success_list
+            weeks[week_num].append(diary)
+            
+        self.weeks = weeks 
+        
+        weeks_full = {}
+        
+        for week_num in range(1, 6):  # 最大5週まで作っておく（必要なら4でもOK）
+            diary_list = weeks.get(week_num, [])
+
+            week_diaries = [None] * 7  # 月〜日 各曜日の枠
+
+            for diary in diary_list:
+                index = diary.weekday_index
+                week_diaries[index] = diary  # 曜日インデックスにセット
+
+            weeks_full[week_num] = {
+               "diaries": week_diaries,
+            }
+
+        self.weeks = weeks_full
+        
+        return diaries   
+
+    #     for week_num in weeks:
+    #         diaries = weeks[week_num]
+    # # 空白数を計算（最大7日 - 実際の件数）
+    #         padding = 7 - len(diaries)
+    #         weeks_full[week_num] = {
+    #         "diaries": diaries,
+    #         "padding": range(padding),
+    #         }
+
+    #     self.weeks = weeks_full   
+    #     return diaries   
+             
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        year = int(self.kwargs.get('year'))
+        month = int(self.kwargs.get('month'))
+        
+
+        context['weeks'] = self.weeks # {1: [diary, diary], 2: [...], ...}
+        context['month_current'] = date(year, month, 1)
+        context['month_previous'] = context['month_current'] - timedelta(days=1)
+        context['month_next'] = context['month_current'] + timedelta(days=31)
+        context['today'] = date.today()
+        return context    
+
+        
+    
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     selected_date = date(
+    #         self.kwargs.get('year'),
+    #         self.kwargs.get('month'),
+    #         self.kwargs.get('day'),
+    #     )
+    #     context['today'] = date.today()
+    #     context['year'] = selected_date.year
+    #     context['month'] = selected_date.month
+    #     context['day'] = selected_date.day
+
+    #     # 前日・翌日を計算して渡す
+    #     context['prev_date'] = selected_date - timedelta(days=1)
+    #     context['next_date'] = selected_date + timedelta(days=1)
+    #     return context      

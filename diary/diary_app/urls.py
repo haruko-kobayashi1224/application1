@@ -1,6 +1,6 @@
 from django.urls import path
 from .import views
-from. views import DiaryInspectionListView
+from. views import DiaryInspectionListView, ReflectionListView
 
 app_name = 'diary_app'
 
@@ -11,7 +11,7 @@ urlpatterns = [
     # path('home/', views.home, name='home'),
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
-    path('reflection/', views.reflection, name='reflection'),
+    path('reflection/<int:year>/<int:month>/', ReflectionListView.as_view(), name='reflection'),
     path('my_page/', views.my_page, name='my_page'),
     path('change_password/', views.change_password, name='change_password'),
     path('month/<int:year>/<int:month>/', views.MonthCalendar.as_view(), name='month'),

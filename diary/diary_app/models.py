@@ -110,11 +110,13 @@ class Diary(TimeStampedModel):
     user = models.ForeignKey(
         'User',on_delete=models.CASCADE,
     ) 
-    # week_reflection = models.ForeignKey(
-    #     'WeekReflection',on_delete=models.CASCADE,
-    #     related_name='week_reflections'
-    # ) 
+    week_reflection = models.ForeignKey(
+        'WeekReflection',on_delete=models.CASCADE,null=True, blank=True
+     ) 
     
+    @property
+    def weekday_index(self):
+        return self.created_at.weekday()
     
     class Meta:
         db_table = 'diaries'
@@ -142,7 +144,6 @@ class WeekReflection(TimeStampedModel):
     )  
     month_reflection = models.ForeignKey(
         'MonthReflection',on_delete=models.CASCADE,
-        related_name='month_reflections'
     ) 
    
     class Meta:
