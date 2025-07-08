@@ -138,11 +138,11 @@ def today_input(request, year, month, day):
             diary.save()  
             
         for success in today_input_form.cleaned_data['successes']:
-                DiarySuccess.objects.create(success=success, diary=diary) 
+            DiarySuccess.objects.create(success=success, diary=diary) 
         
         for f in formset.cleaned_data:
-                 if f and f.get('other_success'):
-                     DiarySuccess.objects.create(success=f['other_success'], diary=diary)
+            if f and f.get('other_success'):
+                DiarySuccess.objects.create(success=f['other_success'], diary=diary)
                     
         messages.success(request, '今日の日記を作成しました')
         return redirect('diary_app:month', year=year, month=month)        
@@ -257,15 +257,55 @@ def edit_diary(request, pk,  year, month, day):
     diary = get_object_or_404(Diary, pk=pk)
     if diary.user.pk != request.user.pk:
         raise Http404
-    edit_diary_form = forms.TodayInputForm(
-        request.POST or None, instance=diary
-    )
-    if edit_diary_form.is_valid():
-        edit_diary_form.save()
+    if request.method == 'POST':
+        edit_diary_form = TodayInputForm(request.POST, instance=diary)
+        formset = OtherSuccessFormSet(request.POST)
+    else:
+    # 成功したチェックボックス項目だけを取得
+        initial_successes = list(
+            diary.diarysuccess_set
+            .filter(success__in=[
+                'breakfast', 'washing', 'throw_away',
+                'sleep_more_than_six_hours', 'cooking'
+            ])
+            .values_list('success', flat=True)
+        )
+        edit_diary_form = TodayInputForm(instance=diary, initial={'successes': initial_successes})
+    
+    # 既存の自由記述を取得（チェックボックス以外）
+        other_successes = diary.diarysuccess_set.exclude(success__in=[
+            'breakfast', 'washing', 'throw_away', 'sleep_more_than_six_hours', 'cooking'
+        ])
+        formset_initial = [{'other_success': s.success} for s in other_successes]
+        formset = OtherSuccessFormSet(initial=formset_initial)
+    
+    if edit_diary_form.is_valid() and formset.is_valid():
+        diary = edit_diary_form.save(commit=False)
+        diary.user = request.user
+        diary.save()
+       
+        diary.diarysuccess_set.all().delete()
+        
+        for success in edit_diary_form.cleaned_data['successes']:
+            DiarySuccess.objects.create(success=success, diary=diary) 
+            
+        for f in formset.cleaned_data:
+            if f and f.get('other_success'):
+                DiarySuccess.objects.create(success=f['other_success'], diary=diary)    
+        
         messages.success(request, '今日の日記を更新しました')
         return redirect('diary_app:diary_inspection', year=year, month=month, day=day)
+    
     return render(
-        request, 'edit_diary.html'
+        request, 'edit_diary.html',context={
+            'edit_diary_form': edit_diary_form,   
+            'year': year,
+            'month': month,
+            'day': day,
+            'today': date.today(),
+            'formset':formset,
+            
+        }
     ) 
      
 

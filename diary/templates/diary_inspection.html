@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
+{% if messages %}
+    {% for message in messages %}
+    <p>{{ message.message}}</p>
+    {% endfor %}
+{% endif %}
 <div class="container  text-center">
         {% comment %} <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}">前月</a>
         {{ month_current | date:"Y年m月"}}
@@ -35,6 +40,11 @@
   {% if diaries %}
     {% for diary in diaries %}
       <li>{{ diary.tomorrow_goal }}</li>
+       {% if diary.user.id == user.id %}
+           <a href="{% url 'diary_app:edit_diary' pk=diary.id year=year month=month day=day  %}">
+             <button type="button">編集する</button>
+          </a>
+       {% endif %}    
     {% endfor %}
   {% else %}
     <li>まだ登録されていません</li>
