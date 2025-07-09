@@ -18,5 +18,7 @@ urlpatterns = [
     path('today_input/<int:year>/<int:month>/<int:day>/', views.today_input, name='today_input'),
     path('diary_inspection/<int:year>/<int:month>/<int:day>/', DiaryInspectionListView.as_view(), name='diary_inspection'),
     path('edit_diary/<int:pk>/<int:year>/<int:month>/<int:day>/', views.edit_diary, name='edit_diary'),
+    path('delete_diary/<int:pk>/<int:year>/<int:month>/<int:day>/', views.delete_diary, name='delete_diary'),
+    
     
 ]

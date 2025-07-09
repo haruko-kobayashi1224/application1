@@ -153,9 +153,5 @@ class OtherSuccessForm(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': 'その他にできたことを書いてください'})
     )
 OtherSuccessFormSet = forms.formset_factory(OtherSuccessForm, 
-                                            extra=1, max_num=3, can_delete=True, validate_max=True)    
+                                            extra=1, max_num=3, can_delete=True, validate_max=True) 
 
-
-
-    
-      

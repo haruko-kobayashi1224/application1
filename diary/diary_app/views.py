@@ -10,12 +10,15 @@ from django.contrib.auth.decorators import login_required
 from django.views import generic 
 from . import mixins
 from datetime import date, timedelta, datetime
-from django.forms import formset_factory
+#from django.forms import formset_factory
 from .models import DiarySuccess, Diary
 from .forms import RegistForm, LoginForm, UserMyPageForm, PasswordChangeForm, OtherSuccessFormSet, TodayInputForm
 from django.views.generic import ListView, TemplateView
 from collections import defaultdict
+from django.views.decorators.http import require_POST
 from django.http import Http404
+from django.http import JsonResponse
+
 
 
 def portfolio(request):
@@ -307,8 +310,25 @@ def edit_diary(request, pk,  year, month, day):
             
         }
     ) 
-     
 
+  
+# class DiaryDeleteView(generic.DeleteView):
+#     def get_success_url(self):
+#         model = Diary
+#         success_url = reverse_lazy('diary_app:diary_inspection', kwargs={
+#             'year': self.object.created_at.year,
+#             'month': self.object.created_at.month,
+#             'day': self.object.created_at.day
+#         })
+@require_POST
+def delete_diary(request, pk,  year, month, day):
+    diary = get_object_or_404(Diary, pk=pk, user=request.user)
+    diary.delete()
+    messages.success(request, '日記を削除しました')
+    return redirect('diary_app:diary_inspection', year=year, month=month, day=day)
+      
+    
+    
 class ReflectionListView(ListView):
     template_name ='reflection.html'
     context_object_name = 'reflections'

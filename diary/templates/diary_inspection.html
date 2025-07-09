@@ -41,14 +41,38 @@
     {% for diary in diaries %}
       <li>{{ diary.tomorrow_goal }}</li>
        {% if diary.user.id == user.id %}
+       {% else %}
+         <li>まだ登録されていません</li>
+       {% endif %}
            <a href="{% url 'diary_app:edit_diary' pk=diary.id year=year month=month day=day  %}">
              <button type="button">編集する</button>
           </a>
-       {% endif %}    
+          <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">削除</button>
+              
+          <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal-{{diary.id}}">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">データの削除</h5>
+                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>削除すると元に戻すことはできません。よろしいでしょうか？</p>
+                </div>
+                <div class="modal-footer">
+                  <form method="POST" action="{% url 'diary_app:delete_diary' pk=diary.id year=year month=month day=day %}">
+                    {% csrf_token %}
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">DELETE</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
     {% endfor %}
-  {% else %}
-    <li>まだ登録されていません</li>
-  {% endif %}
+  {% endif %}  
 </ul>
 
 <a href="{% url 'diary_app:month' year=today.year month=today.month %}">ホーム画面に戻る</a>
