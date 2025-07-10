@@ -112,7 +112,7 @@ class Diary(TimeStampedModel):
     ) 
     week_reflection = models.ForeignKey(
         'WeekReflection',on_delete=models.CASCADE,null=True, blank=True
-     ) 
+    ) 
     
     @property
     def weekday_index(self):
@@ -136,9 +136,9 @@ class DiarySuccess(TimeStampedModel):
 
 class WeekReflection(TimeStampedModel):
     week_number = models.IntegerField()
-    highlight = models.CharField(max_length=50)
-    reason = models.CharField(max_length=50)
-    next_plan = models.CharField(max_length=50)   
+    highlight = models.CharField(max_length=50,null=True, blank=True)
+    reason = models.CharField(max_length=50,null=True, blank=True)
+    next_plan = models.CharField(max_length=50,null=True, blank=True)   
     user = models.ForeignKey(
         'User',on_delete=models.CASCADE,   
     )  
@@ -152,9 +152,9 @@ class WeekReflection(TimeStampedModel):
 class MonthReflection(TimeStampedModel):
     year_number = models.IntegerField()
     month_number = models.IntegerField()
-    common_ground = models.CharField(max_length=50)
-    my_values = models.CharField(max_length=50)
-    awareness = models.CharField(max_length=50)   
+    common_ground = models.CharField(max_length=50,null=True, blank=True)
+    my_values = models.CharField(max_length=50,null=True, blank=True)
+    awareness = models.CharField(max_length=50,null=True, blank=True)   
     user = models.ForeignKey(
         'User',on_delete=models.CASCADE,
     ) 

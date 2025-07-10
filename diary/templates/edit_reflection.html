@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container  text-center">
+    <h2>{{ year }}年{{ month }}月の振り返り編集</h2>
+</div>
+<form method="post">
+  {% csrf_token %}
+  {{ formset.management_form }}
+<table style="border: 1px solid black; border-collapse: collapse;"> 
+    <thead>              
+        <tr>
+          <th>週</th>  
+          <th>1日目</th>
+          <th>2日目</th>
+          <th>3日目</th>
+          <th>4日目</th>
+          <th>5日目</th>
+          <th>6日目</th>
+          <th>7日目</th>
+          <th>今週のハイライト</th>
+          <th>できた理由</th>
+          <th>今後はどのような工夫をしたらよいか</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for form, week in week_form_pairs %}
+        {% with week_num=week.0 data=week.1 %}  
+          <tr>
+              <td>{{ week_num }}週目</td>
+              {% for diary in data.diaries %}
+                  {% if diary %}
+                    <td>
+                      {% comment %} <strong>{{ diary.created_at|date:"n/j (D)" }}</strong><br>     {% endcomment %}
+                      {% for success in diary.success_list %}
+                         ・{{ success.label }}<br>
+                      {% endfor %}
+                   </td>
+                  {% else %}
+                    <td></td>
+                  {% endif %}  
+              {% endfor %} 
+              <td style="display: none;">{{ form.id }}</td>    
+              <td>{{ form.highlight }}</td>
+              <td>{{ form.reason }}</td>
+              <td>{{ form.next_plan }}</td>
+                
+                {% comment %} <td></td>  <!-- できた理由 -->
+                <td></td>  <!-- 空白セルで埋める --> {% endcomment %}
+          </tr>
+           
+        {% endwith %}
+      {% endfor %}
+    </tbody>
+</table>
+ <input type="submit" value="保存">
+</form>
+
+
+<a href="{% url 'diary_app:reflection' year=year month=month %}">
+    <button type="button">キャンセル</button>
+</a>
+{% endblock %}
+
+

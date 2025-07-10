@@ -1,0 +1,66 @@
+# diary_app/utils.py
+from collections import defaultdict
+from .models import Diary, WeekReflection, MonthReflection
+
+def get_weeks_data(user, year, month):
+    success_map = {
+        'breakfast': '朝食が食べられた',
+        'washing': '洗濯ができた',
+        'throw_away': 'ごみを捨てられた',
+        'sleep_more_than_six_hours': '6時間以上寝られた',
+        'cooking': '自炊をした',
+    }
+
+    diaries = Diary.objects.filter(
+        created_at__year=year,
+        created_at__month=month,
+        user=user
+    ).order_by('created_at')
+    
+    try:
+        month_reflection = MonthReflection.objects.get(
+            user=user,
+            year_number=year,
+            month_number=month
+        )
+    except MonthReflection.DoesNotExist:
+        month_reflection = None
+
+    weeks = defaultdict(list)
+
+    for diary in diaries:
+        week_num = (diary.created_at.day - 1) // 7 + 1
+        success_list = []
+        for s in diary.diarysuccess_set.all():
+            s.label = success_map.get(s.success, s.success)
+            success_list.append(s)
+        diary.success_list = success_list
+        weeks[week_num].append(diary)
+
+    weeks_full = {}
+
+    for week_num in range(1, 6):
+        diary_list = weeks.get(week_num, [])
+        week_diaries = [None] * 7
+        
+        for diary in diary_list:
+            index = diary.weekday_index
+            week_diaries[index] = diary
+        weeks_full[week_num] = {
+            "diaries": week_diaries
+        }
+        
+        week_reflection = None
+        if month_reflection:
+            week_reflection = WeekReflection.objects.filter(
+                user=user,
+                week_number=week_num,
+                month_reflection=month_reflection
+            ).first()
+            
+        weeks_full[week_num] = {
+            "diaries": week_diaries,
+            "reflection": week_reflection,
+        }    
+
+    return weeks_full

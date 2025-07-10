@@ -2,7 +2,8 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from .models import Diary
+from .models import Diary, WeekReflection, MonthReflection
+from django.forms import modelformset_factory
 
 User = get_user_model()
 
@@ -154,4 +155,65 @@ class OtherSuccessForm(forms.Form):
     )
 OtherSuccessFormSet = forms.formset_factory(OtherSuccessForm, 
                                             extra=1, max_num=3, can_delete=True, validate_max=True) 
+
+
+class WeekReflectionForm(forms.ModelForm):
+    
+    class Meta:
+        model = WeekReflection
+        fields = ('highlight', 'reason', 'next_plan',)
+        widgets = {
+           'highlight' : forms.Textarea(
+               attrs={ 'rows': 2, 'cols':30},
+           ),
+           'reason' : forms.Textarea(
+               attrs={ 'rows': 2, 'cols':30},
+           ),
+           ' next_plan' : forms.Textarea(
+               attrs={ 'rows': 2, 'cols':30},
+           )
+        }
+        labels = {
+            'highlight':'今週のハイライト',
+            'reason':'できた理由',
+            'next_plan':'今後はどのような工夫をしたらよいか',
+        }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['highlight'].required = False
+        self.fields['reason'].required = False
+        self.fields['next_plan'].required = False
+
+WeekReflectionFormSet = modelformset_factory(
+    WeekReflection,
+    form=WeekReflectionForm,
+    extra=0
+)    
+
+
+class MonthReflectionForm(forms.ModelForm):
+    class Meta:
+        model = MonthReflection
+        fields = ('common_ground', 'my_values', 'awareness',)
+        widgets = {
+           'common_ground' : forms.Textarea(
+               attrs={ 'rows': 2, 'cols':30},
+           ),
+           'my_values' : forms.Textarea(
+               attrs={ 'rows': 2, 'cols':30},
+           ),
+           'awareness' : forms.Textarea(
+               attrs={ 'rows': 2, 'cols':30},
+           )
+        }
+        labels = {
+            'common_ground':'各週のハイライトに共通する点',
+            'my_values':'自分の価値観や大切にしていること',
+            'awareness':'その他気づいたこと',
+        }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['common_ground'].required = False
+        self.fields['my_values'].required = False
+        self.fields['awareness'].required = False
 

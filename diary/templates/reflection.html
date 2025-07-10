@@ -5,7 +5,12 @@
         {{ month_current | date:"Y年m月"}}
         <a href="{% url 'diary_app:month' month_next.year month_next.month %}">次月</a> {% endcomment %}
     {% comment %} <h3>{{ day.grouper|date:"Y年m月d日" }}</h3> {% endcomment %}
-<div class="navigation">
+{% if messages %}
+    {% for message in messages %}
+    <p>{{ message.message}}</p>
+    {% endfor %}
+{% endif %}
+    <div class="navigation">
   <h3> <a href="{% url 'diary_app:reflection' month_previous.year month_previous.month %}">前月</a>
   {{ month_current | date:"Y年m月"}}
   <a href="{% url 'diary_app:reflection' month_next.year month_next.month %}">次月</a></h3>
@@ -13,7 +18,7 @@
     
 </div>
 <h4>今日できたこと</h4>
-<table border="1"> 
+<table style="border: 1px solid black; border-collapse: collapse;">
     <thead>              
         <tr>
           <th>週</th>  
@@ -44,19 +49,18 @@
                   {% else %}
                     <td></td>
                   {% endif %}  
-              {% endfor %}    
-             
-                <td></td>  <!-- 今週のハイライト -->
-                <td></td>  <!-- できた理由 -->
-                <td></td>  <!-- 空白セルで埋める -->
-          </tr>
+              {% endfor %}      
+               <td>{{ data.reflection.highlight }}</td>
+               <td>{{ data.reflection.reason }}</td>
+               <td>{{ data.reflection.next_plan }}</td>
+          </tr>    
            
           {% endfor %}
     </tbody>
 </table>
 
-
 <a href="{% url 'diary_app:month' year=today.year month=today.month %}">ホーム画面に戻る</a>
+<a href="{% url 'diary_app:edit_reflection' year=today.year month=today.month %}">編集する</a>
 {% endblock %}
 
 
