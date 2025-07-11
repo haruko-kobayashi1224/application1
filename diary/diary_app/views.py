@@ -334,6 +334,7 @@ class ReflectionListView(ListView):
     template_name ='reflection.html'
     context_object_name = 'reflections'
     
+    
     def get_queryset(self):
         year = self.kwargs['year']
         month = self.kwargs['month']
@@ -346,6 +347,7 @@ class ReflectionListView(ListView):
                 if diary:
                     diaries.append(diary)
         return diaries 
+    
 
     #     for week_num in weeks:
     #         diaries = weeks[week_num]
@@ -364,6 +366,7 @@ class ReflectionListView(ListView):
         context = super().get_context_data(**kwargs)
         year = int(self.kwargs.get('year'))
         month = int(self.kwargs.get('month'))
+       
         
 
         context['weeks'] = self.weeks # {1: [diary, diary], 2: [...], ...}
@@ -371,11 +374,16 @@ class ReflectionListView(ListView):
         context['month_previous'] = context['month_current'] - relativedelta(months=1)
         context['month_next'] = context['month_current'] + relativedelta(months=1)
         context['today'] = date.today()
+        context['month_reflection'] = MonthReflection.objects.filter(
+        user=self.request.user,
+        year_number=year,
+        month_number=month
+        ).first()
         return context    
     
 @login_required   
 def edit_reflection(request, year, month):
-    reflection, created =  MonthReflection.objects.get_or_create(
+    month_reflection, created =  MonthReflection.objects.get_or_create(
         user=request.user,
         year_number=year,
         month_number=month)
@@ -384,25 +392,25 @@ def edit_reflection(request, year, month):
         WeekReflection.objects.get_or_create(
             user=request.user,
             week_number=week_num,
-            month_reflection=reflection
+            month_reflection=month_reflection
     )
     
-    queryset = WeekReflection.objects.filter(
+    week_queryset  = WeekReflection.objects.filter(
         user=request.user,
-        month_reflection=reflection
+        month_reflection=month_reflection
     ).order_by('week_number')
 
     if request.method == 'POST': 
-        formset = WeekReflectionFormSet(request.POST, queryset=queryset)
-        if formset.is_valid():
-            formset.save()
-            messages.success(request, '1週間の振り返りを保存しました。')
-            return redirect('diary_app:reflection', year=year, month=month)
+        week_formset = WeekReflectionFormSet(request.POST, queryset=week_queryset)
+        month_form = MonthReflectionForm(request.POST, instance=month_reflection)
+        if week_formset.is_valid() and month_form.is_valid():
+            week_formset.save()
+            month_form.save()
+        messages.success(request, '振り返りを保存しました。')
+        return redirect('diary_app:reflection', year=year, month=month)
     else:
-        formset = WeekReflectionFormSet(queryset=queryset)
-    
-    print("フォーム数:", len(formset))
-    print("querysetの件数:", queryset.count())    
+        week_formset = WeekReflectionFormSet(queryset=week_queryset)
+        month_form = MonthReflectionForm(instance=month_reflection)
     
     current = date(int(year), int(month), 1)
     month_previous = current - relativedelta(months=1)
@@ -410,7 +418,7 @@ def edit_reflection(request, year, month):
     
     weeks = get_weeks_data(request.user, year, month)   
     
-    week_form_pairs = list(zip(formset, weeks.items()))   
+    week_form_pairs = list(zip(week_formset, weeks.items()))   
      
     return render(
         request, 'edit_reflection.html', context={
@@ -418,35 +426,18 @@ def edit_reflection(request, year, month):
             'month': month,
             'today':date.today(), 
             'weeks': weeks,
-            'formset': formset,
+            'week_formset': week_formset,
+            'month_form': month_form,
             'week_form_pairs': week_form_pairs, 
             'month_previous': month_previous,
             'month_next': month_next,
+            'month_reflection': month_reflection, 
         }
     )        
 
 
-# @login_required   
-# def edit_reflection(request, year, month):
-#     if request.method == 'POST':         
-#         formset = MonthReflectionForm(request.POST)
-#         if formset.is_valid():
-#             diary = formset.save(commit=False)
-#             diary.save()    
-        
-#         messages.success(request, '1週間の振り返りを保存しました。')
-#         return redirect('diary_app:reflection', year=year, month=month)          
-    
-#     else:
-#         formset = MonthReflectionForm() 
-#     return render(
-#         request, 'edit_reflection.html', context={
-#             'year' : year,
-#             'month': month,
-#             'today':date.today(), 
-#             'formset':formset,
-#         }
-#     )              
+
+           
 
         
         

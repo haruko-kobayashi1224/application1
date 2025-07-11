@@ -17,7 +17,7 @@
 </div> 
     
 </div>
-<h4>今日できたこと</h4>
+<h4>1週間の振り返り</h4>
 <table style="border: 1px solid black; border-collapse: collapse;">
     <thead>              
         <tr>
@@ -50,14 +50,30 @@
                     <td></td>
                   {% endif %}  
               {% endfor %}      
-               <td>{{ data.reflection.highlight }}</td>
-               <td>{{ data.reflection.reason }}</td>
-               <td>{{ data.reflection.next_plan }}</td>
+               <td>{{ data.reflection.highlight|default_if_none:""  }}</td>
+               <td>{{ data.reflection.reason|default_if_none:""  }}</td>
+               <td>{{ data.reflection.next_plan|default_if_none:"" }}</td>
           </tr>    
            
           {% endfor %}
     </tbody>
 </table>
+
+{% if month_reflection %}
+  <div>
+    <h4>今日できたこと</h4>
+      <p>各週のハイライトに共通する点</p>
+          <p>{{ month_reflection.common_ground|default_if_none:""  }}</p>
+      <p>自分の価値観や大切にしていること</p>
+          <p>{{ month_reflection.my_values|default_if_none:""  }}</p>
+      <p>その他気づいたこと</p>
+          <p>{{ month_reflection.awareness|default_if_none:"" }}</p>
+  </div>
+{% else %}
+    <p>今月の振り返りはまだ記入されていません。</p>
+{% endif %}
+
+
 
 <a href="{% url 'diary_app:month' year=today.year month=today.month %}">ホーム画面に戻る</a>
 <a href="{% url 'diary_app:edit_reflection' year=today.year month=today.month %}">編集する</a>
