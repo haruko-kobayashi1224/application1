@@ -19,6 +19,7 @@ from django.views.decorators.http import require_POST
 from django.http import Http404
 from dateutil.relativedelta import relativedelta
 from .utils import get_weeks_data
+from django.utils import timezone
 
 
 
@@ -184,8 +185,8 @@ class DiaryInspectionListView(ListView):
         day = self.kwargs.get('day')
 
         selected_date = date(year, month, day)
-        start_datetime = datetime.combine(selected_date, datetime.min.time())
-        end_datetime = datetime.combine(selected_date, datetime.max.time())
+        start_datetime = timezone.make_aware(datetime.combine(selected_date, datetime.min.time()))
+        end_datetime = timezone.make_aware(datetime.combine(selected_date, datetime.max.time()))
         
         success_map = {
          'breakfast': '朝食が食べられた',
@@ -379,8 +380,9 @@ class ReflectionListView(ListView):
         year_number=year,
         month_number=month
         ).first()
-        print('表示用 month_reflection:', context['month_reflection'])
-        print('内容 common_ground:', context['month_reflection'].common_ground if context['month_reflection'] else 'None')
+        context['year'] = year
+        context['month'] = month
+        
         
         return context    
     
@@ -410,21 +412,8 @@ def edit_reflection(request, year, month):
             print('DEBUG Month Form Data:', month_form.cleaned_data)
             week_formset.save()
             month_form.save()
-            print('保存直後:', month_form.instance.pk)
-            print('保存内容 common_ground:', month_form.instance.common_ground)
             messages.success(request, '振り返りを保存しました。')
             return redirect('diary_app:reflection', year=year, month=month)
-        else:
-            print('ERROR week_formset:', week_formset.errors)
-            print('ERROR month_form:', month_form.errors)
-            print("month_form.is_valid():", month_form.is_valid())
-            print("month_form.errors:", month_form.errors)
-
-            print("week_formset.is_valid():", week_formset.is_valid())
-            for form in week_formset:
-                print("WeekForm errors:", form.errors) 
-            for i, form in enumerate(week_formset):
-                print(f"WeekForm[{i}] errors:", form.errors)   
         
     else:        
         week_formset = WeekReflectionFormSet(queryset=week_queryset)
@@ -452,12 +441,19 @@ def edit_reflection(request, year, month):
             'month_reflection': month_reflection, 
         }
     )   
+
+@require_POST
+def delete_reflection(request, year, month):
+    month_reflection = get_object_or_404(
+        MonthReflection, 
+        user=request.user,
+        year_number=year,
+        month_number=month)
+    month_reflection.delete()
+    messages.success(request, '日記を削除しました')
+    return redirect('diary_app:reflection', year=year, month=month, )    
     
          
-
-
-
-           
 
         
         
