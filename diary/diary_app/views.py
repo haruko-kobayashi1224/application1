@@ -379,6 +379,9 @@ class ReflectionListView(ListView):
         year_number=year,
         month_number=month
         ).first()
+        print('表示用 month_reflection:', context['month_reflection'])
+        print('内容 common_ground:', context['month_reflection'].common_ground if context['month_reflection'] else 'None')
+        
         return context    
     
 @login_required   
@@ -404,11 +407,26 @@ def edit_reflection(request, year, month):
         week_formset = WeekReflectionFormSet(request.POST, queryset=week_queryset)
         month_form = MonthReflectionForm(request.POST, instance=month_reflection)
         if week_formset.is_valid() and month_form.is_valid():
+            print('DEBUG Month Form Data:', month_form.cleaned_data)
             week_formset.save()
             month_form.save()
-        messages.success(request, '振り返りを保存しました。')
-        return redirect('diary_app:reflection', year=year, month=month)
-    else:
+            print('保存直後:', month_form.instance.pk)
+            print('保存内容 common_ground:', month_form.instance.common_ground)
+            messages.success(request, '振り返りを保存しました。')
+            return redirect('diary_app:reflection', year=year, month=month)
+        else:
+            print('ERROR week_formset:', week_formset.errors)
+            print('ERROR month_form:', month_form.errors)
+            print("month_form.is_valid():", month_form.is_valid())
+            print("month_form.errors:", month_form.errors)
+
+            print("week_formset.is_valid():", week_formset.is_valid())
+            for form in week_formset:
+                print("WeekForm errors:", form.errors) 
+            for i, form in enumerate(week_formset):
+                print(f"WeekForm[{i}] errors:", form.errors)   
+        
+    else:        
         week_formset = WeekReflectionFormSet(queryset=week_queryset)
         month_form = MonthReflectionForm(instance=month_reflection)
     
@@ -433,7 +451,9 @@ def edit_reflection(request, year, month):
             'month_next': month_next,
             'month_reflection': month_reflection, 
         }
-    )        
+    )   
+    
+         
 
 
 
