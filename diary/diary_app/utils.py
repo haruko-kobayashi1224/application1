@@ -1,8 +1,11 @@
 # diary_app/utils.py
 from collections import defaultdict
 from .models import Diary, WeekReflection, MonthReflection
+import calendar
 
 def get_weeks_data(user, year, month):
+    month_calendar = calendar.Calendar().monthdatescalendar(year, month)
+    
     success_map = {
         'breakfast': '朝食が食べられた',
         'washing': '洗濯ができた',
@@ -27,9 +30,20 @@ def get_weeks_data(user, year, month):
         month_reflection = None
 
     weeks = defaultdict(list)
+    
+    def get_week_number(d):
+        for i, week in enumerate(month_calendar, 1):
+            if d in week:
+                return i
+        return None
 
+    
     for diary in diaries:
-        week_num = (diary.created_at.day - 1) // 7 + 1
+        diary_date =diary.created_at.date()
+        week_num =get_week_number(diary_date) 
+        if not week_num :
+            continue 
+        # week_num = (diary.created_at.day - 1) // 7 + 1
         success_list = []
         for s in diary.diarysuccess_set.all():
             s.label = success_map.get(s.success, s.success)
@@ -46,9 +60,9 @@ def get_weeks_data(user, year, month):
         for diary in diary_list:
             index = diary.weekday_index
             week_diaries[index] = diary
-        weeks_full[week_num] = {
-            "diaries": week_diaries
-        }
+        # weeks_full[week_num] = {
+        #     "diaries": week_diaries
+        # }
         
         week_reflection = None
         if month_reflection:
