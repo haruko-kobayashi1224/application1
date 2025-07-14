@@ -11,6 +11,9 @@
 
     {% comment %} <a class="navbar-brand" href="{% url 'diary_app:login' %}">ログアウト</a> {% endcomment %}
     <div class="container  text-center">
+      {% if streak >= 2 %}  
+      <p>{{ streak }} 日連続で日記かけた！すごい👏</p>
+      {% endif %}
        <h3> <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}">前月</a>
         {{ month_current | date:"Y年m月"}}
         <a href="{% url 'diary_app:month' month_next.year month_next.month %}">次月</a></h3>
@@ -28,20 +31,24 @@
         {% for week in month_days %}
             <tr>
                 {% for day in week %}
+                  {% if day in diary_dates %} 
                     {% if now == day %}
                         <td class="table-success">
-                            {% else %}
-                        <td>
+                    {% else %}
+                       <td style="background-color:#FFDAB9;">
                     {% endif %}
+                  {% else %}    
+                      <td>
+                  {% endif %}
                     <a href="{% url 'diary_app:today_input' year=day.year month=day.month day=day.day %}">
                         {% if month_current.month != day.month %}
                             {{ day | date:"m/d" }}
                         {% else %}
-                            {{ day.day }}   
+                            {{ day.day }}         
                     {% endif %}
-                    </a>                 
-                </td>
-                {% endfor %}
+                    </a>  
+                    </td>               
+                {% endfor %} 
             </tr>
         {% endfor %}
         </tbody>

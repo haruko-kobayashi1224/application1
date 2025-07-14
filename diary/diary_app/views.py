@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from . import forms
 from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import UserCreationForm
+#from django.core.exceptions import ValidationError
+#from django.contrib.auth.forms import UserCreationForm
 # from .models import UserActivateToken
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required 
-from django.views import generic 
+#from django.views import generic 
 from . import mixins
 from datetime import date, timedelta, datetime
 #from django.forms import formset_factory
@@ -116,12 +116,30 @@ def change_password(request):
    
 class MonthCalendar(mixins.MonthCalendarMixin, TemplateView):
     template_name ='home.html'
+            
 
     def get_context_data(self, **kwargs):
+        
         context = super().get_context_data(**kwargs)
         calendar_context = self.get_month_calendar()
         context.update(calendar_context)
+        
         context['today'] = date.today() 
+        
+        diary_dates = set(Diary.objects.filter(user=self.request.user)
+                             .values_list('created_at__date', flat=True))
+        context['diary_dates']= diary_dates
+        
+        diaries = Diary.objects.filter(user=self.request.user).order_by('created_at')
+        dates = [d.created_at.date() for d in diaries]
+        
+        streak = 0
+        current =date.today()
+        while current in dates:
+            streak += 1
+            current -= timedelta(days=1)
+        context['streak'] =streak        
+        
         return context
 
 # def home(request):
