@@ -2,6 +2,11 @@
 {% block content %}
 
 <style>
+h4 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+  }
+
 .triangle-left{
   width: 0;
   height: 0;
@@ -24,6 +29,45 @@
     display: inline-block;
     text-decoration: none;
   }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1em; /* テーブル下に余白 */
+}
+
+table td, table th {
+  padding: 8px 12px; /* 余白 */
+  
+}
+
+.success-list {
+  display: flex;
+  flex-wrap: wrap; /* 折り返しあり */
+  gap: 10px;       /* アイテム同士の隙間 */
+  margin-bottom: 20px; /* 下の要素との余白 */
+}
+
+.success-item {
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.button-group {
+  text-align: right; /* 右寄せ */
+  margin-top: 20px; /* ボタン上に余白 */
+  margin-bottom: 20px; /* ボタン下に余白 */
+  gap: 10px;
+  
+
+}
+
+button {
+  margin-left: 5px; /* ボタン同士の間隔 */
+}
+
+
+
 </style>
 
 {% if messages %}
@@ -45,6 +89,7 @@
     <a href="{% url 'diary_app:diary_inspection' year=next_date.year month=next_date.month day=next_date.day %}" class="triangle-link">
       <div class="triangle-right"></div>
     </a>
+  </h4> 
 </div> 
     
 </div>
@@ -54,12 +99,11 @@
   <tbody>
     {% if diaries %}
       {% for diary in diaries %}
+      <div class="success-list">
         {% for success in diary.success_list %}
-          <tr>
-            {% comment %} <td>{{ forloop.parentloop.counter }}</td> {% endcomment %}
-            {{ success.label }}
-          </tr>
+          <div class="success-item">{{ success.label }}</div>
         {% endfor %}
+      </div>  
       {% endfor %}
     {% else %}
       <tr><td colspan="2">今日の記録はまだありません。</td></tr>
@@ -75,14 +119,15 @@
        {% else %}
         <tr><td>まだ登録されていません</td></tr>
        {% endif %}
-        <p><button type="button" class="btn btn-primary btn-sm"
+       <div class="button-group"> 
+       <button type="button" class="btn btn-primary  btn-lg"
            onclick="location.href='{% url 'diary_app:edit_diary' pk=diary.id year=year month=month day=day %}'">
            編集する
           </button>
-          <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">
+          <button type="button" class="btn btn-danger  btn-lg" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">
           削除
           </button>
-        </p>    
+        </div>    
           <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal-{{diary.id}}">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
