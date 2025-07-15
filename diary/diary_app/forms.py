@@ -123,12 +123,7 @@ class TodayInputForm(forms.ModelForm): # あなたのフォームクラス名を
         label='今日できたこと'
     )
     
-
-        
-    # 今日できたこと = forms.MultipleChoiceField(
-    #     widget=forms.CheckboxSelectMultiple,
-    #     choices=diary_choices,
-    # )        
+       
     class Meta:
         model = Diary
         fields =('tomorrow_goal',) 

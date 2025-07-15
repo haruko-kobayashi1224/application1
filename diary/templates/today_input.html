@@ -1,5 +1,68 @@
 {% extends "base.html" %}
 {% block content %}
+<style>
+
+  .other-success-form {
+    flex: 0 0 auto;
+  }
+
+    h4 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+  }
+
+  .checkbox-inline {
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 10px;
+  }
+
+  .formset-flex {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  .other-success-form {
+    flex: 0 0 auto;
+    margin-bottom: 10px;
+  }
+
+  
+  .button-area {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  #add-form-btn,
+  input[type="submit"] {
+    font-size: 1.1rem;
+    padding: 10px 25px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+
+    
+  }
+
+  #add-form-btn {
+    background-color: #E0FFFF;
+    color: black;
+  }
+
+  input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+  }
+
+</style>
+
+
+
 {% if formset.non_form_errors %}
     <div>
       {% for error in formset.non_form_errors %}
@@ -8,57 +71,42 @@
     </div> 
 {% endif %}
 
-    <h3>{{ year }}年{{ month }}月{{ day }}日</h3>
+    <h4>{{ year }}年{{ month }}月{{ day }}日</h4>
     <form method="POST">    
         {% csrf_token %}
-        <h3>今日できたこと</h3>
-{% comment %} {{ today_input_form.今日できたこと.label_tag }}   
-{{ today_input_form.今日できたこと }} {% endcomment %}
-        {{ today_input_form.successes }}
-        {{ formset.management_form }}
+        <h4>今日できたこと</h4>
+        <div class="formset-flex">
+          {% for checkbox in today_input_form.successes %}
+            <label class="checkbox-inline">
+             {{ checkbox.tag }} {{ checkbox.choice_label }}
+           </label>
+          {% endfor %}
+        </div>  
+          {{ formset.management_form }}
         <div id="formset-area">
+          <div class="formset-flex" id="formset-container"> 
             {% for form in formset %}
             <div class="other-success-form">
                 {{ form.other_success }}
             </div>
             {% endfor %}
+          </div>
         </div>
-        <button type="button" id="add-form-btn" style= "background-color:#E0FFFF;">＋追加</button>       
-{% comment %} <button name="btn_add" type="submit">追加する </button> {% endcomment %}
-
-        <h3>明日の目標</h3>
+        <div style="text-align: center; margin-bottom: 20px;">
+          <button type="button" id="add-form-btn">＋追加</button>
+        </div>    
+        <h4>明日の目標</h4>
         {{ today_input_form.tomorrow_goal }}
 
-
-        <input type="submit" value="作成" class="btn btn-primary btn-sm">
+        <div class="button-area">
+          <input type="submit" value="作成" class="btn btn-primary btn-sm">      
+        </div>    
     </form>        
-{% comment %} <script>
-  const addBtn = document.getElementById("add-form-btn");
-  const formArea = document.getElementById("formset-area");
-  let totalForms = document.getElementById("id_form-TOTAL_FORMS");
-
-  addBtn.addEventListener("click", function () {
-    const currentFormCount = parseInt(totalForms.value);
-    const newForm = formArea.children[0].cloneNode(true); // 最初のフォームをコピー
-
-    // 入力欄をクリア
-    newForm.querySelector("input").value = "";
-
-    // name属性などを正しく更新（管理用のインデックス変更）
-    const newIndex = currentFormCount;
-    const input = newForm.querySelector("input");
-    input.name = input.name.replace(/form-\d+-/, `form-${newIndex}-`);
-    input.id = input.id.replace(/form-\d+-/, `form-${newIndex}-`);
-
-    formArea.appendChild(newForm);
-    totalForms.value = newIndex + 1;
-  });
-</script> {% endcomment %}
 
 <script>
     document.addEventListener('DOMContentLoaded', function(){
-        const addButton = document.getElementById("add-form-btn");    
-        const formArea = document.getElementById("formset-area");
+        const addButton = document.getElementById("add-form-btn"); 
+        const formContainer = document.getElementById("formset-container");
         let formCount = {{ formset.total_form_count }};
         const maxForms =3;
 
@@ -69,9 +117,10 @@
                  alert("これ以上追加できません（最大3つ）");
                  return;
              }
-             const newForm = formArea.children[0].cloneNode(true); 
+             const originalForm = formContainer.children[0];
+            const newForm = originalForm.cloneNode(true);
              newForm.innerHTML = newForm.innerHTML.replace(/form-0-/g, `form-${formCount}-`)
-             formArea.appendChild(newForm);
+             formContainer.appendChild(newForm);
              formCount++;
              const totalForms = document.querySelector("#id_form-TOTAL_FORMS");
              totalForms.value =formCount;

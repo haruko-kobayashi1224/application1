@@ -2,6 +2,7 @@
 from collections import defaultdict
 from .models import Diary, WeekReflection, MonthReflection
 import calendar
+from django.utils import timezone
 
 def get_weeks_data(user, year, month):
     month_calendar = calendar.Calendar().monthdatescalendar(year, month)
@@ -39,11 +40,11 @@ def get_weeks_data(user, year, month):
 
     
     for diary in diaries:
-        diary_date =diary.created_at.date()
-        week_num =get_week_number(diary_date) 
+        diary_date = timezone.localtime(diary.created_at).date()
+        week_num = get_week_number(diary_date)
         if not week_num :
             continue 
-        # week_num = (diary.created_at.day - 1) // 7 + 1
+        
         success_list = []
         for s in diary.diarysuccess_set.all():
             s.label = success_map.get(s.success, s.success)
@@ -57,12 +58,15 @@ def get_weeks_data(user, year, month):
         diary_list = weeks.get(week_num, [])
         week_diaries = [None] * 7
         
+        
         for diary in diary_list:
-            index = diary.weekday_index
+            local_date = timezone.localtime(diary.created_at)
+            index = local_date.weekday()  # ← ここで正しい曜日を取得
             week_diaries[index] = diary
-        # weeks_full[week_num] = {
-        #     "diaries": week_diaries
-        # }
+        
+        print("JST:", timezone.localtime(diary.created_at).strftime("%Y-%m-%d %H:%M:%S"))
+        print("曜日:", timezone.localtime(diary.created_at).weekday())  # 0=月曜, ..., 6=日曜    
+        
         
         week_reflection = None
         if month_reflection:

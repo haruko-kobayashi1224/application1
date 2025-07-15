@@ -20,6 +20,7 @@ from django.http import Http404
 from dateutil.relativedelta import relativedelta
 from .utils import get_weeks_data
 from django.utils import timezone
+from datetime import datetime, time
 
 
 
@@ -40,17 +41,6 @@ def regist(request):
             'regist_form': regist_form,   
         }
     )
-# def activate_user(request, token):
-#     activate_form = forms.UserActivateForm(request.POST or None)
-#     if activate_form.is_valid():
-#         UserActivateToken.objects.activate_user_by_token(token) #ユーザーを有効化
-#         messages.success(request,'ユーザーを有効化しました')
-#     activate_form.initial['token'] = token
-#     return render(
-#         request, 'user/activate_user.html', context={
-#             'activate_form': activate_form,
-#         }
-#     )  
     
 def user_login(request):
     login_form = LoginForm(request.POST or None)
@@ -73,16 +63,6 @@ def user_login(request):
 def user_logout(request):    
     logout(request)    
     return redirect('diary_app:user_login')
-    #     password =user_form.cleaned_data.get('password', '')
-    #     try:
-    #         validate_password(password)
-    #     except ValidationError as e:
-    #        user_form.add_error('password', e)
-    #     user.set_password(password)
-    #     user.save()
-    # user_form = UserCreationForm(request.POST or None)  
-    # if user_form.is_valid(): 
-    #     user_form.save()
 
   
     
@@ -142,14 +122,13 @@ class MonthCalendar(mixins.MonthCalendarMixin, TemplateView):
         
         return context
 
-# def home(request):
-#     return render(
-#         request, 'home.html' 
-#     )       
-#できたことを入力する 
+ 
 @login_required   
 def today_input(request, year, month, day):
-    # selected_date = date(year, month, day)
+    naive_date = datetime(year, month, day)
+    naive_datetime = datetime.combine(naive_date, time.min)
+    selected_date = timezone.make_aware(naive_datetime, timezone.get_current_timezone())
+    
     if request.method == 'POST':
         today_input_form = TodayInputForm(request.POST)
         formset = OtherSuccessFormSet(request.POST)   
@@ -157,7 +136,7 @@ def today_input(request, year, month, day):
         if today_input_form.is_valid() and formset.is_valid():
             diary = today_input_form.save(commit=False)
             diary.user = request.user
-            # form.instance.date = selected_date
+            diary.created_at = selected_date 
             diary.save()  
             
         for success in today_input_form.cleaned_data['successes']:
@@ -174,6 +153,7 @@ def today_input(request, year, month, day):
         today_input_form = TodayInputForm()
         formset = OtherSuccessFormSet()
         
+        
     return render(
         request, 'today_input.html', context={
             'today_input_form':today_input_form,
@@ -189,12 +169,7 @@ class DiaryInspectionListView(ListView):
     queryset = Diary.objects.all()
     template_name ='diary_inspection.html'
     context_object_name = 'diaries'
-
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['today'] = date.today() 
-    #     return context 
+ 
 
     
     def get_queryset(self):
@@ -225,12 +200,13 @@ class DiaryInspectionListView(ListView):
                      s.label = success_map.get(s.success, s.success)
                      success_list.append(s)
              diary.success_list = success_list
+             
+             print("UTC保存日時:", diary.created_at)
+             print("ローカル日時:", timezone.localtime(diary.created_at)) 
 
         return diaries
 
-        # return Diary.objects.filter(
-        #     created_at__range=(start_datetime, end_datetime)
-        # ).order_by('-created_at')
+        
         
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -245,39 +221,17 @@ class DiaryInspectionListView(ListView):
         context['month'] = selected_date.month
         context['day'] = selected_date.day
 
-        # 前日・翌日を計算して渡す
+        
         context['prev_date'] = selected_date - timedelta(days=1)
         context['next_date'] = selected_date + timedelta(days=1)
         return context    
-        # date_str = self.request.GET.get('date')
-        # if date_str:
-        #     try:
-        #         selected_date = timezone.datetime.strptime(date_str, '%Y-%m-%d').date()
-        #     except ValueError:
-        #         selected_date = timezone.localdate()
-        # else:
-        #     selected_date = timezone.localdate()
-
-        # # その日付のDiaryだけに絞る
-        # start_datetime = timezone.datetime.combine(selected_date, timezone.datetime.min.time())
-        # end_datetime = timezone.datetime.combine(selected_date, timezone.datetime.max.time())
-        # qs = Diary.objects.filter(created_at__range=(start_datetime, end_datetime)).order_by('-created_at')
-        # return qs
-        # qs = super().get_queryset()
-        # return qs  
-
-# def diary_inspection(request):
-#     today = date.today()
-#     diary = Diary.objects.fetch_all_inspection()
-#     return render(
-#         request, 'diary_inspection.html',context={
-#             'today':date.today(), 
-#             'diary':diary,
-#         }
-#     )     
+        
 @login_required   
 def edit_diary(request, pk,  year, month, day):
     diary = get_object_or_404(Diary, pk=pk)
+    
+    print("UTC保存日時:", diary.created_at)
+    print("ローカル日時:", timezone.localtime(diary.created_at))
     if diary.user.pk != request.user.pk:
         raise Http404
     if request.method == 'POST':
@@ -306,6 +260,7 @@ def edit_diary(request, pk,  year, month, day):
         diary = edit_diary_form.save(commit=False)
         diary.user = request.user
         diary.save()
+        
        
         diary.diarysuccess_set.all().delete()
         
@@ -318,7 +273,7 @@ def edit_diary(request, pk,  year, month, day):
         
         messages.success(request, '今日の日記を更新しました')
         return redirect('diary_app:diary_inspection', year=year, month=month, day=day)
-    
+        
     return render(
         request, 'edit_diary.html',context={
             'edit_diary_form': edit_diary_form,   
@@ -332,14 +287,6 @@ def edit_diary(request, pk,  year, month, day):
     ) 
 
   
-# class DiaryDeleteView(generic.DeleteView):
-#     def get_success_url(self):
-#         model = Diary
-#         success_url = reverse_lazy('diary_app:diary_inspection', kwargs={
-#             'year': self.object.created_at.year,
-#             'month': self.object.created_at.month,
-#             'day': self.object.created_at.day
-#         })
 @require_POST
 def delete_diary(request, pk,  year, month, day):
     diary = get_object_or_404(Diary, pk=pk, user=request.user)
@@ -367,18 +314,7 @@ class ReflectionListView(ListView):
                     diaries.append(diary)
         return diaries 
     
-
-    #     for week_num in weeks:
-    #         diaries = weeks[week_num]
-    # # 空白数を計算（最大7日 - 実際の件数）
-    #         padding = 7 - len(diaries)
-    #         weeks_full[week_num] = {
-    #         "diaries": diaries,
-    #         "padding": range(padding),
-    #         }
-
-    #     self.weeks = weeks_full   
-    #     return diaries   
+  
              
         
     def get_context_data(self, **kwargs):
@@ -472,28 +408,6 @@ def delete_reflection(request, year, month):
     return redirect('diary_app:reflection', year=year, month=month, )    
     
          
-
-        
-        
-#     diary = get_object_or_404(Diary, pk=pk)
-#     if diary.user.pk != request.user.pk:
-#         raise Http404
-
-        
     
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     selected_date = date(
-    #         self.kwargs.get('year'),
-    #         self.kwargs.get('month'),
-    #         self.kwargs.get('day'),
-    #     )
-    #     context['today'] = date.today()
-    #     context['year'] = selected_date.year
-    #     context['month'] = selected_date.month
-    #     context['day'] = selected_date.day
-
-    #     # 前日・翌日を計算して渡す
-    #     context['prev_date'] = selected_date - timedelta(days=1)
-    #     context['next_date'] = selected_date + timedelta(days=1)
-    #     return context
+        
+        
