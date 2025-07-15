@@ -1,5 +1,31 @@
 {% extends "base.html" %}
 {% block content %}
+
+<style>
+.triangle-left{
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-right: 10px solid black;
+  border-bottom: 10px solid transparent;
+  display: inline-block;
+}
+
+.triangle-right{
+  width: 0;
+  height: 0;
+  border-left: 10px solid black;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  display: inline-block;
+}
+
+ .triangle-link {
+    display: inline-block;
+    text-decoration: none;
+  }
+</style>
+
 {% if messages %}
     {% for message in messages %}
     <p>{{ message.message}}</p>
@@ -11,9 +37,14 @@
         <a href="{% url 'diary_app:month' month_next.year month_next.month %}">次月</a> {% endcomment %}
     {% comment %} <h3>{{ day.grouper|date:"Y年m月d日" }}</h3> {% endcomment %}
 <div class="navigation">
-  <h3><a href="{% url 'diary_app:diary_inspection' year=prev_date.year month=prev_date.month day=prev_date.day %}">前の日</a> 
-  {{ year }}年{{ month }}月{{ day }}日
-  <a href="{% url 'diary_app:diary_inspection' year=next_date.year month=next_date.month day=next_date.day %}">次の日</a></h3>
+  <h4>
+    <a href="{% url 'diary_app:diary_inspection' year=prev_date.year month=prev_date.month day=prev_date.day %}" class="triangle-link">
+       <div class="triangle-left"></div>
+    </a> 
+     {{ year }}年{{ month }}月{{ day }}日
+    <a href="{% url 'diary_app:diary_inspection' year=next_date.year month=next_date.month day=next_date.day %}" class="triangle-link">
+      <div class="triangle-right"></div>
+    </a>
 </div> 
     
 </div>
@@ -44,16 +75,19 @@
        {% else %}
          <li>まだ登録されていません</li>
        {% endif %}
-           <a href="{% url 'diary_app:edit_diary' pk=diary.id year=year month=month day=day  %}">
-             <button type="button">編集する</button>
-          </a>
-          <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">削除</button>
+          <button type="button" class="btn btn-primary btn-sm"
+           onclick="location.href='{% url 'diary_app:edit_diary' pk=diary.id year=year month=month day=day %}'">
+           編集する
+         </button>
+          <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">
+          削除
+          </button>
               
           <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal-{{diary.id}}">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">データの削除</h5>
+                  <h5 class="modal-title">今日できたこと日記の削除</h5>
                   <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>

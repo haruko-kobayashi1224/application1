@@ -1,23 +1,52 @@
 {% extends "base.html" %}
 {% block content %}
+<style>
+.triangle-left{
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-right: 10px solid black;
+  border-bottom: 10px solid transparent;
+  display: inline-block;
+}
+
+.triangle-right{
+  width: 0;
+  height: 0;
+  border-left: 10px solid black;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  display: inline-block;
+}
+
+ .triangle-link {
+    display: inline-block;
+    text-decoration: none;
+  }
+</style>
+<h4>1週間の振り返り</h4>
 <div class="container  text-center">
-        {% comment %} <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}">前月</a>
-        {{ month_current | date:"Y年m月"}}
-        <a href="{% url 'diary_app:month' month_next.year month_next.month %}">次月</a> {% endcomment %}
-    {% comment %} <h3>{{ day.grouper|date:"Y年m月d日" }}</h3> {% endcomment %}
+
 {% if messages %}
     {% for message in messages %}
     <p>{{ message.message}}</p>
     {% endfor %}
 {% endif %}
-    <div class="navigation">
-  <h3> <a href="{% url 'diary_app:reflection' month_previous.year month_previous.month %}">前月</a>
-  {{ month_current | date:"Y年m月"}}
-  <a href="{% url 'diary_app:reflection' month_next.year month_next.month %}">次月</a></h3>
-</div> 
-    
-</div>
-<h4>1週間の振り返り</h4>
+
+  <div class="navigation">
+    <h4>
+        <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}"  class="triangle-link">
+             <div class="triangle-left"></div>
+        </a>
+         {{ month_current | date:"Y年m月"}}
+        
+        <a href="{% url 'diary_app:month' month_next.year month_next.month %}" class="triangle-link">
+             <div class="triangle-right"></div>
+        </a>
+      </h4> 
+  </div> 
+</div>   
+
 <table style="border: 1px solid black; border-collapse: collapse;">
     <thead>              
         <tr>
@@ -73,23 +102,25 @@
     <p>今月の振り返りはまだ記入されていません。</p>
 {% endif %}
 
-
-<a href="{% url 'diary_app:edit_reflection' year=today.year month=today.month %}">
-  <button type="button">編集する</button>
-</a>
-<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">削除</button>
+<button type="button" class="btn btn-primary btn-sm"
+        onclick="location.href='{% url 'diary_app:edit_reflection' year=today.year month=today.month %}'">
+  編集する
+</button>
+<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">
+  削除
+</button>
               
           <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal-{{diary.id}}">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">データの削除</h5>
+                  <h5 class="modal-title">1週間・1ヶ月の振り返りを削除</h5>
                   <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
-                  <p>削除すると元に戻すことはできません。よろしいでしょうか？</p>
+                  <p>削除すると元に戻すことはできません。削除してもよろしいでしょうか？</p>
                 </div>
                 <div class="modal-footer">
                   <form method="POST" action="{% url 'diary_app:delete_reflection' year=year month=month %}">

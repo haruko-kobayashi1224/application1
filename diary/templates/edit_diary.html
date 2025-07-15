@@ -24,14 +24,13 @@
             </div>
             {% endfor %}
         </div>
-        <button type="button" id="add-form-btn">＋追加</button>        
+        <button type="button" id="add-form-btn" style= "background-color:#E0FFFF;">＋追加</button>        
 {% comment %} <button name="btn_add" type="submit">追加する </button> {% endcomment %}
 
         <h3>明日の目標</h3>
         {{ edit_diary_form.tomorrow_goal }}
 
-
-        <input type="submit" value="保存">
+        <input type="submit" value="保存" class="btn btn-primary btn-sm">
     </form>    
 <a href="{% url 'diary_app:diary_inspection' year=year month=month day=day %}">
     <button type="button">キャンセル</button>

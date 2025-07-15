@@ -1,6 +1,32 @@
 {% extends "base.html" %}
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 {% block content %}
+
+<style>
+.triangle-left{
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-right: 10px solid black;
+  border-bottom: 10px solid transparent;
+  display: inline-block;
+}
+
+.triangle-right{
+  width: 0;
+  height: 0;
+  border-left: 10px solid black;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  display: inline-block;
+}
+
+ .triangle-link {
+    display: inline-block;
+    text-decoration: none;
+  }
+</style>
+
 {% if messages %}
     {% for message in messages %}
     <p>{{ message.message}}</p>
@@ -11,11 +37,19 @@
 
     <div class="container  text-center">
       {% if streak >= 2 %}  
-      <p>{{ streak }} 日連続で日記かけた！すごい👏</p>
+      <p style= "font-weight: bold; font-size: 25px; color: #FF8C00;">{{ streak }} 日連続で日記かけた！すごい👏</p>
       {% endif %}
-       <h3> <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}">前月</a>
-        {{ month_current | date:"Y年m月"}}
-        <a href="{% url 'diary_app:month' month_next.year month_next.month %}">次月</a></h3>
+      <h4>
+        <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}"  class="triangle-link">
+             <div class="triangle-left"></div>
+        </a>
+         {{ month_current | date:"Y年m月"}}
+        
+        <a href="{% url 'diary_app:month' month_next.year month_next.month %}" class="triangle-link">
+             <div class="triangle-right"></div>
+        </a>
+      </h4>
+        
     </div>
 
     <table class="table">
