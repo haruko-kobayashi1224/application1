@@ -1,5 +1,8 @@
 {% extends "user/user_base.html" %}
 {% block content %}
+
+<body>   
+<div class="text-center">    
 <p>ログイン画面</p>
 {% if messages %}
     {% for message in messages %}
@@ -9,9 +12,11 @@
 <form method="POST">    
 {% csrf_token %}
 {{ login_form.as_p }}
-<input type="submit" value="ログイン">
+<input type="submit" value="ログイン" class="btn btn-primary">
 </form>    
-<nav>
+  <nav>
      <a href="{% url 'diary_app:regist' %}">登録画面</a>
-</nav>
+  </nav>  
+</div>
+</body>
 {% endblock %}
