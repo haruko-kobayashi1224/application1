@@ -1,22 +1,65 @@
 {% extends "user/user_base.html" %}
 {% block content %}
 
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;  
+    justify-content: center;  
+    background-color: #E0FFFF;  
+  }
+
+  .form-container {
+    width: 350px;
+    padding: 30px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  .form-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .message-container {
+    margin-bottom: 10px;
+    color: red;
+  }
+
+  input[type="submit"] {
+    width: 100%;
+  }
+
+  nav {
+    margin-top: 15px;
+  }
+</style>
+
+
 <body>   
-<div class="text-center">    
-<p>ログイン画面</p>
-{% if messages %}
-    {% for message in messages %}
+<div class="form-container">
+  <div class="form-title">ログイン画面</div>
+  <div class="message-container">
+    {% if messages %}
+      {% for message in messages %}
         <p>{{ message.message }}</p>
-    {% endfor %}
-{% endif %}
-<form method="POST">    
-{% csrf_token %}
-{{ login_form.as_p }}
-<input type="submit" value="ログイン" class="btn btn-primary">
-</form>    
-  <nav>
+      {% endfor %}
+    {% endif %}
+   </div> 
+    <form method="POST">    
+      {% csrf_token %}
+      {{ login_form.as_p }}
+    <input type="submit" value="ログイン" class="btn btn-primary">
+    </form>    
+    <nav>
      <a href="{% url 'diary_app:regist' %}">登録画面</a>
-  </nav>  
+    </nav>  
 </div>
 </body>
 {% endblock %}

@@ -1,11 +1,55 @@
 {% extends 'user/user_base.html' %}
 {% block content %}
-<div class="text-center">  
-<p>登録画面</p>
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;  
+    justify-content: center;  
+    background-color: #E0FFFF;  
+  }
+
+  .form-container {
+    width: 400px;
+    padding: 30px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  .form-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .message-container {
+    margin-bottom: 10px;
+    color: red;
+  }
+
+  input[type="submit"] {
+    width: 100%;
+  }
+
+  nav {
+    margin-top: 15px;
+  }
+</style>
+
+<div class="form-container">
+{% comment %} <style= display: flex; justify-content: center;>      {% endcomment %}
+ <div class="form-title">登録画面</div>
 <form method="POST">
     {% csrf_token %}
     {{ regist_form.as_p }}
     <input type="submit" value"ユーザー登録" class="btn btn-primary">
-</form>    
+</form> 
+<nav>   
 <a href="{% url 'diary_app:login' %}">ログイン画面に戻る</a>
+</nav>  
 {% endblock %}

@@ -94,8 +94,8 @@
                 <div class="modal-footer">
                   <form method="POST" action="{% url 'diary_app:delete_reflection' year=year month=month %}">
                     {% csrf_token %}
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-danger">DELETE</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                    <button type="submit" class="btn btn-danger">削除</button>
                   </form>
                 </div>
               </div>
