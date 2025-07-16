@@ -63,7 +63,7 @@ table td, table th {
 }
 
 button {
-  margin-left: 5px; /* ボタン同士の間隔 */
+  margin-left: 5px; 
 }
 
 
@@ -76,10 +76,6 @@ button {
     {% endfor %}
 {% endif %}
 <div class="container  text-center">
-        {% comment %} <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}">前月</a>
-        {{ month_current | date:"Y年m月"}}
-        <a href="{% url 'diary_app:month' month_next.year month_next.month %}">次月</a> {% endcomment %}
-    {% comment %} <h3>{{ day.grouper|date:"Y年m月d日" }}</h3> {% endcomment %}
 <div class="navigation">
   <h4>
     <a href="{% url 'diary_app:diary_inspection' year=prev_date.year month=prev_date.month day=prev_date.day %}" class="triangle-link">
@@ -119,14 +115,14 @@ button {
        {% else %}
         <tr><td>まだ登録されていません</td></tr>
        {% endif %}
-       <div class="button-group"> 
-       <button type="button" class="btn btn-primary  btn-lg"
+       <div class="button-group">
+         <button type="button" class="btn btn-danger  btn-lg" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">
+           削除
+         </button> 
+         <button type="button" class="btn btn-primary  btn-lg"
            onclick="location.href='{% url 'diary_app:edit_diary' pk=diary.id year=year month=month day=day %}'">
-           編集する
-          </button>
-          <button type="button" class="btn btn-danger  btn-lg" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">
-          削除
-          </button>
+           編集
+         </button>
         </div>    
           <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal-{{diary.id}}">
             <div class="modal-dialog" role="document">

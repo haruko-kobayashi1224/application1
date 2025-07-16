@@ -22,8 +22,74 @@
  .triangle-link {
     display: inline-block;
     text-decoration: none;
+ }
+
+ .table-container {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 120%;
+  table-layout: fixed;
+  font-size: 10px;
+}
+
+th, td {
+  border: 1px solid #000;
+  padding: 4px 6px;
+  vertical-align: top;
+  word-break: break-word;
+  white-space: normal;
+  overflow-wrap: break-word;  
+  line-height: 1.2;
+  height: 80px;         
+  max-height: 80px;
+  overflow: auto; 
+}
+
+
+th {
+    background-color: #f0f8ff;
+    text-align: center;
+}
+
+td {
+    max-height: 100px;
+    background-color: #ffffff;
+}
+
+.navigation h4 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+  
+  .container.text-center h4 {
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
+
+  .button-group {
+  text-align: right; /* 右寄せ */
+  margin-top: 20px; /* ボタン上に余白 */
+  margin-bottom: 20px; /* ボタン下に余白 */
+  gap: 10px;
+  }
+
+  button {
+   margin-left: 5px; 
+ }
+
+  p {
+    margin-bottom: 10px;
+  }
+  
+
 </style>
+
 <h4>1週間の振り返り</h4>
 <div class="container  text-center">
 
@@ -35,22 +101,30 @@
 
   <div class="navigation">
     <h4>
-        <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}"  class="triangle-link">
+        <a href="{% url 'diary_app:reflection' month_previous.year month_previous.month %}"  class="triangle-link">
              <div class="triangle-left"></div>
         </a>
          {{ month_current | date:"Y年m月"}}
         
-        <a href="{% url 'diary_app:month' month_next.year month_next.month %}" class="triangle-link">
+        <a href="{% url 'diary_app:reflection' month_next.year month_next.month %}" class="triangle-link">
              <div class="triangle-right"></div>
         </a>
       </h4> 
   </div> 
 </div>   
 
-<table style="border: 1px solid black; border-collapse: collapse;">
+<div class="table-container">
+<table>
+    <colgroup>
+    <col style="width: 80px;"> <!-- ★ここが週列 -->
+    <col span="7" style="width: 10%;"> <!-- 1日目〜7日目 -->
+    <col style="width: 12%;"> <!-- ハイライト -->
+    <col style="width: 12%;"> <!-- 理由 -->
+    <col style="width: 16%;"> <!-- 工夫 -->
+    </colgroup>
     <thead>              
         <tr>
-          <th>週</th>  
+          <th >週</th>  
           <th>1日目</th>
           <th>2日目</th>
           <th>3日目</th>
@@ -68,48 +142,47 @@
           <tr>
               <td>{{ week_num }}週目</td>
               {% for diary in data.diaries %}
-                  {% if diary %}
-                    <td>
-                      {% comment %} <strong>{{ diary.created_at|date:"n/j (D)" }}</strong><br>     {% endcomment %}
+                  <td>
+                    {% if diary %}
                       {% for success in diary.success_list %}
                          ・{{ success.label }}<br>
                       {% endfor %}
-                   </td>
-                  {% else %}
-                    <td></td>
-                  {% endif %}  
+                    {% endif %} 
+                  </td>
               {% endfor %}      
                <td>{{ data.reflection.highlight|default_if_none:""  }}</td>
                <td>{{ data.reflection.reason|default_if_none:""  }}</td>
                <td>{{ data.reflection.next_plan|default_if_none:"" }}</td>
           </tr>    
-           
           {% endfor %}
     </tbody>
 </table>
+</div>
 
 {% if month_reflection %}
-  <div>
+  <div style="margin-top: 30px;">
     <h4>今日できたこと</h4>
-      <p>各週のハイライトに共通する点</p>
-          <p>{{ month_reflection.common_ground|default_if_none:""  }}</p>
-      <p>自分の価値観や大切にしていること</p>
-          <p>{{ month_reflection.my_values|default_if_none:""  }}</p>
-      <p>その他気づいたこと</p>
-          <p>{{ month_reflection.awareness|default_if_none:"" }}</p>
+      <p><strong>各週のハイライトに共通する点</strong><br>
+      {{ month_reflection.common_ground|default_if_none:""  }}</p>
+      <p><strong>自分の価値観や大切にしていること</strong><br>
+      {{ month_reflection.my_values|default_if_none:""  }}</p>
+      <p><strong>その他気づいたこと</strong><br>
+      {{ month_reflection.awareness|default_if_none:"" }}</p>
   </div>
 {% else %}
     <p>今月の振り返りはまだ記入されていません。</p>
 {% endif %}
 
-<button type="button" class="btn btn-primary btn-sm"
-        onclick="location.href='{% url 'diary_app:edit_reflection' year=today.year month=today.month %}'">
-  編集する
-</button>
-<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">
+<div class="button-group">
+<button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">
   削除
 </button>
-              
+<button type="button" class="btn btn-primary btn-lg"
+        onclick="location.href='{% url 'diary_app:edit_reflection' year=today.year month=today.month %}'">
+  編集
+</button>
+</div>
+
           <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal-{{diary.id}}">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
