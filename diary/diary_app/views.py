@@ -170,8 +170,6 @@ class DiaryInspectionListView(ListView):
     template_name ='diary_inspection.html'
     context_object_name = 'diaries'
  
-
-    
     def get_queryset(self):
         year = self.kwargs.get('year')
         month = self.kwargs.get('month')
@@ -201,12 +199,9 @@ class DiaryInspectionListView(ListView):
                      success_list.append(s)
              diary.success_list = success_list
              
-             print("UTC保存日時:", diary.created_at)
-             print("ローカル日時:", timezone.localtime(diary.created_at)) 
 
         return diaries
 
-        
         
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -229,9 +224,6 @@ class DiaryInspectionListView(ListView):
 @login_required   
 def edit_diary(request, pk,  year, month, day):
     diary = get_object_or_404(Diary, pk=pk)
-    
-    print("UTC保存日時:", diary.created_at)
-    print("ローカル日時:", timezone.localtime(diary.created_at))
     if diary.user.pk != request.user.pk:
         raise Http404
     if request.method == 'POST':

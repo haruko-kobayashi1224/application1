@@ -45,6 +45,7 @@ def get_weeks_data(user, year, month):
         if not week_num :
             continue 
         
+        
         success_list = []
         for s in diary.diarysuccess_set.all():
             s.label = success_map.get(s.success, s.success)
@@ -60,12 +61,11 @@ def get_weeks_data(user, year, month):
         
         
         for diary in diary_list:
+            if diary is None:
+               continue
             local_date = timezone.localtime(diary.created_at)
-            index = local_date.weekday()  # ← ここで正しい曜日を取得
+            index = local_date.weekday()
             week_diaries[index] = diary
-        
-        print("JST:", timezone.localtime(diary.created_at).strftime("%Y-%m-%d %H:%M:%S"))
-        print("曜日:", timezone.localtime(diary.created_at).weekday())  # 0=月曜, ..., 6=日曜    
         
         
         week_reflection = None
