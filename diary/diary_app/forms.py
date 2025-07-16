@@ -96,15 +96,7 @@ class PasswordChangeForm(forms.ModelForm):
         if commit:
             user.save()
         return user  
-
-# class TodayInputForm(forms.ModelForm):
-        
-#    class Meta:
-#        model = Diary
-#        fields =('tomottow_goal',) 
-#        labels = {
-#           'tomottow_goal': '明日の目標',
-#        }    
+    
        
 class TodayInputForm(forms.ModelForm): # あなたのフォームクラス名を適切なものに置き換えてください
     diary_choices = [
@@ -113,7 +105,6 @@ class TodayInputForm(forms.ModelForm): # あなたのフォームクラス名を
         ('throw_away', 'ごみを捨てられた'),
         ('sleep_more_than_six_hours', '6時間以上寝られた'),
         ('cooking', '自炊をした'),
-        # 他の選択肢があればここに追加
     ]
     
     successes = forms.MultipleChoiceField(
@@ -129,7 +120,7 @@ class TodayInputForm(forms.ModelForm): # あなたのフォームクラス名を
         fields =('tomorrow_goal',) 
         widgets = {
            'tomorrow_goal' : forms.Textarea(
-               attrs={ 'rows': 5, 'cols':60},
+               attrs={ 'rows': 3, 'cols':60},
            )
         }
         labels = {
