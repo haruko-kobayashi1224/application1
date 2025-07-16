@@ -169,11 +169,14 @@ class DiaryInspectionListView(ListView):
     queryset = Diary.objects.all()
     template_name ='diary_inspection.html'
     context_object_name = 'diaries'
+    
  
     def get_queryset(self):
         year = self.kwargs.get('year')
         month = self.kwargs.get('month')
         day = self.kwargs.get('day')
+        
+        user = self.request.user
 
         selected_date = date(year, month, day)
         start_datetime = timezone.make_aware(datetime.combine(selected_date, datetime.min.time()))
@@ -187,7 +190,8 @@ class DiaryInspectionListView(ListView):
          'cooking': '自炊をした',
          }
         diaries = Diary.objects.filter(
-        created_at__range=(start_datetime, end_datetime)
+            created_at__range=(start_datetime, end_datetime),
+            user=user
         ).order_by('-created_at')
         
 
@@ -355,7 +359,6 @@ def edit_reflection(request, year, month):
         week_formset = WeekReflectionFormSet(request.POST, queryset=week_queryset)
         month_form = MonthReflectionForm(request.POST, instance=month_reflection)
         if week_formset.is_valid() and month_form.is_valid():
-            print('DEBUG Month Form Data:', month_form.cleaned_data)
             week_formset.save()
             month_form.save()
             messages.success(request, '振り返りを保存しました。')
