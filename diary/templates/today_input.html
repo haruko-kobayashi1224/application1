@@ -99,6 +99,9 @@
         {{ today_input_form.tomorrow_goal }}
 
         <div class="button-area">
+          <button type="button" class="btn-cancel" onclick="location.href='{% url 'diary_app:month' year=year month=month  %}'">
+           キャンセル
+          </button> 
           <input type="submit" value="作成" class="btn btn-primary btn-sm">      
         </div>    
     </form>        
@@ -118,7 +121,7 @@
                  return;
              }
              const originalForm = formContainer.children[0];
-            const newForm = originalForm.cloneNode(true);
+             const newForm = originalForm.cloneNode(true);
              newForm.innerHTML = newForm.innerHTML.replace(/form-0-/g, `form-${formCount}-`)
              formContainer.appendChild(newForm);
              formCount++;
