@@ -150,13 +150,13 @@ class WeekReflectionForm(forms.ModelForm):
         fields = ('highlight', 'reason', 'next_plan',)
         widgets = {
            'highlight' : forms.Textarea(
-               attrs={ 'rows': 2, 'cols':30},
+               attrs={ 'rows': 6, 'cols':15},
            ),
            'reason' : forms.Textarea(
-               attrs={ 'rows': 2, 'cols':30},
+               attrs={ 'rows': 6, 'cols':15},
            ),
            'next_plan' : forms.Textarea(
-               attrs={ 'rows': 2, 'cols':30},
+               attrs={ 'rows': 6, 'cols':20},
            )
         }
         labels = {
@@ -183,13 +183,13 @@ class MonthReflectionForm(forms.ModelForm):
         fields = ('common_ground', 'my_values', 'awareness',)
         widgets = {
            'common_ground' : forms.Textarea(
-               attrs={ 'rows': 2, 'cols':30},
+               attrs={ 'rows': 2, 'cols':70},
            ),
            'my_values' : forms.Textarea(
-               attrs={ 'rows': 2, 'cols':30},
+               attrs={ 'rows': 2, 'cols':70},
            ),
            'awareness' : forms.Textarea(
-               attrs={ 'rows': 2, 'cols':30},
+               attrs={ 'rows': 2, 'cols':70},
            )
         }
         labels = {

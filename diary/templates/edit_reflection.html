@@ -1,13 +1,125 @@
 {% extends "base.html" %}
 {% block content %}
+
+<style>
+
+.table-container {
+  overflow-x: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  scrollbar-width: auto;
+  -ms-overflow-style: auto;
+}
+
+
+.table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}  
+
+.table-container {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+table {
+  border-collapse: collapse;
+  min-width: 1200px;
+  width: 100%;
+  table-layout: fixed;
+  font-size: 12px;
+}
+
+th, td {
+  border: 1px solid #000;
+  padding: 4px 6px;
+  vertical-align: top;
+  word-break: break-word;
+  white-space: normal;
+  overflow-wrap: break-word;
+  line-height: 1.2;
+  height: 80px;         
+  max-height: 80px;
+  overflow: auto; 
+}
+
+
+th {
+    background-color: #f0f8ff;
+    text-align: center;
+}
+
+td {
+    max-height: 100px;
+    background-color: #ffffff;
+}
+
+.navigation h4 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+  
+  .container.text-center h4 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }  
+
+.button-area {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    padding: 10px 25px;
+  }
+
+ .btn-cancel,
+input[type="submit"] {
+  font-size: 1.1rem;
+  padding: 10px 25px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+ 
+
+ input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+  }
+
+</style>
+
 <div class="container  text-center">
-    <h2>{{ year }}年{{ month }}月の振り返り編集</h2>
+    <h4>{{ year }}年{{ month }}月の振り返り編集</h4>
 </div>
 <form method="post">
   {% csrf_token %}
   {{ week_formset.management_form }}
-<table style="border: 1px solid black; border-collapse: collapse;"> 
-    <thead>              
+ <div class="table-container">
+   <table>
+     <colgroup>
+      <col style="width: 80px;"> 
+      <col span="7" style="width: 10%;"> 
+      <col style="width: 12%;"> 
+      <col style="width: 12%;"> 
+      <col style="width: 16%;"> 
+     </colgroup>
+     <thead>              
         <tr>
           <th>週</th>  
           <th>1日目</th>
@@ -21,54 +133,49 @@
           <th>できた理由</th>
           <th>今後はどのような工夫をしたらよいか</th>
         </tr>
-    </thead>
-    <tbody>
-      {% for form, week in week_form_pairs %}
-        {% with week_num=week.0 data=week.1 %}  
-          <tr>
+      </thead>
+      <tbody>
+        {% for form, week in week_form_pairs %}
+          {% with week_num=week.0 data=week.1 %}  
+            <tr>
               <td>{{ week_num }}週目</td>
               {% for diary in data.diaries %}
+                <td> 
                   {% if diary %}
-                    <td>
-                      {% comment %} <strong>{{ diary.created_at|date:"n/j (D)" }}</strong><br>     {% endcomment %}
-                      {% for success in diary.success_list %}
-                         ・{{ success.label }}<br>
-                      {% endfor %}
-                   </td>
-                  {% else %}
-                    <td></td>
-                  {% endif %}  
+                    {% for success in diary.success_list %}
+                      ・{{ success.label }}<br>
+                    {% endfor %}
+                  {% endif %}   
+                </td>
               {% endfor %} 
               <td style="display: none;">{{ form.id }}</td>    
               <td>{{ form.highlight }}</td>
               <td>{{ form.reason }}</td>
               <td>{{ form.next_plan }}</td>
-                
-                {% comment %} <td></td>  <!-- できた理由 -->
-                <td></td>  <!-- 空白セルで埋める --> {% endcomment %}
-          </tr>
-           
-        {% endwith %}
-      {% endfor %}
-    </tbody>
-</table>
-<div>
-<h4>今日できたこと</h4>
-<p>各週のハイライトに共通する点</p>
-  <p>{{ month_form.common_ground }}</p>
-<p>自分の価値観や大切にしていること</p>
-  <p>{{ month_form.my_values}}</p>
-<p>その他気づいたこと</p>
-  <p>{{ month_form.awareness }}</p>
+           </tr>  
+          {% endwith %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+<div style="margin-top: 30px;">  
+  <h4>今月できたこと</h4>
+    <p><strong>各週のハイライトに共通する点</strong><br>
+    {{ month_form.common_ground }}</p>
+    <p><strong>自分の価値観や大切にしていること</strong><br>
+    {{ month_form.my_values}}</p>
+    <p><strong>その他気づいたこと</strong><br>
+    {{ month_form.awareness }}</p>
 </div>
 
- <input type="submit" value="保存">
+ <div class="button-area">
+   <button type="button" class="btn-cancel" onclick="location.href='{% url 'diary_app:reflection' year=year month=month  %}'">
+    キャンセル
+   </button>  
+   <input type="submit" value="保存" class="btn btn-primary btn-sm">
+  </div>
 </form>
-
-
-<a href="{% url 'diary_app:reflection' year=year month=month %}">
-    <button type="button">キャンセル</button>
-</a>
 {% endblock %}
 
 

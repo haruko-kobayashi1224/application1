@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+
 <style>
 .triangle-left{
   width: 0;
@@ -31,9 +32,10 @@
 
 table {
   border-collapse: collapse;
-  width: 120%;
+  min-width: 1200px;
+  width: 100%;
   table-layout: fixed;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 th, td {
@@ -73,9 +75,9 @@ td {
   }
 
   .button-group {
-  text-align: right; /* 右寄せ */
-  margin-top: 20px; /* ボタン上に余白 */
-  margin-bottom: 20px; /* ボタン下に余白 */
+  text-align: right; 
+  margin-top: 20px; 
+  margin-bottom: 20px; 
   gap: 10px;
   }
 
@@ -84,15 +86,15 @@ td {
  }
 
   p {
-    margin-bottom: 10px;
+    margin-bottom: 40px;
   }
   
 
 </style>
 
-<h4>1週間の振り返り</h4>
-<div class="container  text-center">
+<h4>{{ year }}年{{ month }}月の振り返り編集</h4>
 
+<div class="container  text-center">
 {% if messages %}
     {% for message in messages %}
     <p>{{ message.message}}</p>
@@ -116,11 +118,11 @@ td {
 <div class="table-container">
 <table>
     <colgroup>
-    <col style="width: 80px;"> <!-- ★ここが週列 -->
-    <col span="7" style="width: 10%;"> <!-- 1日目〜7日目 -->
-    <col style="width: 12%;"> <!-- ハイライト -->
-    <col style="width: 12%;"> <!-- 理由 -->
-    <col style="width: 16%;"> <!-- 工夫 -->
+    <col style="width: 80px;"> 
+    <col span="7" style="width: 10%;"> 
+    <col style="width: 12%;"> 
+    <col style="width: 12%;"> 
+    <col style="width: 16%;"> 
     </colgroup>
     <thead>              
         <tr>
