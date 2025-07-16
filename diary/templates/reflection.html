@@ -81,14 +81,19 @@ td {
   gap: 10px;
   }
 
-  button {
+button {
    margin-left: 5px; 
  }
 
-  p {
-    margin-bottom: 40px;
+p {
+    margin-top: 20px;
+    margin-bottom: 60px;
   }
-  
+
+h4 {
+    margin-top: 20px;
+    
+   }
 
 </style>
 
@@ -116,6 +121,7 @@ td {
 </div>   
 
 <div class="table-container">
+<h4>1週間ごとの振り返り</h4>  
 <table>
     <colgroup>
     <col style="width: 80px;"> 
@@ -160,20 +166,19 @@ td {
     </tbody>
 </table>
 </div>
-
-{% if month_reflection %}
+<h4>今月の振り返り</h4>      
+{% if month_reflection %} 
   <div style="margin-top: 30px;">
-    <h4>今日できたこと</h4>
-      <p><strong>各週のハイライトに共通する点</strong><br>
+      <p><strong>各週のハイライトに共通する点</strong><br> 
       {{ month_reflection.common_ground|default_if_none:""  }}</p>
-      <p><strong>自分の価値観や大切にしていること</strong><br>
+      <p><strong>自分の価値観や大切にしていること</strong><br> 
       {{ month_reflection.my_values|default_if_none:""  }}</p>
-      <p><strong>その他気づいたこと</strong><br>
+      <p><strong>その他気づいたこと</strong><br> 
       {{ month_reflection.awareness|default_if_none:"" }}</p>
   </div>
-{% else %}
+ {% else %}
     <p>今月の振り返りはまだ記入されていません。</p>
-{% endif %}
+{% endif %} 
 
 <div class="button-group">
 <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">

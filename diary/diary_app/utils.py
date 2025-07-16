@@ -1,4 +1,3 @@
-# diary_app/utils.py
 from collections import defaultdict
 from .models import Diary, WeekReflection, MonthReflection
 import calendar
@@ -43,6 +42,7 @@ def get_weeks_data(user, year, month):
         diary_date = timezone.localtime(diary.created_at).date()
         week_num = get_week_number(diary_date)
         if not week_num :
+
             continue 
         
         

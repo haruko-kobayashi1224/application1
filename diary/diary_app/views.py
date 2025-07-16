@@ -311,14 +311,11 @@ class ReflectionListView(ListView):
         return diaries 
     
   
-             
-        
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         year = int(self.kwargs.get('year'))
         month = int(self.kwargs.get('month'))
        
-        
 
         context['weeks'] = self.weeks # {1: [diary, diary], 2: [...], ...}
         context['month_current'] = date(year, month, 1)

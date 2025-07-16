@@ -69,13 +69,12 @@ button {
 
 
 </style>
-
-{% if messages %}
+<div class="container  text-center">
+  {% if messages %}
     {% for message in messages %}
     <p>{{ message.message}}</p>
     {% endfor %}
-{% endif %}
-<div class="container  text-center">
+  {% endif %}
 <div class="navigation">
   <h4>
     <a href="{% url 'diary_app:diary_inspection' year=prev_date.year month=prev_date.month day=prev_date.day %}" class="triangle-link">
@@ -95,59 +94,77 @@ button {
   <tbody>
     {% if diaries %}
       {% for diary in diaries %}
-      <div class="success-list">
-        {% for success in diary.success_list %}
-          <div class="success-item">{{ success.label }}</div>
-        {% endfor %}
-      </div>  
+        <tr>
+          <td>
+            <div class="success-list">
+              {% for success in diary.success_list %}
+                <div class="success-item">{{ success.label }}</div>
+              {% endfor %}
+            </div>
+          </td>
+        </tr>
       {% endfor %}
     {% else %}
       <tr><td colspan="2">今日の記録はまだありません。</td></tr>
-    {% endif %}  
+    {% endif %}
   </tbody>
 </table>
 
 <h4>明日の目標</h4>
-  {% if diaries %}
-    {% for diary in diaries %}
-      <td>{{ diary.tomorrow_goal }}</td>
-       {% if diary.user.id == user.id %}
-       {% else %}
-        <tr><td>まだ登録されていません</td></tr>
-       {% endif %}
-       <div class="button-group">
-         <button type="button" class="btn btn-danger  btn-lg" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">
-           削除
-         </button> 
-         <button type="button" class="btn btn-primary  btn-lg"
-           onclick="location.href='{% url 'diary_app:edit_diary' pk=diary.id year=year month=month day=day %}'">
-           編集
-         </button>
-        </div>    
-          <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal-{{diary.id}}">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">今日できたこと日記の削除</h5>
-                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <p>削除すると元に戻すことはできません。よろしいでしょうか？</p>
-                </div>
-                <div class="modal-footer">
-                  <form method="POST" action="{% url 'diary_app:delete_diary' pk=diary.id year=year month=month day=day %}">
-                    {% csrf_token %}
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-                    <button type="submit" class="btn btn-danger">削除</button>
-                  </form>
+<table>
+  <tbody>
+    {% if diaries %}
+      {% for diary in diaries %}
+        <tr>
+          <td>
+            {% if diary.tomorrow_goal %}
+              {{ diary.tomorrow_goal }}
+            {% else %}
+              なし
+            {% endif %}
+          </td>
+          <td>
+            {% if diary.user.id == user.id %}
+              <div class="button-group">
+                <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ diary.id }}">
+                  削除
+                </button>
+                <button type="button" class="btn btn-primary btn-lg"
+                        onclick="location.href='{% url 'diary_app:edit_diary' pk=diary.id year=year month=month day=day %}'">
+                  編集
+                </button>
+              </div>
+
+              <!-- モーダル -->
+              <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal-{{ diary.id }}">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">今日できたこと日記の削除</h5>
+                      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <p>削除すると元に戻すことはできません。よろしいでしょうか？</p>
+                    </div>
+                    <div class="modal-footer">
+                      <form method="POST" action="{% url 'diary_app:delete_diary' pk=diary.id year=year month=month day=day %}">
+                        {% csrf_token %}
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                        <button type="submit" class="btn btn-danger">削除</button>
+                      </form>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-    {% endfor %}
-  {% endif %}  
-</ul>
-</div>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      <tr><td colspan="2">今日の記録はまだありません。</td></tr>
+    {% endif %}
+  </tbody>
+</table>
 {% endblock %}
