@@ -21,6 +21,7 @@ from dateutil.relativedelta import relativedelta
 from .utils import get_weeks_data
 from django.utils import timezone
 from datetime import datetime, time
+from django.utils.timezone import localtime
 
 
 
@@ -104,22 +105,27 @@ class MonthCalendar(mixins.MonthCalendarMixin, TemplateView):
         calendar_context = self.get_month_calendar()
         context.update(calendar_context)
         
-        context['today'] = date.today() 
-        
-        diary_dates = set(Diary.objects.filter(user=self.request.user)
-                             .values_list('created_at__date', flat=True))
-        context['diary_dates']= diary_dates
-        
+        today = timezone.localdate()
+        context['today'] = today
+        context['now'] = today
+
         diaries = Diary.objects.filter(user=self.request.user).order_by('created_at')
-        dates = [d.created_at.date() for d in diaries]
+        diary_dates = set(localtime(d.created_at).date() for d in diaries)
+        context['diary_dates'] = diary_dates
         
+        dates_set = diary_dates
         streak = 0
-        current =date.today()
-        while current in dates:
+        current = today
+        
+        if current not in dates_set:
+            current -= timedelta(days=1)
+
+        while current in dates_set:
             streak += 1
             current -= timedelta(days=1)
+
+
         context['streak'] =streak        
-        
         return context
 
  
