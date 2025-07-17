@@ -54,15 +54,20 @@ class UserMyPageForm(forms.ModelForm):
     
     class Meta:
         model = User
-        fields = ('user_image','username', 'email',)
+        fields = ['user_image','username', 'email',]
         labels = {
-            #'user_image':'画像',
+            'user_image':'画像',
             'username':'名前',
             'email':'メールアドレス',
         }
-        #required = {
-        #     'user_image': False,
-        # }
+        widgets = {
+            'user_image': forms.FileInput(attrs={
+                'style': 'display: none;',
+                'id': 'file-upload',
+            }),  
+        }
+    
+    
 class PasswordChangeForm(forms.ModelForm):
     
     confirm_password = forms.CharField(
