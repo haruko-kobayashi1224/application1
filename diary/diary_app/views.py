@@ -36,6 +36,7 @@ def regist(request):
     today = date.today()
     if regist_form.is_valid():
        regist_form.save(commit=True)
+       messages.success(request, 'ユーザー登録ができました！')
        return redirect('diary_app:month', year=today.year, month=today.month )
     return render(
         request, 'user/registration.html', context={
@@ -52,6 +53,7 @@ def user_login(request):
         if user:
             login(request, user)
             today = date.today()
+            messages.success(request, 'ログイン成功しました！')
             return redirect('diary_app:month', year=today.year, month=today.month )
         else:
             messages.warning(request, 'ログインに失敗しました')
