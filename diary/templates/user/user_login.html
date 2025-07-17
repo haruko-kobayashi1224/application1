@@ -2,9 +2,11 @@
 {% block content %}
 
 <style>
+  
   body {
     margin: 0;
     padding: 0;
+    height: 100vh;
     display: flex;
     align-items: center;  
     justify-content: center;  
@@ -28,7 +30,7 @@
 
   .message-container {
     margin-bottom: 10px;
-    color: red;
+    
   }
 
   input[type="submit"] {
@@ -40,8 +42,7 @@
   }
 </style>
 
-
-<body>   
+  
 <div class="form-container">
   <div class="form-title">ログイン画面</div>
   <div class="message-container">
@@ -60,5 +61,4 @@
      <a href="{% url 'diary_app:regist' %}">登録画面</a>
     </nav>  
 </div>
-</body>
 {% endblock %}
