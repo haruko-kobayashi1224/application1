@@ -158,9 +158,9 @@ h5 {
                     {% endif %} 
                   </td>
               {% endfor %}      
-               <td>{{ data.reflection.highlight|default_if_none:""  }}</td>
-               <td>{{ data.reflection.reason|default_if_none:""  }}</td>
-               <td>{{ data.reflection.next_plan|default_if_none:"" }}</td>
+               <td>{{ data.reflection.highlight|default_if_none:""|linebreaksbr }}</td>
+               <td>{{ data.reflection.reason|default_if_none:""|linebreaksbr }}</td>
+               <td>{{ data.reflection.next_plan|default_if_none:""|linebreaksbr }}</td>
           </tr>    
           {% endfor %}
     </tbody>
@@ -170,11 +170,11 @@ h5 {
 {% if month_reflection %} 
   <div style="margin-top: 30px;">
       <p><strong>各週のハイライトに共通する点</strong><br> 
-      {{ month_reflection.common_ground|default_if_none:""  }}</p>
+      {{ month_reflection.common_ground|default_if_none:""|linebreaksbr }}</p>
       <p><strong>自分の価値観や大切にしていること</strong><br> 
-      {{ month_reflection.my_values|default_if_none:""  }}</p>
+      {{ month_reflection.my_values|default_if_none:""|linebreaksbr }}</p>
       <p><strong>その他気づいたこと</strong><br> 
-      {{ month_reflection.awareness|default_if_none:"" }}</p>
+      {{ month_reflection.awareness|default_if_none:""|linebreaksbr }}</p>
   </div>
  {% else %}
     <p>今月の振り返りはまだ記入されていません。</p>
