@@ -169,11 +169,11 @@ h5 {
 <h5>今月の振り返り</h5>      
 {% if month_reflection %} 
   <div style="margin-top: 30px;">
-      <p><strong>各週のハイライトに共通する点</strong><br> 
+      <p><strong>■各週のハイライトに共通する点</strong><br> 
       {{ month_reflection.common_ground|default_if_none:""|linebreaksbr }}</p>
-      <p><strong>自分の価値観や大切にしていること</strong><br> 
+      <p><strong>■自分の価値観や大切にしていること</strong><br> 
       {{ month_reflection.my_values|default_if_none:""|linebreaksbr }}</p>
-      <p><strong>その他気づいたこと</strong><br> 
+      <p><strong>■その他気づいたこと</strong><br> 
       {{ month_reflection.awareness|default_if_none:""|linebreaksbr }}</p>
   </div>
  {% else %}
