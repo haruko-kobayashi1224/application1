@@ -39,16 +39,68 @@
   nav {
     margin-top: 15px;
   }
+
+  input[type="text"], input[type="password"], input[type="email"] {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
 </style>
 
 <div class="form-container">
  <div class="form-title">登録画面</div>
 <form method="POST">
     {% csrf_token %}
-    {{ regist_form.as_p }}
+    <div class="form-group text-start mb-3">
+      <label for="{{ regist_form.username.id_for_label }}">名前</label>
+      {{ regist_form.username }}
+      {% if regist_form.username.errors %}
+        <div class="text-danger">{{ regist_form.username.errors }}</div>
+      {% endif %}
+   </div>
+
+   <div class="form-group text-start mb-3">
+      <label for="{{ regist_form.email.id_for_label }}">メールアドレス</label>
+      {{ regist_form.email }}
+      {% if regist_form.email.errors %}
+        <div class="text-danger">{{ regist_form.email.errors }}</div>
+      {% endif %}
+   </div>
+
+   <div class="form-group text-start mb-3">
+      <label for="{{ regist_form.password.id_for_label }}">パスワード</label>
+      {{ regist_form.password }}
+      {% if regist_form.password.errors %}
+        <div class="text-danger">{{ regist_form.password.errors }}</div>
+      {% endif %}
+   </div>
+
+   <div class="form-group text-start mb-3">
+      <label for="{{ regist_form.confirm_password.id_for_label }}">パスワード再入力</label>
+      {{ regist_form.confirm_password }}
+      {% if regist_form.confirm_password.errors %}
+        <div class="text-danger">{{ regist_form.confirm_password.errors }}</div>
+      {% endif %}
+   </div>
+
     <input type="submit" value"ユーザー登録" class="btn btn-primary">
-</form> 
-<nav>   
+</form>
+<nav>
 <a href="{% url 'diary_app:login' %}">ログイン画面に戻る</a>
-</nav>  
+</nav>
 {% endblock %}

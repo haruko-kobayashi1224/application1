@@ -35,7 +35,8 @@ def regist(request):
     regist_form = RegistForm(request.POST or None)
     today = date.today()
     if regist_form.is_valid():
-       regist_form.save(commit=True)
+       user = regist_form.save(commit=True)
+       login(request, user)
        messages.success(request, 'ユーザー登録ができました！')
        return redirect('diary_app:month', year=today.year, month=today.month )
     return render(
@@ -174,7 +175,6 @@ def today_input(request, year, month, day):
     )   
     
 class DiaryInspectionListView(ListView):
-    queryset = Diary.objects.all()
     template_name ='diary_inspection.html'
     context_object_name = 'diaries'
     
