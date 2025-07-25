@@ -142,7 +142,10 @@ class OtherSuccessForm(forms.Form):
     other_success =forms.CharField(
         required=False,
         label='その他',
-        widget=forms.TextInput(attrs={'placeholder': 'その他にできたことを書いてください'})
+        widget=forms.Textarea(attrs={'placeholder': 'その他にできたことを書いてください',
+                                     'rows': 1,
+                                     'cols':40,   
+                              })
     )
 OtherSuccessFormSet = forms.formset_factory(OtherSuccessForm, 
                                             extra=1, max_num=3, can_delete=True, validate_max=True) 
