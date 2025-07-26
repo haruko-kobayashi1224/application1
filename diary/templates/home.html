@@ -25,12 +25,42 @@
     display: inline-block;
     text-decoration: none;
   }
+  
+
+.calendar-table {
+  width: 100%;
+  table-layout: fixed; 
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+
+.calendar-table td,
+.calendar-table th {
+  border: 1px solid #ccc;
+  vertical-align: middle;
+  height: 80px; 
+  font-size: 16px;
+  
+}
+
+.calendar-table th {
+  background-color: #E0FFFF;
+  font-weight: bold;
+  padding: 5px;
+  text-align: center;
+}
+
+.calendar-table td {
+  text-align: left;
+  padding-left: 8px;
+}
 </style>
 
 {% if user.is_authenticated %}
 <div class="container" mt-3>
 
-    <div class="container  text-center">
+     <div class="container  text-center">
       {% if messages %}
         {% for message in messages %}
         <p>{{ message.message}}</p>
@@ -52,7 +82,7 @@
         
     </div>
 
-    <table class="table">
+    <table class="calendar-table">
         <thead>
         <tr>
             {% for w in week_names %}
