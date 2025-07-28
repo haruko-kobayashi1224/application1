@@ -69,7 +69,8 @@ class UserMyPageForm(forms.ModelForm):
     
     
 class PasswordChangeForm(forms.ModelForm):
-    
+    current_password = forms.CharField(label="現在のパスワード", widget=forms.PasswordInput()) 
+    password = forms.CharField(label="新しいパスワード", widget=forms.PasswordInput())    
     confirm_password = forms.CharField(
         label='新しいパスワード再入力', widget=forms.PasswordInput()
     )
@@ -77,23 +78,27 @@ class PasswordChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('password',)
-        labels ={
-            'password': '新しいパスワード',
-        }
-        widgets = {
-            'password': forms.PasswordInput()  
-        }
+    
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.get('instance')
+        super().__init__(*args, **kwargs)
+    
+
     def clean(self):
         cleaned_data = super().clean()
-        password = cleaned_data['password']
-        confirm_password = cleaned_data['confirm_password']   
+        current_password = cleaned_data.get('current_password')
+        password = cleaned_data.get('password')
+        confirm_password = cleaned_data.get('confirm_password')
+        
+        if not self.user.check_password(current_password):
+            self.add_error('current_password', '現在のパスワードが間違っています')
         if password != confirm_password:
             self.add_error('password', 'パスワードが一致しません')
         try: 
             validate_password(password, self.instance) 
         except ValidationError as e:
             self.add_error('password', e)
-            return cleaned_data         
+        return cleaned_data         
                 
     def save(self, commit=False):
         user =super().save(commit=False) 

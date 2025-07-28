@@ -22,7 +22,7 @@ from .utils import get_weeks_data
 from django.utils import timezone
 from datetime import datetime, time
 from django.utils.timezone import localtime
-
+from django.contrib.auth import update_session_auth_hash
 
 
 def portfolio(request):
@@ -91,8 +91,9 @@ def change_password(request):
     
     if password_change_form.is_valid():
         password_change_form.save(commit=True)
+        update_session_auth_hash(request, request.user)
         messages.success(request, 'パスワードを変更しました')
-        return redirect('diary_app:login') 
+        # return redirect('diary_app:login') 
     return render(request, 'change_password.html',context={
         'password_change_form': password_change_form,
         'today':date.today(), 
