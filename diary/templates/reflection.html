@@ -87,7 +87,7 @@ button {
 
 p {
     margin-top: 20px;
-    margin-bottom: 60px;
+    margin-bottom: 30px;
   }
 
 h5 {
@@ -167,27 +167,42 @@ h5 {
 </table>
 </div>
 <h5>今月の振り返り</h5>      
-{% if month_reflection %} 
   <div style="margin-top: 30px;">
       <p><strong>■各週のハイライトに共通する点</strong><br> 
-      {{ month_reflection.common_ground|default_if_none:""|linebreaksbr }}</p>
+      {% if month_reflection and month_reflection.common_ground %}   
+        <p>{{ month_reflection.common_ground|default_if_none:""|linebreaksbr }}</p>
+      {% else %}
+        <p>まだ記入されていません。</p>
+      {% endif %}  
       <p><strong>■自分の価値観や大切にしていること</strong><br> 
-      {{ month_reflection.my_values|default_if_none:""|linebreaksbr }}</p>
+      {% if month_reflection and month_reflection.my_values  %}   
+        <p>{{ month_reflection.my_values|default_if_none:""|linebreaksbr }}</p>
+      {% else %}
+        <p>まだ記入されていません。</p>
+      {% endif %}    
       <p><strong>■その他気づいたこと</strong><br> 
-      {{ month_reflection.awareness|default_if_none:""|linebreaksbr }}</p>
+      {% if month_reflection and month_reflection.awareness %}     
+        <p>{{ month_reflection.awareness|default_if_none:""|linebreaksbr }}</p>
+      {% else %}
+        <p>まだ記入されていません。</p>
+      {% endif %}
   </div>
- {% else %}
-    <p>今月の振り返りはまだ記入されていません。</p>
-{% endif %} 
 
 <div class="button-group">
-<button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">
-  削除
-</button>
-<button type="button" class="btn btn-primary btn-lg"
+{% if month_reflection or  data.reflection %}  
+  <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">
+    削除
+  </button>
+{% else %}
+  <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#emptyModal">
+    削除
+  </button>
+{% endif %}
+  <button type="button" class="btn btn-primary btn-lg"
         onclick="location.href='{% url 'diary_app:edit_reflection' year=today.year month=today.month %}'">
-  編集
-</button>
+    編集
+  </button>  
+
 </div>
 
           <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal-{{diary.id}}">
@@ -208,6 +223,25 @@ h5 {
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
                     <button type="submit" class="btn btn-danger">削除</button>
                   </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="modal fade" tabindex="-1" role="dialog" id="emptyModal">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">まだ記録がありません</h5>
+                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>この日の記録はまだありません。削除する内容がありません。</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
                 </div>
               </div>
             </div>

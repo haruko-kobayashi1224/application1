@@ -55,6 +55,10 @@
   text-align: left;
   padding-left: 8px;
 }
+
+.bg-today {
+  background-color: #AEFCE2FF;  
+}
 </style>
 
 {% if user.is_authenticated %}
@@ -97,9 +101,9 @@
                   {% if now == day and day in diary_dates %}
                       <td style="background-color:#FFA07A;">
                   {% elif day in diary_dates %}              
-                       <td style="background-color:#FFDAB9;">
+                      <td style="background-color:#FFDAB9;">
                   {% elif now == day %}
-                       <td class="table-success">      
+                      <td class="bg-today">      
                   {% else %}    
                       <td> 
                   {% endif %}
