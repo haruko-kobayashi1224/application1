@@ -129,7 +129,26 @@ class MonthCalendar(mixins.MonthCalendarMixin, TemplateView):
             current -= timedelta(days=1)
 
 
-        context['streak'] =streak        
+        context['streak'] =streak  
+        
+        diary_dict = {}
+        for diary in diaries:
+            date_key =localtime(diary.created_at).date().isoformat()
+            diary_dict[date_key] = diary.pk
+        context['diary_dict'] = diary_dict  
+        
+    #     return render(
+    #     request, 'edit_diary.html',context={
+    #         'edit_diary_form': edit_diary_form,   
+    #         'year': year,
+    #         'month': month,
+    #         'day': day,
+    #         'today': date.today(),
+    #         'formset':formset,
+            
+    #     }
+    # )     
+        
         return context
 
  
@@ -277,7 +296,7 @@ def edit_diary(request, pk,  year, month, day):
                 DiarySuccess.objects.create(success=f['other_success'], diary=diary)    
         
         messages.success(request, '今日の日記を更新しました')
-        return redirect('diary_app:diary_inspection', year=year, month=month, day=day)
+        return redirect('diary_app:month', year=year, month=month, )
         
     return render(
         request, 'edit_diary.html',context={

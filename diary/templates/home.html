@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load diary_extras %}
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 {% block content %}
 
@@ -107,7 +108,16 @@
                   {% else %}    
                       <td> 
                   {% endif %}
-                    <a href="{% url 'diary_app:today_input' year=day.year month=day.month day=day.day %}">
+                  {% with date_str=day|date:"Y-m-d" %}
+                    {% with diary_pk=diary_dict|get_item:date_str %}
+                      {% if diary_pk %}
+                        <a href="{% url 'diary_app:edit_diary' pk=diary_pk year=day.year month=day.month day=day.day %}">
+                      {% else %}
+                        <a href="{% url 'diary_app:today_input' year=day.year month=day.month day=day.day %}">
+                      {% endif %}
+                    {% endwith %}
+                  {% endwith %}  
+                    
                         {% if month_current.month != day.month %}
                             {{ day | date:"m/d" }}
                         {% else %}
