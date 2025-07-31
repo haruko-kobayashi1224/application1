@@ -1,6 +1,6 @@
 from django.urls import path
 from .import views
-from. views import DiaryInspectionListView, ReflectionListView
+from. views import ReflectionListView
 
 app_name = 'diary_app'
 
@@ -14,7 +14,7 @@ urlpatterns = [
     path('change_password/', views.change_password, name='change_password'),
     path('month/<int:year>/<int:month>/', views.MonthCalendar.as_view(), name='month'),
     path('today_input/<int:year>/<int:month>/<int:day>/', views.today_input, name='today_input'),
-    path('diary_inspection/<int:year>/<int:month>/<int:day>/', DiaryInspectionListView.as_view(), name='diary_inspection'),
+    # path('diary_inspection/<int:year>/<int:month>/<int:day>/', DiaryInspectionListView.as_view(), name='diary_inspection'),
     path('edit_diary/<int:pk>/<int:year>/<int:month>/<int:day>/', views.edit_diary, name='edit_diary'),
     path('delete_diary/<int:pk>/<int:year>/<int:month>/<int:day>/', views.delete_diary, name='delete_diary'),
     path('edit_reflection/<int:year>/<int:month>/', views.edit_reflection, name='edit_reflection'),

@@ -59,6 +59,14 @@
     color: white;
   }
 
+  .btn-cancel,
+ input[type="submit"] {
+  font-size: 1.1rem;
+  padding: 10px 25px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
 </style>
 
 
@@ -71,7 +79,7 @@
     </div> 
 {% endif %}
 
-    <h4>{{ year }}年{{ month }}月{{ day }}日</h4>
+    <h4>{{ year }}年{{ month }}月{{ day }}日{{ weekday_jp  }}曜日</h4>
     <form method="POST">    
         {% csrf_token %}
         <h4>今日できたこと</h4>
@@ -131,4 +139,5 @@
         })   
     })        
 </script>
+
 {% endblock %}
