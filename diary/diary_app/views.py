@@ -348,9 +348,8 @@ class ReflectionListView(ListView):
         context = super().get_context_data(**kwargs)
         year = int(self.kwargs.get('year'))
         month = int(self.kwargs.get('month'))
-       
 
-        context['weeks'] = self.weeks # {1: [diary, diary], 2: [...], ...}
+        context['weeks'] = self.weeks 
         context['month_current'] = date(year, month, 1)
         context['month_previous'] = context['month_current'] - relativedelta(months=1)
         context['month_next'] = context['month_current'] + relativedelta(months=1)
