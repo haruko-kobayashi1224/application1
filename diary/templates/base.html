@@ -1,5 +1,16 @@
 <!DOCTYPE html>
 <html lang="ja">
+<style>
+    
+  .btn-logout {
+    background-color: #F08080;
+    color: #FFFFFF;
+    padding: 10px 25px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1.1rem;
+  }
+</style>    
     <head>
         <meta charset='utf-8'>
         <title>{% block title %}できたこと日記{% endblock %}</title>
@@ -13,7 +24,10 @@
                 {% comment %} <a class="navbar-brand" href="{% url 'diary_app:diary_inspection' year=today.year month=today.month  day=today.day %}">今日できたこと</a> {% endcomment %}
                 <a class="navbar-brand" href="{% url 'diary_app:reflection' year=today.year month=today.month %}">1週間・1ヶ月の振り返り</a>
                 <a class="navbar-brand" href="{% url 'diary_app:my_page'%}">マイページ</a>
-                <a class="btn btn-lg mt-3" style="background-color: #F08080; color:#FFFFFF;" href="{% url 'diary_app:login' %}">ログアウト</a>
+                <form method="post" action="{% url 'diary_app:logout'%}">
+                  {% csrf_token %}   
+                  <button type="submit" class="btn-logout">ログアウト</button>
+                </form>
             </div>
         </nav>   
            <div class="container" style="margin-top: 80px;">

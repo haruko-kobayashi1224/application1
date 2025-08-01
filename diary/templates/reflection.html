@@ -49,10 +49,12 @@ th, td {
   height: 80px;         
   max-height: 80px;
   overflow: auto; 
+  
 }
 
 
 th {
+    vertical-align: middle;
     background-color: #f0f8ff;
     text-align: center;
 }
@@ -60,6 +62,7 @@ th {
 td {
     max-height: 100px;
     background-color: #ffffff;
+    
 }
 
 .navigation h5 {
@@ -142,13 +145,13 @@ h5 {
           <th>7日目</th>
           <th>今週のハイライト</th>
           <th>できた理由</th>
-          <th>今後はどのような工夫をしたらよいか</th>
+          <th>今後はどのような<br>工夫をしたらよいか</th>
         </tr>
     </thead>
     <tbody>
          {% for week_num, data in weeks.items %}
           <tr>
-              <td>{{ week_num }}週目</td>
+              <td style="text-align: center; background-color: #f0f8ff; vertical-align: middle; font-weight: bold;">{{ week_num }}週目</td>
               {% for diary in data.diaries %}
                   <td>
                     {% if diary %}
