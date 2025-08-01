@@ -57,8 +57,9 @@ th, td {
 
 
 th {
-    background-color: #f0f8ff;
-    text-align: center;
+  vertical-align: middle;
+  background-color: #f0f8ff;
+  text-align: center;
 }
 
 td {
@@ -131,14 +132,14 @@ input[type="submit"] {
           <th>7日目</th>
           <th>今週のハイライト</th>
           <th>できた理由</th>
-          <th>今後はどのような工夫をしたらよいか</th>
+          <th>今後はどのような<br>工夫をしたらよいか</th>
         </tr>
       </thead>
       <tbody>
         {% for form, week in week_form_pairs %}
           {% with week_num=week.0 data=week.1 %}  
             <tr>
-              <td>{{ week_num }}週目</td>
+              <td style="text-align: center; background-color: #f0f8ff; vertical-align: middle; font-weight: bold;">{{ week_num }}週目</td>
               {% for diary in data.diaries %}
                 <td> 
                   {% if diary %}

@@ -63,8 +63,16 @@ class UserMyPageForm(forms.ModelForm):
         widgets = {
             'user_image': forms.FileInput(attrs={
                 'style': 'display: none;',
-                'id': 'file-upload',
-            }),  
+                'id': 'file-upload',                
+            }), 
+            'username': forms.TextInput(attrs={
+                'class': 'form-control',
+                'style': 'max-width: 300px; margin: 0 auto;',
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'style': 'max-width: 300px; margin: 0 auto;',
+            }),
         }
     
     

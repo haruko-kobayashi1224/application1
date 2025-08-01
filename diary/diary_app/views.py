@@ -23,6 +23,7 @@ from django.utils import timezone
 from datetime import datetime, time
 from django.utils.timezone import localtime
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def portfolio(request):
@@ -93,13 +94,12 @@ def change_password(request):
         password_change_form.save(commit=True)
         update_session_auth_hash(request, request.user)
         messages.success(request, 'パスワードを変更しました')
-        # return redirect('diary_app:login') 
     return render(request, 'change_password.html',context={
         'password_change_form': password_change_form,
         'today':date.today(), 
     })    
    
-class MonthCalendar(mixins.MonthCalendarMixin, TemplateView):
+class MonthCalendar(LoginRequiredMixin, mixins.MonthCalendarMixin, TemplateView):
     template_name ='home.html'
             
 
