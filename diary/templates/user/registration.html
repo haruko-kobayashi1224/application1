@@ -63,7 +63,7 @@ label {
 </style>
 
 <div class="form-container">
- <div class="form-title">登録画面</div>
+ <div class="form-title">新規登録</div>
 <form method="POST">
     {% csrf_token %}
     <div class="form-group text-start mb-3">
@@ -101,6 +101,6 @@ label {
     <input type="submit" value="登録" class="btn btn-primary">
 </form>
 <nav>
-<a href="{% url 'diary_app:login' %}">ログイン画面に戻る</a>
+<a href="{% url 'diary_app:login' %}">ログインに戻る</a>
 </nav>
 {% endblock %}
