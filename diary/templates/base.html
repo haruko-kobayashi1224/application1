@@ -20,7 +20,7 @@
         <nav class="navbar navbar-expand-lg navbar-light" style="position: fixed; top: 0; width: 100%; z-index: 1000; background-color: #7FFFD4;">
              <div class="container-fluid">
                 <h3>できたこと日記</h3>
-                <a class="navbar-brand" href="{% url 'diary_app:month' year=today.year month=today.month %}">ホーム画面</a>
+                <a class="navbar-brand" href="{% url 'diary_app:month' year=today.year month=today.month %}">ホーム</a>
                 {% comment %} <a class="navbar-brand" href="{% url 'diary_app:diary_inspection' year=today.year month=today.month  day=today.day %}">今日できたこと</a> {% endcomment %}
                 <a class="navbar-brand" href="{% url 'diary_app:reflection' year=today.year month=today.month %}">1週間・1ヶ月の振り返り</a>
                 <a class="navbar-brand" href="{% url 'diary_app:my_page'%}">マイページ</a>

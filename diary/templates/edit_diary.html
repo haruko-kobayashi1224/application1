@@ -75,11 +75,11 @@ input[type="submit"] {
       {% endfor%}
     </div> 
 {% endif %}
-    <h4>できたこと編集画面</h4>
+    <h4>できたこと編集</h4>
     <h4>{{ year }}年{{ month }}月{{ day }}日{{ weekday_jp  }}曜日</h4>
     <form method="POST">    
         {% csrf_token %}
-        <h4>今日できたこと</h4>
+        <h5>今日できたこと</h5>
         <div class="formset-flex">
           {% for checkbox in edit_diary_form.successes %}
             <label class="checkbox-inline">
@@ -100,7 +100,7 @@ input[type="submit"] {
         <div style="text-align: center; margin-bottom: 20px;">
           <button type="button" id="add-form-btn" >＋追加</button>        
         </div>
-        <h4>明日の目標</h4>
+        <h5>明日の目標</h5>
         {{ edit_diary_form.tomorrow_goal }}
         <div class="button-area">
           <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ diary.id }}">

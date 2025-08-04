@@ -100,7 +100,7 @@ h5 {
 
 </style>
 
-<h5>{{ year }}年{{ month }}月の振り返り編集</h5>
+<h4>{{ year }}年{{ month }}月の振り返り</h4>
 
 <div class="container  text-center">
 {% if messages %}
@@ -203,7 +203,7 @@ h5 {
 {% endif %}
   <button type="button" class="btn btn-primary btn-lg"
         onclick="location.href='{% url 'diary_app:edit_reflection' year=year month=month %}'">
-    編集
+    振り返りを入力・編集
   </button>  
 
 </div>

@@ -74,9 +74,9 @@ td {
     gap: 10px;
 }
   
-  .container.text-center h4 {
+ h4 {
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
   }  
 
 .button-area {
@@ -105,13 +105,13 @@ input[type="submit"] {
 
 </style>
 
-<div class="container  text-center">
     <h4>{{ year }}年{{ month }}月の振り返り編集</h4>
-</div>
+
 <form method="post">
   {% csrf_token %}
   {{ week_formset.management_form }}
  <div class="table-container">
+  <h5>1週間ごとの振り返り</h5>  
    <table>
      <colgroup>
       <col style="width: 80px;"> 
@@ -161,7 +161,7 @@ input[type="submit"] {
   </div>
 
 <div style="margin-top: 30px;">  
-  <h4>今月できたこと</h4>
+  <h5>今月できたこと</h5>
     <p><strong>■各週のハイライトに共通する点</strong><br>
     {{ month_form.common_ground }}</p>
     <p><strong>■自分の価値観や大切にしていること</strong><br>

@@ -6,7 +6,12 @@
     flex: 0 0 auto;
   }
 
-    h4 {
+  h4 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+  }
+
+  h5 {
     margin-top: 30px;
     margin-bottom: 15px;
   }
@@ -82,7 +87,7 @@
     <h4>{{ year }}年{{ month }}月{{ day }}日{{ weekday_jp  }}曜日</h4>
     <form method="POST">    
         {% csrf_token %}
-        <h4>今日できたこと</h4>
+        <h5>今日できたこと</h5>
         <div class="formset-flex">
           {% for checkbox in today_input_form.successes %}
             <label class="checkbox-inline">
@@ -103,7 +108,7 @@
         <div style="text-align: center; margin-bottom: 20px;">
           <button type="button" id="add-form-btn">＋追加</button>
         </div>    
-        <h4>明日の目標</h4>
+        <h5>明日の目標</h5>
         {{ today_input_form.tomorrow_goal }}
 
         <div class="button-area">
