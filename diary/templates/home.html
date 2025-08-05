@@ -4,6 +4,7 @@
 {% block content %}
 
 <style>
+
 .triangle-left{
   width: 0;
   height: 0;
@@ -98,7 +99,7 @@
 
 {% if user.is_authenticated %}
 <div class="container" mt-3>
-
+<p style= "font-weight: bold; font-size: 18px; margin-bottom: 30px;">★今日自分ができたことを書いてみましょう</p>
      <div class="container  text-center">
       {% if messages %}
         {% for message in messages %}
@@ -153,7 +154,7 @@
                   {% endwith %}  
                     
                         {% if month_current.month != day.month %}
-                            {{ day | date:"m/d" }}
+                            {{ day | date:"j" }}
                         {% else %}
                             {{ day.day }}         
                     {% endif %}
