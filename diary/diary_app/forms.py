@@ -67,11 +67,9 @@ class UserMyPageForm(forms.ModelForm):
             }), 
             'username': forms.TextInput(attrs={
                 'class': 'form-control',
-                'style': 'max-width: 300px; margin: 0 auto;',
             }),
             'email': forms.EmailInput(attrs={
                 'class': 'form-control',
-                'style': 'max-width: 300px; margin: 0 auto;',
             }),
         }
     
@@ -136,6 +134,7 @@ class TodayInputForm(forms.ModelForm): # あなたのフォームクラス名を
     class Meta:
         model = Diary
         fields =('tomorrow_goal',) 
+        max_length=20, 
         widgets = {
            'tomorrow_goal' : forms.Textarea(
                attrs={ 'rows': 3, 'cols':60},
@@ -154,10 +153,11 @@ class TodayInputForm(forms.ModelForm): # あなたのフォームクラス名を
 class OtherSuccessForm(forms.Form):
     other_success =forms.CharField(
         required=False,
+        max_length=20, 
         label='その他',
-        widget=forms.Textarea(attrs={'placeholder': 'その他にできたことを書いてください',
+        widget=forms.Textarea(attrs={'placeholder': 'その他にできたことを書いてください（20文字以内）',
                                      'rows': 1,
-                                     'cols':40,   
+                                     'cols':50,   
                               })
     )
 OtherSuccessFormSet = forms.formset_factory(OtherSuccessForm, 
@@ -204,13 +204,13 @@ class MonthReflectionForm(forms.ModelForm):
         fields = ('common_ground', 'my_values', 'awareness',)
         widgets = {
            'common_ground' : forms.Textarea(
-               attrs={ 'rows': 2, 'cols':70},
+               attrs={ 'rows': 4, 'cols':90},
            ),
            'my_values' : forms.Textarea(
-               attrs={ 'rows': 2, 'cols':70},
+               attrs={ 'rows': 4, 'cols':90},
            ),
            'awareness' : forms.Textarea(
-               attrs={ 'rows': 2, 'cols':70},
+               attrs={ 'rows': 4, 'cols':90},
            )
         }
         labels = {

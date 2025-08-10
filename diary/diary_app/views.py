@@ -135,7 +135,16 @@ class MonthCalendar(LoginRequiredMixin, mixins.MonthCalendarMixin, TemplateView)
         for diary in diaries:
             date_key =localtime(diary.created_at).date().isoformat()
             diary_dict[date_key] = diary.pk
-        context['diary_dict'] = diary_dict      
+        context['diary_dict'] = diary_dict  
+
+        tomorrow_goals_dict = {}
+        for diary in diaries:
+            diary_date = localtime(diary.created_at).date()
+            tomorrow_date =diary_date + timedelta(days=1)
+            tomorrow_goals_dict[tomorrow_date.isoformat()] =diary.tomorrow_goal
+            
+        context ['tomorrow_goals_dict']= tomorrow_goals_dict
+            
         
         return context
 
@@ -264,7 +273,7 @@ def edit_diary(request, pk,  year, month, day):
         edit_diary_form = TodayInputForm(request.POST, instance=diary)
         formset = OtherSuccessFormSet(request.POST)
     else:
-    # 成功したチェックボックス項目だけを取得
+    
         initial_successes = list(
             diary.diarysuccess_set
             .filter(success__in=[
@@ -428,7 +437,7 @@ def delete_reflection(request, year, month):
         year_number=year,
         month_number=month)
     month_reflection.delete()
-    messages.success(request, '日記を削除しました')
+    messages.success(request, '振り返りを削除しました')
     return redirect('diary_app:reflection', year=year, month=month )    
     
          

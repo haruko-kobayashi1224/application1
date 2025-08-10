@@ -106,7 +106,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
 
 
 class Diary(TimeStampedModel):
-    tomorrow_goal = models.CharField(max_length=50,null=True, blank=True)  
+    tomorrow_goal = models.CharField(max_length=20,null=True, blank=True)  
     user = models.ForeignKey(
         'User',on_delete=models.CASCADE,
     ) 
@@ -125,7 +125,7 @@ class Diary(TimeStampedModel):
 # objects: DiaryManager = DiaryManager()    
 
 class DiarySuccess(TimeStampedModel):
-    success = models.CharField(max_length=50) 
+    success = models.CharField(max_length=20) 
     diary = models.ForeignKey(
         'Diary',on_delete=models.CASCADE,
     ) 
@@ -136,9 +136,9 @@ class DiarySuccess(TimeStampedModel):
 
 class WeekReflection(TimeStampedModel):
     week_number = models.IntegerField()
-    highlight = models.CharField(max_length=50,null=True, blank=True)
-    reason = models.CharField(max_length=50,null=True, blank=True)
-    next_plan = models.CharField(max_length=50,null=True, blank=True)   
+    highlight = models.CharField(max_length=150,null=True, blank=True)
+    reason = models.CharField(max_length=150,null=True, blank=True)
+    next_plan = models.CharField(max_length=150,null=True, blank=True)   
     user = models.ForeignKey(
         'User',on_delete=models.CASCADE,   
     )  
@@ -152,9 +152,9 @@ class WeekReflection(TimeStampedModel):
 class MonthReflection(TimeStampedModel):
     year_number = models.IntegerField()
     month_number = models.IntegerField()
-    common_ground = models.CharField(max_length=50,null=True, blank=True)
-    my_values = models.CharField(max_length=50,null=True, blank=True)
-    awareness = models.CharField(max_length=50,null=True, blank=True)   
+    common_ground = models.CharField(max_length=150,null=True, blank=True)
+    my_values = models.CharField(max_length=150,null=True, blank=True)
+    awareness = models.CharField(max_length=150,null=True, blank=True)   
     user = models.ForeignKey(
         'User',on_delete=models.CASCADE,
     ) 

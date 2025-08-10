@@ -3,7 +3,7 @@
 {% block content %}
 <style>
   .centered-form {
-    max-width: 500px;
+    max-width: 550px;
     margin: 0 auto;
     text-align: left;
   }
@@ -26,21 +26,42 @@
   .form-label {
   display: block;
   font-weight: bold;
-  margin-bottom: 10px;
-  margin-left: -210px;  
+  margin-bottom: 15px;
+  margin-left: -240px;  
 }
 
 .form-label-name{
   display: block;
   font-weight: bold;
-  margin-bottom: 5px;
-  margin-left: -260px;  
+  margin-bottom: 15px;
+  margin-left: -290px;  
 }
 
-  .preview-image {
-    display: block;
-    margin: 0 auto;
+
+input[type="submit"] {
+    width: 60%;
   }
+
+.preview-image {
+  display: block;
+  margin: 0 auto;
+  object-fit: cover;           
+  width: 133px;                 
+  height: 140px;               
+}
+
+.mb-4.text-center {
+  position: relative; 
+  
+} 
+
+.form-control {
+  width: 100%;       /* 親要素いっぱいに */
+  max-width: 330px;  /* 必要なら最大幅の制限 */
+  margin: 0 auto;    /* 中央寄せ */
+}
+
+
 </style>
 
 <h4>マイページ</h4>
@@ -60,9 +81,9 @@
     <!-- プロフィール画像 -->
     <div class="mb-4 text-center">
       {% if user.user_image and user.user_image.name %} 
-        <img id="preview" src="{{ user.user_image.url }}" width="120px" class="mb-2 rounded preview-image">
+        <img id="preview" src="{{ user.user_image.url }}"  class="preview-image">
       {% else %}
-        <img id="preview" src="{% static 'images/noimage.png' %}" width="120px" class="mb-2 rounded preview-image" alt="画像未設定">
+        <img id="preview" src="/static/no image.webp" class="preview-image" alt="no image">
       {% endif %}
       <br>
       <label for="file-upload" class="btn btn-info mt-2">画像を選択</label>
@@ -70,7 +91,6 @@
       {{ my_page_form.user_image }}
     </div>
 
-    <!-- 名前 -->
     <div class="form-group text-center mb-3">
       <label for="{{ my_page_form.username.id_for_label }}" class="form-label-name">名前</label>
       {{ my_page_form.username }}

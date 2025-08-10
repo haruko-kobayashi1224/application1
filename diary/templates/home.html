@@ -2,6 +2,9 @@
 {% load diary_extras %}
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 {% block content %}
+<script>
+  const todayServer = "{{ today|date:'Y-m-d' }}";
+</script>
 
 <style>
 
@@ -23,11 +26,10 @@
   display: inline-block;
 }
 
- .triangle-link {
+.triangle-link {
     display: inline-block;
     text-decoration: none;
-  }
-  
+}  
 
 .calendar-table {
   width: 100%;
@@ -36,12 +38,12 @@
   margin-top: 20px;
 }
 
-
 .calendar-table td,
 .calendar-table th {
   border: 1px solid #ccc;
   vertical-align: middle;
-  height: 80px; 
+  height: 100px;
+  max-height: 100px;
   font-size: 16px;
   
 }
@@ -62,38 +64,56 @@
   background-color: #AEFCE2FF;  
 }
 
-
-
 #future-modal {
-    display: none;
-    position: fixed;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    border: 2px solid #aaa;
-    border-radius: 15px;
-    padding: 40px 60px;
-    z-index: 9999;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    font-size: 20px;
-  }
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border: 2px solid #aaa;
+  border-radius: 15px;
+  padding: 40px 60px;
+  z-index: 9999;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-size: 20px;
+}
 
-  #future-modal p {
-    margin-bottom: 30px;
-  }
+#future-modal p {
+  margin-bottom: 30px;
+}
 
-  #future-modal button {
-    padding: 12px 30px;
-    font-size: 18px;
-    background-color: #8d8c89e9; 
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  }
+#future-modal button {
+  padding: 12px 30px;
+  font-size: 18px;
+  background-color: #8d8c89e9; 
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+#future-modal button:hover {
+  background-color: #c5c4c2e9;!important; 
+  color: white;           /* 文字色も濃く */
+  transition: 0.2s ease;      /* なめらかな変化 */
+}
+
+
+.goal-text {
+  display: block;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  color: #555;
+  margin-left: 30px;   
+  max-width: 100%;            /* セル幅内に収める */ /* 一部ブラウザ対応 */
+  word-break: break-all;  /* 強制的に文字単位で改行 */
+  overflow-wrap: anywhere; 
+}  
+
 
 </style>
 
@@ -133,33 +153,43 @@
         <tbody>
         {% for week in month_days %}
             <tr>
-                {% for day in week %}     
-                  {% if now == day and day in diary_dates %}
+                {% for day in week %}    
+                  {% with date_str=day|date:"Y-m-d" %}  
+                    {% if now == day and day in diary_dates %}
                       <td style="background-color:#FFA07A;">
-                  {% elif day in diary_dates %}              
+                    {% elif day in diary_dates %}              
                       <td style="background-color:#FFDAB9;">
-                  {% elif now == day %}
+                    {% elif now == day %}
                       <td class="bg-today">      
-                  {% else %}    
+                    {% else %}    
                       <td> 
-                  {% endif %}
-                  {% with date_str=day|date:"Y-m-d" %}
-                    {% with diary_pk=diary_dict|get_item:date_str %}
-                      {% if diary_pk %}
-                        <a href="{% url 'diary_app:edit_diary' pk=diary_pk year=day.year month=day.month day=day.day %}" class="diary-link" data-date="{{ day|date:'Y-m-d' }}">
-                      {% else %}
-                        <a href="{% url 'diary_app:today_input' year=day.year month=day.month day=day.day %}" class="diary-link" data-date="{{ day|date:'Y-m-d' }}">
-                      {% endif %}
-                    {% endwith %}
-                  {% endwith %}  
-                    
-                        {% if month_current.month != day.month %}
-                            {{ day | date:"j" }}
-                        {% else %}
-                            {{ day.day }}         
                     {% endif %}
-                    </a>  
-                    </td>               
+                    <div style="display: flex; flex-direction: column; height: 100%;">
+                      <div style="text-align: left; font-weight: bold;">  
+                        {% with diary_pk=diary_dict|get_item:date_str %}
+                          {% if diary_pk %}
+                            <a href="{% url 'diary_app:edit_diary' pk=diary_pk year=day.year month=day.month day=day.day %}" class="diary-link" data-date="{{ day|date:'Y-m-d' }}">
+                          {% else %}
+                            <a href="{% url 'diary_app:today_input' year=day.year month=day.month day=day.day %}" class="diary-link" data-date="{{ day|date:'Y-m-d' }}">
+                          {% endif %}  
+                            {% if month_current.month != day.month %}
+                              {{ day | date:"j" }}
+                            {% else %}
+                              {{ day.day }}         
+                            {% endif %}
+                            </a>
+                        {% endwith %}  
+                     </div>      
+                     {% with goal=tomorrow_goals_dict|get_item:date_str %}
+                       {% if goal %}
+                        <div class="goal-text">
+                          <span> {{ goal|linebreaksbr|safe }}</span>
+                        </div>
+                       {% endif %}
+                     {% endwith %}  
+                   </div>   
+                   </td>               
+                  {% endwith %}     
                 {% endfor %} 
             </tr>
         {% endfor %}
@@ -179,7 +209,7 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const links = document.querySelectorAll('.diary-link');
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const today = todayServer;
 
     links.forEach(link => {
       const dateStr = link.dataset.date;

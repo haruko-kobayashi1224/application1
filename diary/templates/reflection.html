@@ -53,6 +53,7 @@ th, td {
 }
 
 
+
 th {
     vertical-align: middle;
     background-color: #f0f8ff;
@@ -66,23 +67,21 @@ td {
 }
 
 .navigation h5 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
   
-  .container.text-center h5 {
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
+.container.text-center h5 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 
-  .button-group {
-  text-align: right; 
+.button-group {
   margin-top: 20px; 
   margin-bottom: 20px; 
-  gap: 10px;
-  }
+}
 
 button {
    margin-left: 5px; 
@@ -93,10 +92,71 @@ p {
     margin-bottom: 30px;
   }
 
-h5 {
+h5{
     margin-top: 20px;
     
-   }
+}
+
+.btn  {
+  min-width: 100px;
+  gap: 10px;
+  padding: 10px 25px;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.btn-input-edit{
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-input-edit:hover{
+  background-color: #449cfbff;
+  color: white;                
+  transition: 0.2s ease;      
+}
+
+.btn-cancel {
+  background-color: #b4b4b4ff;
+  color: #333;
+}
+
+.btn-cancel:hover {
+  background-color: #c7c7c7ff;  
+  color: #333;              
+  transition: 0.2s ease;      
+}
+
+.btn-delete {
+  background-color: #ff3700ff;
+  color: white;
+}
+
+.btn-delete:hover  {
+  background-color: #f75e34ff; 
+  color: white;     
+  transition: 0.2s ease;      
+}
+
+#emptyModal button {
+  padding: 12px 30px;
+  font-size: 18px;
+  background-color: #8d8c89e9; 
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    
+}
+
+#emptyModal button:hover {
+  background-color: #c5c4c2e9;!important; 
+  color: white;           
+  transition: 0.2s ease;      
+} 
+
 
 </style>
 
@@ -124,7 +184,13 @@ h5 {
 </div>   
 
 <div class="table-container">
-<h5>1週間ごとの振り返り</h5>  
+<h5>1週間ごとの振り返り</h5> 
+<div class="d-flex justify-content-end mb-2"> 
+  <button type="button" class="btn btn- btn btn-input-edit"
+        onclick="location.href='{% url 'diary_app:edit_reflection' year=year month=month %}'">
+    振り返りを入力・編集
+  </button>
+</div>   
 <table>
     <colgroup>
     <col style="width: 80px;"> 
@@ -193,18 +259,15 @@ h5 {
 
 <div class="button-group">
 {% if month_reflection or  data.reflection %}  
-  <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">
+  <button type="button" class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">
     削除
   </button>
 {% else %}
-  <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#emptyModal">
+  <button type="button" class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#emptyModal">
     削除
   </button>
 {% endif %}
-  <button type="button" class="btn btn-primary btn-lg"
-        onclick="location.href='{% url 'diary_app:edit_reflection' year=year month=month %}'">
-    振り返りを入力・編集
-  </button>  
+   
 
 </div>
 
@@ -223,22 +286,19 @@ h5 {
                 <div class="modal-footer">
                   <form method="POST" action="{% url 'diary_app:delete_reflection' year=year month=month %}">
                     {% csrf_token %}
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
-                    <button type="submit" class="btn btn-danger">削除</button>
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">キャンセル</button>
+                    <button type="submit" class="btn btn-delete">削除</button>
                   </form>
                 </div>
               </div>
             </div>
           </div>
-          
+
           <div class="modal fade" tabindex="-1" role="dialog" id="emptyModal">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title">まだ記録がありません</h5>
-                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                 </div>
                 <div class="modal-body">
                   <p>この日の記録はまだありません。削除する内容がありません。</p>
@@ -249,6 +309,7 @@ h5 {
               </div>
             </div>
           </div>
+
 
 {% endblock %}
 
