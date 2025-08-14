@@ -56,7 +56,7 @@ th, td {
 }
 
 .table-container textarea {
-  min-height: 240px;     /* 最小高さは確保 */
+  min-height: 230px;     /* 最小高さは確保 */
   width: 100%;
   overflow-y: hidden;   /* スクロールバーを消す */
   resize: none;         /* サイズ変更禁止（必要なら消す） */
@@ -99,7 +99,7 @@ td {
 .btn  {
   min-width: 100px;
   padding: 10px 25px;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
@@ -107,6 +107,7 @@ td {
 
 .btn-save {
   background-color: #007bff;
+  padding: 15px 55px;
   color: white;
 }
 
@@ -118,6 +119,7 @@ td {
 
 .btn-cancel {
   background-color: #b4b4b4ff;
+   padding: 15px 40px;
   color: #333;
 }
 
@@ -170,7 +172,7 @@ td {
                 <td> 
                   {% if diary %}
                     {% for success in diary.success_list %}
-                      ・{{ success.label }}<br>
+                      <span style="white-space: nowrap;">・{{ success.label|slice:":1" }}</span>{{ success.label|slice:"1:" }}<br>
                     {% endfor %}
                   {% endif %}   
                 </td>

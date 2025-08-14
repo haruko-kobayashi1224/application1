@@ -101,7 +101,7 @@ h5{
   min-width: 100px;
   gap: 10px;
   padding: 10px 25px;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
@@ -128,12 +128,38 @@ h5{
   transition: 0.2s ease;      
 }
 
+.btn-cancel-modal{
+  background-color: #b4b4b4ff;
+  padding: 10px 25px;
+  color: #333;
+}
+
+.btn-cancel-modal:hover {
+  background-color: #c7c7c7ff;  /* 少し濃いグレーに */
+  color: #333;              /* 文字色も濃く */
+  transition: 0.2s ease;      /* なめらかな変化 */
+}
+
+
 .btn-delete {
   background-color: #ff3700ff;
+  padding: 15px 55px;
   color: white;
 }
 
 .btn-delete:hover  {
+  background-color: #f75e34ff; 
+  color: white;     
+  transition: 0.2s ease;      
+}
+
+.btn-delete-modal{
+  background-color: #ff3700ff;
+  padding: 10px 38px;
+  color: white;
+}
+
+.btn-delete-modal:hover {
   background-color: #f75e34ff; 
   color: white;     
   transition: 0.2s ease;      
@@ -222,7 +248,7 @@ h5{
                   <td>
                     {% if diary %}
                       {% for success in diary.success_list %}
-                         ・{{ success.label }}<br>
+                        <span style="white-space: nowrap;">・{{ success.label|slice:":1" }}</span>{{ success.label|slice:"1:" }}<br>
                       {% endfor %}
                     {% endif %} 
                   </td>
@@ -286,8 +312,8 @@ h5{
                 <div class="modal-footer">
                   <form method="POST" action="{% url 'diary_app:delete_reflection' year=year month=month %}">
                     {% csrf_token %}
-                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">キャンセル</button>
-                    <button type="submit" class="btn btn-delete">削除</button>
+                    <button type="button" class="btn btn-cancel-modal" data-bs-dismiss="modal">キャンセル</button>
+                    <button type="submit" class="btn btn-delete-modal">削除</button>
                   </form>
                 </div>
               </div>

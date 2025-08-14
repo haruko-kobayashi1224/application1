@@ -57,14 +57,14 @@ h5 {
 .btn  {
   min-width: 100px;
   gap: 10px;
-  padding: 10px 25px;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
 
 #add-form-btn {
   background-color: #8ffefeff;
+  padding: 10px 25px;
   color: black;
 }
 
@@ -76,6 +76,7 @@ h5 {
 
 .btn-cancel {
   background-color: #b4b4b4ff;
+  padding: 15px 40px;
   color: #333;
 }
 
@@ -85,8 +86,21 @@ h5 {
   transition: 0.2s ease;      /* なめらかな変化 */
 }
 
+.btn-cancel-modal{
+  background-color: #b4b4b4ff;
+  padding: 10px 25px;
+  color: #333;
+}
+
+.btn-cancel-modal:hover {
+  background-color: #c7c7c7ff;  /* 少し濃いグレーに */
+  color: #333;              /* 文字色も濃く */
+  transition: 0.2s ease;      /* なめらかな変化 */
+}
+
 .btn-save {
   background-color: #007bff;
+  padding: 15px 55px;
   color: white;
 }
 
@@ -100,6 +114,7 @@ h5 {
 
 .btn-delete {
   background-color: #ff3700ff;
+  padding: 15px 55px;
   color: white;
 }
 
@@ -108,6 +123,19 @@ h5 {
   color: white;     
   transition: 0.2s ease;      
 }
+
+.btn-delete-modal{
+  background-color: #ff3700ff;
+  padding: 10px 38px;
+  color: white;
+}
+
+.btn-delete-modal:hover {
+  background-color: #f75e34ff; 
+  color: white;     
+  transition: 0.2s ease;      
+}
+
 
 #emptyModal{
   display:none;
@@ -215,8 +243,8 @@ h5 {
         {% if diary.pk %}
           <form action="{% url 'diary_app:delete_diary' pk=diary.pk year=diary.created_at.year month=diary.created_at.month day=diary.created_at.day %}" method="POST">
             {% csrf_token %}
-              <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">キャンセル</button>
-              <button type="submit" class="btn btn-delete">削除</button>
+              <button type="button" class="btn btn-cancel-modal" data-bs-dismiss="modal">キャンセル</button>
+              <button type="submit" class="btn btn-delete-modal">削除</button>
           </form>
         {% endif %}
       </div>
