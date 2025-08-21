@@ -2,52 +2,57 @@
 {% block content %}
 
 <style>
-  body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    align-items: center;  
-    justify-content: center;  
-    background-color: #E0FFFF;  
-  }
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;  
+  justify-content: center;  
+  background-color: #E0FFFF;  
+}
 
-  .form-container {
-    width: 400px;
-    padding: 30px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
+.form-container {
+  width: 400px;
+  padding: 30px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
 
-  .form-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
+.form-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
 
-  .message-container {
-    margin-bottom: 10px;
-    color: red;
-  }
+.message-container {
+  margin-bottom: 10px;
+  color: red;
+}
 
-  input[type="submit"] {
-    width: 100%;
-  }
+input[type="submit"] {
+  width: 100%;
+}
 
-  nav {
-    margin-top: 15px;
-  }
+nav {
+  margin-top: 15px;
+}
 
-  input[type="text"], input[type="password"], input[type="email"] {
+  
+input[type="text"], input[type="password"], input[type="email"] {
   width: 100%;
   padding: 8px;
   margin-top: 5px;
   box-sizing: border-box;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 1.4;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
 }
+
 
 label {
   display: block;

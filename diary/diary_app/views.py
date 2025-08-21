@@ -399,7 +399,7 @@ def edit_reflection(request, year, month):
         if week_formset.is_valid() and month_form.is_valid():
             week_formset.save()
             month_form.save()
-            messages.success(request, '振り返りを保存しました。')
+            messages.success(request, '振り返りを保存しました')
             return redirect('diary_app:reflection', year=year, month=month)
         
     else:        

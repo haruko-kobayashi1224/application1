@@ -56,11 +56,16 @@ th, td {
 }
 
 .table-container textarea {
-  min-height: 250px;     
+  min-height: 300px;     
   width: 100%;
+  font-size: 14px;
   overflow-y: hidden;   
   resize: none;         
+  border: 1px solid #ccc;
+  line-height: 1.4;
+  border-radius: 8px;
   box-sizing: border-box;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
 }
 
 
@@ -129,6 +134,20 @@ td {
   transition: 0.2s ease;      
 }
 
+
+textarea,
+input[type="text"] {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  line-height: 1.4;
+  box-sizing: border-box;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  min-height: 100px; /* 最低限の高さ */
+  overflow: hidden;  /* スクロールバーを非表示 */
+  resize: vertical;  
+}
+</style>
 
 
 </style>

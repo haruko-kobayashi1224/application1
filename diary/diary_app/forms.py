@@ -137,7 +137,9 @@ class TodayInputForm(forms.ModelForm): # あなたのフォームクラス名を
         max_length=20, 
         widgets = {
            'tomorrow_goal' : forms.Textarea(
-               attrs={ 'rows': 3, 'cols':60},
+               attrs={'placeholder': '目標を書いてください（20文字以内）',
+                      'rows': 3, 
+                      'cols':60},
            )
         }
         labels = {
@@ -171,13 +173,19 @@ class WeekReflectionForm(forms.ModelForm):
         fields = ('highlight', 'reason', 'next_plan',)
         widgets = {
            'highlight' : forms.Textarea(
-               attrs={ 'rows': 6, 'cols':15},
+               attrs={'placeholder': '今週のハイライトを書いてください（150文字以内）',
+                      'rows': 6, 
+                      'cols':15},
            ),
            'reason' : forms.Textarea(
-               attrs={ 'rows': 6, 'cols':15},
+               attrs={'placeholder': 'できた理由を書いてください（150文字以内）',
+                      'rows': 6, 
+                      'cols':15},
            ),
            'next_plan' : forms.Textarea(
-               attrs={ 'rows': 6, 'cols':15},
+               attrs={ 'placeholder': '今後はどのような工夫をしたらよいかを書いてください（150文字以内）',
+                       'rows': 6, 
+                       'cols':15},
            )
         }
         labels = {
@@ -204,13 +212,16 @@ class MonthReflectionForm(forms.ModelForm):
         fields = ('common_ground', 'my_values', 'awareness',)
         widgets = {
            'common_ground' : forms.Textarea(
-               attrs={ 'rows': 4, 'cols':90},
+               attrs={'placeholder': '各週のハイライトに共通する点を書いてください（150文字以内）', 
+                      'rows': 4, 'cols':90},
            ),
            'my_values' : forms.Textarea(
-               attrs={ 'rows': 4, 'cols':90},
+               attrs={'placeholder': '自分の価値観や大切にしていることを書いてください（150文字以内）',
+                      'rows': 4, 'cols':90},
            ),
            'awareness' : forms.Textarea(
-               attrs={ 'rows': 4, 'cols':90},
+               attrs={'placeholder': 'その他気づいたことを書いてください（150文字以内）', 
+                      'rows': 4, 'cols':90},
            )
         }
         labels = {
