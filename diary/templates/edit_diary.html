@@ -49,8 +49,8 @@ h5 {
   margin-top: 40px;
   margin-bottom: 40px;
   display: flex;
-  justify-content: center;  
-  gap: 30px;
+  justify-content: space-between;  
+  align-items: center;         
 }
 
 #add-form-btn,
@@ -111,8 +111,8 @@ h5 {
 }
 
 
-
 .btn-delete {
+  
   background-color: #ff3700ff;
   padding: 15px 55px;
   color: white;
@@ -212,13 +212,15 @@ h5 {
         <h5>明日の目標</h5>
         {{ edit_diary_form.tomorrow_goal }}
         <div class="button-area"> 
-          <button type="button" class="btn btn-cancel" onclick="location.href='{% url 'diary_app:month' year=today.year month=today.month %}'">
-           キャンセル
-          </button>
           <button type="button" class="btn btn-delete " data-bs-toggle="modal" data-bs-target="#deleteModal-{{ diary.id }}">
             削除
-          </button>    
-          <button type="submit" class="btn btn-save">保存</button>
+          </button> 
+          <div style="display:flex; gap:30px;">
+            <button type="button" class="btn btn-cancel" onclick="location.href='{% url 'diary_app:month' year=today.year month=today.month %}'">
+            キャンセル
+            </button>   
+            <button type="submit" class="btn btn-save">保存</button>
+          </div>  
         </div>  
     </form>  
   </div>  

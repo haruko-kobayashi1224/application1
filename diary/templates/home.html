@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load diary_extras %}
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% comment %} <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> {% endcomment %}
 {% block content %}
 <script>
   const todayServer = "{{ today|date:'Y-m-d' }}";
@@ -35,24 +35,36 @@
   width: 100%;
   table-layout: fixed; 
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 15px;
+  margin-bottom: 50px; 
 }
 
 .calendar-table td,
 .calendar-table th {
   border: 1px solid #ccc;
   vertical-align: middle;
-  height: 100px;
+  height: 85px;
   max-height: 100px;
   font-size: 16px;
   
 }
 
+.calendar-table td,
 .calendar-table th {
-  background-color: #E0FFFF;
+  height: 85px;
+}
+.calendar-table th {
+  height: px;
+  max-height: 100px;
+  font-size: 16px;
+}
+
+.calendar-table th {
+  background-color: #befafaff;
   font-weight: bold;
-  padding: 5px;
   text-align: center;
+  padding: 5px;
+  height: 60px;    
 }
 
 .calendar-table td {
@@ -106,7 +118,7 @@
   display: block;
   justify-content: space-between;
   align-items: center;
-  font-size: 16px;
+  font-size: 14px;
   color: #555;
   margin-left: 30px;   
   max-width: 100%;            /* セル幅内に収める */ /* 一部ブラウザ対応 */
@@ -115,11 +127,13 @@
 }  
 
 
+
+
 </style>
 
 {% if user.is_authenticated %}
 <div class="container" mt-3>
-<p style= "font-weight: bold; font-size: 18px; margin-bottom: 30px;">★今日自分ができたことを書いてみましょう</p>
+<p style= "font-weight: bold; font-size: 16px; margin-bottom: 5px;">★今日自分ができたことを書いてみましょう</p>
      <div class="container  text-center">
       {% if messages %}
         {% for message in messages %}
@@ -127,7 +141,7 @@
         {% endfor %}
       {% endif %}  
       {% if streak >= 2 %}  
-        <p style= "font-weight: bold; font-size: 25px; color: #FF8C00;">{{ streak }} 日連続で日記かけた！すごい👏</p>
+        <p style= "font-weight: bold; font-size: 20px; margin-bottom: 10px; color: #FF8C00;">{{ streak }} 日連続で日記かけた！すごい👏</p>
       {% endif %}
       <h4>
         <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}"  class="triangle-link">

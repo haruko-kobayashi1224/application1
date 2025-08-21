@@ -177,7 +177,7 @@ class WeekReflectionForm(forms.ModelForm):
                attrs={ 'rows': 6, 'cols':15},
            ),
            'next_plan' : forms.Textarea(
-               attrs={ 'rows': 6, 'cols':20},
+               attrs={ 'rows': 6, 'cols':15},
            )
         }
         labels = {
