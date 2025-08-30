@@ -42,10 +42,7 @@ def get_weeks_data(user, year, month):
         diary_date = timezone.localtime(diary.created_at).date()
         week_num = get_week_number(diary_date)
         if not week_num :
-
             continue 
-        
-        
         success_list = []
         for s in diary.diarysuccess_set.all():
             s.label = success_map.get(s.success, s.success)

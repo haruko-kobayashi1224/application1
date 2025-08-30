@@ -27,7 +27,7 @@
 
 .table-container::-webkit-scrollbar-thumb:hover {
   background: #555;
-}  
+}
 
 .table-container {
   overflow-x: auto;
@@ -46,7 +46,7 @@ table {
 
 th, td {
   border: 1px solid #000;
-  padding: 8px 12px; 
+  padding: 8px 12px;
   vertical-align: top;
   word-break: break-word;
   white-space: normal;
@@ -56,11 +56,11 @@ th, td {
 }
 
 .table-container textarea {
-  min-height: 300px;     
+  min-height: 300px;
   width: 100%;
   font-size: 14px;
-  overflow-y: hidden;   
-  resize: none;         
+  overflow-y: hidden;
+  resize: none;
   border: 1px solid #ccc;
   line-height: 1.4;
   border-radius: 8px;
@@ -86,19 +86,19 @@ td {
     justify-content: center;
     gap: 10px;
 }
-  
+
  h4 {
     margin-top: 20px;
     margin-bottom: 30px;
-  }  
+  }
 
 .button-area {
   margin-top: 40px;
   margin-bottom: 40px;
   display: flex;
-  justify-content: center;  
+  justify-content: center;
   gap: 30px;
-}  
+}
 
 
 .btn  {
@@ -118,8 +118,8 @@ td {
 
 .btn-save:hover  {
   background-color: #449cfbff;
-  color: white;                
-  transition: 0.2s ease;      
+  color: white;
+  transition: 0.2s ease;
 }
 
 .btn-cancel {
@@ -129,9 +129,9 @@ td {
 }
 
 .btn-cancel:hover {
-  background-color: #c7c7c7ff;  
-  color: #333;              
-  transition: 0.2s ease;      
+  background-color: #c7c7c7ff;
+  color: #333;
+  transition: 0.2s ease;
 }
 
 
@@ -145,7 +145,7 @@ input[type="text"] {
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
   min-height: 100px; /* 最低限の高さ */
   overflow: hidden;  /* スクロールバーを非表示 */
-  resize: vertical;  
+  resize: vertical;
 }
 </style>
 
@@ -158,18 +158,18 @@ input[type="text"] {
   {% csrf_token %}
   {{ week_formset.management_form }}
  <div class="table-container">
-  <h5>1週間ごとの振り返り</h5>  
+  <h5>1週間ごとの振り返り</h5>
    <table>
      <colgroup>
-      <col style="width: 5%;"> 
-      <col span="7" style="width: 7%;"> 
-      <col style="width: 10%;"> 
-      <col style="width: 10%;"> 
-      <col style="width: 10%;"> 
+      <col style="width: 5%;">
+      <col span="7" style="width: 7%;">
+      <col style="width: 10%;">
+      <col style="width: 10%;">
+      <col style="width: 10%;">
      </colgroup>
-     <thead>              
+     <thead>
         <tr>
-          <th>週</th>  
+          <th>週</th>
           <th>1日目</th>
           <th>2日目</th>
           <th>3日目</th>
@@ -184,30 +184,30 @@ input[type="text"] {
       </thead>
       <tbody>
         {% for form, week in week_form_pairs %}
-          {% with week_num=week.0 data=week.1 %}  
+          {% with week_num=week.0 data=week.1 %}
             <tr>
               <td style="text-align: center; background-color: #f0f8ff; vertical-align: middle; font-weight: bold;">{{ week_num }}週目</td>
               {% for diary in data.diaries %}
-                <td> 
+                <td>
                   {% if diary %}
                     {% for success in diary.success_list %}
                       <span style="white-space: nowrap;">・{{ success.label|slice:":1" }}</span>{{ success.label|slice:"1:" }}<br>
                     {% endfor %}
-                  {% endif %}   
+                  {% endif %}
                 </td>
-              {% endfor %} 
-              <td style="display: none;">{{ form.id }}</td>    
+              {% endfor %}
+              <td style="display: none;">{{ form.id }}</td>
               <td>{{ form.highlight }}</td>
               <td>{{ form.reason }}</td>
               <td>{{ form.next_plan }}</td>
-           </tr>  
+           </tr>
           {% endwith %}
         {% endfor %}
       </tbody>
     </table>
   </div>
 
-<div style="margin-top: 30px; ">  
+<div style="margin-top: 30px; ">
   <h5>今月できたこと</h5>
     <p><strong>■各週のハイライトに共通する点</strong><br>
     {{ month_form.common_ground }}</p>
@@ -220,7 +220,7 @@ input[type="text"] {
  <div class="button-area">
    <button type="button" class="btn btn-cancel" onclick="location.href='{% url 'diary_app:reflection' year=year month=month  %}'">
     キャンセル
-   </button>  
+   </button>
    <button type="submit" class="btn btn-save">保存</button>
   </div>
 </form>
