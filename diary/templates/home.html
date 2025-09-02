@@ -126,6 +126,14 @@
   overflow-wrap: anywhere; 
 }  
 
+.diary-link.other-month {
+  color: #FFA07A !important;
+  text-decoration: underline !important;
+  text-decoration-color: #FFA07A !important;
+  pointer-events: none; 
+  cursor: default;
+}
+
 
 </style>
 
@@ -191,17 +199,26 @@
                     <div style="display: flex; flex-direction: column; height: 100%;">
                       <div style="text-align: left; font-weight: bold;">  
                         {% with diary_pk=diary_dict|get_item:date_str %}
-                          {% if diary_pk %}
+                          {% comment %} {% if diary_pk %}
                             <a href="{% url 'diary_app:edit_diary' pk=diary_pk year=day.year month=day.month day=day.day %}" class="diary-link" data-date="{{ day|date:'Y-m-d' }}">
+                            </a>  
                           {% else %}
                             <a href="{% url 'diary_app:today_input' year=day.year month=day.month day=day.day %}" class="diary-link" data-date="{{ day|date:'Y-m-d' }}">
-                          {% endif %}  
-                            {% if month_current.month != day.month %}
+                            </a>  
+                          {% endif %}  {% endcomment %}
+                          {% if month_current.month != day.month %}
+                             <span style="color:#B0C4DE; ">
                               {{ day | date:"j" }}
-                            {% else %}
-                              {{ day.day }}         
-                            {% endif %}
+                             </span> 
+                          {% elif diary_pk %}
+                            <a href="{% url 'diary_app:edit_diary' pk=diary_pk year=day.year month=day.month day=day.day %}" class="diary-link" data-date="{{ day|date:'Y-m-d' }}">
+                            {{ day.day }} 
                             </a>
+                          {% else %}
+                            <a href="{% url 'diary_app:today_input' year=day.year month=day.month day=day.day %}" class="diary-link" data-date="{{ day|date:'Y-m-d' }}">
+                            {{ day.day }}  
+                            </a>    
+                          {% endif %} 
                         {% endwith %}  
                      </div>      
                      {% with goal=tomorrow_goals_dict|get_item:date_str %}
