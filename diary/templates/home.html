@@ -138,8 +138,20 @@
         <p>{{ message.message}}</p>
         {% endfor %}
       {% endif %}  
-      {% if streak >= 2 %}  
-        <p style= "font-weight: bold; font-size: 20px; margin-bottom: 10px; color: #FF8C00;">{{ streak }} 日連続で日記かけた！すごい👏</p>
+      {% if streak >= 30 %}
+        {% if streak == 30 %}
+          <p style= "font-weight: bold; font-size: 20px; margin-bottom: 10px; color: #FF1493;">{{ streak }} 日連続！ついに1ヶ月達成🎉✨</p>
+        {% else %}
+          <p style= "font-weight: bold; font-size: 20px; margin-bottom: 10px; color: #FF69B4;">{{ streak }} 日連続！1ヶ月超えの大記録更新中🔥</p>
+        {% endif %} 
+      {% elif streak >= 20 %}  
+        <p style= "font-weight: bold; font-size: 20px; margin-bottom: 10px; color:  #FF4500;">{{ streak }} 日連続！すごい根気👏</p>    
+      {% elif streak >= 10 %}  
+        <p style= "font-weight: bold; font-size: 20px; margin-bottom: 10px; color: #FF8C00;">{{ streak }} 日連続！習慣になってきたね👏</p>    
+      {% elif streak >= 5 %}  
+        <p style= "font-weight: bold; font-size: 20px; margin-bottom: 10px; color: #32CD32;">{{ streak }} 日連続！いいペースだよ😊</p>  
+      {% elif streak >= 2 %}  
+        <p style= "font-weight: bold; font-size: 20px; margin-bottom: 10px; color: #1E90FF;">{{ streak }} 日連続！その調子！</p>  
       {% endif %}
       <h4>
         <a href="{% url 'diary_app:month' month_previous.year month_previous.month %}"  class="triangle-link">
