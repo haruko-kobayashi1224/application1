@@ -29,7 +29,7 @@ class RegistForm(forms.ModelForm):
         password = cleaned_data['password']
         confirm_password = cleaned_data['confirm_password']   
         if password != confirm_password:
-            self.add_error('password', 'パスワードが一致しません')
+            self.add_error('password', 'パスワードが一致しません。')
         try: 
             validate_password(password, self.instance) 
         except ValidationError as e:
@@ -75,20 +75,38 @@ class UserMyPageForm(forms.ModelForm):
     
     
 class PasswordChangeForm(forms.ModelForm):
-    current_password = forms.CharField(label="現在のパスワード", widget=forms.PasswordInput()) 
-    password = forms.CharField(label="新しいパスワード", widget=forms.PasswordInput())    
+    current_password = forms.CharField(
+         label="現在のパスワード", 
+         widget=forms.PasswordInput()
+     ) 
+    password = forms.CharField(
+         label="新しいパスワード", 
+         widget=forms.PasswordInput()
+     )    
     confirm_password = forms.CharField(
-        label='新しいパスワード再入力', widget=forms.PasswordInput()
-    )
+         label="新しいパスワード再入力", 
+         widget=forms.PasswordInput()
+     )
          
     class Meta:
         model = User
         fields = ('password',)
-    
+        labels = {
+            'password':'新しいパスワード',
+            
+        }
+        widgets = {
+            'password': forms.PasswordInput(attrs={
+                'class': 'form-control',
+            }),
+        }   
     def __init__(self, *args, **kwargs):
         self.user = kwargs.get('instance')
         super().__init__(*args, **kwargs)
-    
+        
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
 
     def clean(self):
         cleaned_data = super().clean()
@@ -97,9 +115,11 @@ class PasswordChangeForm(forms.ModelForm):
         confirm_password = cleaned_data.get('confirm_password')
         
         if not self.user.check_password(current_password):
-            self.add_error('current_password', '現在のパスワードが間違っています')
+            self.add_error('current_password', '現在のパスワードが間違っています。')
         if password != confirm_password:
-            self.add_error('password', 'パスワードが一致しません')
+            self.add_error('password', 'パスワードが一致しません。')
+        if current_password == confirm_password:
+            self.add_error('confirm_password', '前と同じパスワードにはできません。')       
         try: 
             validate_password(password, self.instance) 
         except ValidationError as e:
@@ -114,7 +134,7 @@ class PasswordChangeForm(forms.ModelForm):
         return user  
     
        
-class TodayInputForm(forms.ModelForm): # あなたのフォームクラス名を適切なものに置き換えてください
+class TodayInputForm(forms.ModelForm): 
     diary_choices = [
         ('breakfast', '朝食が食べられた'),
         ('washing', '洗濯ができた'),
@@ -136,10 +156,10 @@ class TodayInputForm(forms.ModelForm): # あなたのフォームクラス名を
         fields =('tomorrow_goal',) 
         max_length=20, 
         widgets = {
-           'tomorrow_goal' : forms.Textarea(
-               attrs={'placeholder': '目標を書いてください（20文字以内）',
-                      'rows': 3, 
-                      'cols':60},
+           'tomorrow_goal' : forms.TextInput(
+               attrs={
+                #    'placeholder': '目標を書いてください（20文字以内）',
+                      'class': 'form-control',},
            )
         }
         labels = {
@@ -157,9 +177,10 @@ class OtherSuccessForm(forms.Form):
         required=False,
         max_length=20, 
         label='その他',
-        widget=forms.Textarea(attrs={'placeholder': 'その他にできたことを書いてください（20文字以内）',
-                                     'rows': 1,
-                                     'cols':50,   
+        widget=forms.TextInput(
+            attrs={
+                # 'placeholder': 'その他にできたことを書いてください（20文字以内）',
+                'class': 'form-control',                      
                               })
     )
 OtherSuccessFormSet = forms.formset_factory(OtherSuccessForm, 
@@ -173,17 +194,17 @@ class WeekReflectionForm(forms.ModelForm):
         fields = ('highlight', 'reason', 'next_plan',)
         widgets = {
            'highlight' : forms.Textarea(
-               attrs={'placeholder': '今週のハイライトを書いてください（150文字以内）',
+               attrs={'placeholder': '例：プログラミングの勉強が2時間できた（150文字以内）',
                       'rows': 6, 
                       'cols':15},
            ),
            'reason' : forms.Textarea(
-               attrs={'placeholder': 'できた理由を書いてください（150文字以内）',
+               attrs={'placeholder': '例：スキマ時間を使って学習したから（150文字以内）',
                       'rows': 6, 
                       'cols':15},
            ),
            'next_plan' : forms.Textarea(
-               attrs={ 'placeholder': '今後はどのような工夫をしたらよいかを書いてください（150文字以内）',
+               attrs={ 'placeholder': '例：もっと学習できるように、スマートフォンを自室に置かずに勉強をする（150文字以内）',
                        'rows': 6, 
                        'cols':15},
            )
@@ -212,15 +233,15 @@ class MonthReflectionForm(forms.ModelForm):
         fields = ('common_ground', 'my_values', 'awareness',)
         widgets = {
            'common_ground' : forms.Textarea(
-               attrs={'placeholder': '各週のハイライトに共通する点を書いてください（150文字以内）', 
+               attrs={'placeholder': '例：現実の課題に向き合えた（150文字以内）', 
                       'rows': 4, 'cols':90},
            ),
            'my_values' : forms.Textarea(
-               attrs={'placeholder': '自分の価値観や大切にしていることを書いてください（150文字以内）',
+               attrs={'placeholder': '例：苦手なことでも1歩ずつ課題を達成する（150文字以内）',
                       'rows': 4, 'cols':90},
            ),
            'awareness' : forms.Textarea(
-               attrs={'placeholder': 'その他気づいたことを書いてください（150文字以内）', 
+               attrs={'placeholder': '例：目の前の課題をクリアしたら、生活が充実するようになった（150文字以内）', 
                       'rows': 4, 'cols':90},
            )
         }

@@ -58,7 +58,7 @@ def user_login(request):
             messages.success(request, 'ログイン成功しました！')
             return redirect('diary_app:month', year=today.year, month=today.month )
         else:
-            messages.warning(request, 'ログインに失敗しました')
+            messages.warning(request, 'ログインに失敗しました。')
     return render(
         request, 'user/user_login.html', context={
             'login_form': login_form,

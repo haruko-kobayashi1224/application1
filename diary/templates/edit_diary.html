@@ -53,7 +53,12 @@ h5 {
   font-size: 14px;
 }
 
-textarea, input[type="text"] {
+p{
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 15px;
@@ -99,9 +104,9 @@ textarea, input[type="text"] {
 }
 
 .btn-cancel:hover {
-  background-color: #c7c7c7ff;  /* 少し濃いグレーに */
-  color: #333;              /* 文字色も濃く */
-  transition: 0.2s ease;      /* なめらかな変化 */
+  background-color: #c7c7c7ff;  
+  color: #333;              
+  transition: 0.2s ease;     
 }
 
 .btn-cancel-modal{
@@ -111,9 +116,9 @@ textarea, input[type="text"] {
 }
 
 .btn-cancel-modal:hover {
-  background-color: #c7c7c7ff;  /* 少し濃いグレーに */
-  color: #333;              /* 文字色も濃く */
-  transition: 0.2s ease;      /* なめらかな変化 */
+  background-color: #c7c7c7ff;  
+  color: #333;             
+  transition: 0.2s ease;     
 }
 
 .btn-save {
@@ -192,6 +197,12 @@ textarea, input[type="text"] {
   margin: 0 auto;
 }
 
+#emptyModal button:hover {
+  background-color: #c5c4c2e9;!important; 
+  color: white;           
+  transition: 0.2s ease;      
+}
+
 </style>
 
 {% if formset.non_form_errors %}
@@ -214,6 +225,7 @@ textarea, input[type="text"] {
             </label>
           {% endfor %}
         </div>
+        <p><strong>その他にできたことがあれば、20文字以内で書いてください（最大3つまで）</strong>&emsp; 例：勉強ができた</p>
           {{ formset.management_form }}   
         <div id="formset-area">
           <div class="formset-flex" id="formset-container"> 
@@ -227,8 +239,10 @@ textarea, input[type="text"] {
         <div style="text-align: center; margin-bottom: 20px;">
           <button type="button" id="add-form-btn" >＋追加</button>        
         </div>
-        <h5>明日の目標</h5>
+        <p><strong>明日の目標があれば、20文字以内で書いてください</strong>&emsp; 例：朝6時に起きる</p>
+        <div class="other-success-form">
         {{ edit_diary_form.tomorrow_goal }}
+        </div>
         <div class="button-area"> 
           <button type="button" class="btn btn-delete " data-bs-toggle="modal" data-bs-target="#deleteModal-{{ diary.id }}">
             削除
@@ -242,10 +256,7 @@ textarea, input[type="text"] {
         </div>  
     </form>  
   </div>  
-<div id="emptyModal" >
-  <p>できたことが入力されて<br>いないので保存できません</p>
-  <button id="modalCloseBtn" >OK</button>
-</div>
+
 
 <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal-{{ diary.pk }}">
   <div class="modal-dialog" role="document">
@@ -271,7 +282,10 @@ textarea, input[type="text"] {
     </div>
   </div>
 </div>
-
+<div id="emptyModal" >
+  <p>できたことが入力されて<br>いないので保存できません</p>
+  <button id="modalCloseBtn" >OK</button>
+</div>
 
 
 <script>
@@ -289,15 +303,9 @@ textarea, input[type="text"] {
                 return;
             }
         
-             const newForm = originalForm.cloneNode(true);
-
-             newForm.innerHTML = newForm.innerHTML.replace(/form-0-/g, `form-${formCount}-`)
-
-            const textarea = newForm.querySelector('textarea');
-              if (textarea) {
-              textarea.value = '';
-            }
              
+             const newForm = originalForm.cloneNode(true);
+             newForm.innerHTML = newForm.innerHTML.replace(/form-0-/g, `form-${formCount}-`)
              formContainer.appendChild(newForm);
              
              const totalForms = document.querySelector("#id_form-TOTAL_FORMS");
@@ -311,7 +319,7 @@ textarea, input[type="text"] {
 
     form.addEventListener('submit', function(event) {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-        const textInputs = document.querySelectorAll('#formset-container input[type="text"], #formset-container textarea');
+        const textInputs = document.querySelectorAll('#formset-container input[type="text"]');
         
         
         let isTextFilled = false;

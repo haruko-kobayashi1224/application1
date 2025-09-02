@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% load diary_extras %}
-{% comment %} <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> {% endcomment %}
 {% block content %}
 <script>
   const todayServer = "{{ today|date:'Y-m-d' }}";
 </script>
 
 <style>
+
 
 .triangle-left{
   width: 0;
@@ -36,7 +36,7 @@
   table-layout: fixed; 
   border-collapse: collapse;
   margin-top: 15px;
-  margin-bottom: 50px; 
+  margin-bottom: 50px;  
 }
 
 .calendar-table td,
@@ -53,8 +53,8 @@
 .calendar-table th {
   height: 85px;
 }
+
 .calendar-table th {
-  height: px;
   max-height: 100px;
   font-size: 16px;
 }
@@ -109,8 +109,8 @@
 
 #future-modal button:hover {
   background-color: #c5c4c2e9;!important; 
-  color: white;           /* 文字色も濃く */
-  transition: 0.2s ease;      /* なめらかな変化 */
+  color: white;           
+  transition: 0.2s ease;     
 }
 
 
@@ -121,12 +121,10 @@
   font-size: 14px;
   color: #555;
   margin-left: 30px;   
-  max-width: 100%;            /* セル幅内に収める */ /* 一部ブラウザ対応 */
-  word-break: break-all;  /* 強制的に文字単位で改行 */
+  max-width: 100%;            
+  word-break: break-all;  
   overflow-wrap: anywhere; 
 }  
-
-
 
 
 </style>
@@ -231,7 +229,7 @@
 
       link.addEventListener('click', function (event) {
         if (dateStr > today) {
-          event.preventDefault(); // リンクを止める
+          event.preventDefault();
           document.getElementById('future-modal').style.display = 'block';
         }
       });

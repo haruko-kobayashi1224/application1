@@ -30,10 +30,9 @@ h5 {
 }
 
 
-
 .formset-flex {
   display: flex;
-  gap: 10px;
+  gap: 20px;
   flex-wrap: wrap;
   margin-top: 10px;
   margin-bottom: 20px;
@@ -48,11 +47,15 @@ h5 {
   width: 300px;
   padding: 8px 12px;
   border: 1px solid #ccc;
-  border-radius: 6px;
   font-size: 14px;
 }
 
-textarea, input[type="text"] {
+p{
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 15px;
@@ -114,7 +117,6 @@ textarea, input[type="text"] {
   color: white;                
   transition: 0.2s ease;      
 }
-
 
 
 
@@ -182,6 +184,7 @@ textarea, input[type="text"] {
            </label>
           {% endfor %}
         </div>  
+        <p><strong>その他にできたことがあれば、20文字以内で書いてください（最大3つまで）</strong>&emsp; 例：勉強ができた</p>
           {{ formset.management_form }}
         <div id="formset-area">
           <div class="formset-flex" id="formset-container"> 
@@ -189,14 +192,22 @@ textarea, input[type="text"] {
             <div class="other-success-form">
                 {{ form.other_success }}
             </div>
+            {% comment %} <div class="other-success-form">
+                {{ form.other_success }}
+            </div>
+            <div class="other-success-form">
+                {{ form.other_success }}
+            </div> {% endcomment %}
             {% endfor %}
           </div>
         </div>
         <div style="text-align: center; margin-bottom: 20px;">
           <button type="button" id="add-form-btn">＋追加</button>
-        </div>    
-        <h5>明日の目標</h5>
+        </div>     
+        <p><strong>明日の目標があれば、20文字以内で書いてください</strong>&emsp; 例：朝6時に起きる</p>
+        <div class="other-success-form">
         {{ today_input_form.tomorrow_goal }}
+        </div>
 
         <div class="button-area">
           <button type="button" class="btn btn-cancel" onclick="location.href='{% url 'diary_app:month' year=year month=month  %}'">
@@ -242,7 +253,7 @@ textarea, input[type="text"] {
 
     form.addEventListener('submit', function(event) {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-        const textInputs = document.querySelectorAll('#formset-container input[type="text"], #formset-container textarea');
+        const textInputs = document.querySelectorAll('#formset-container input[type="text"]');
         
         
         let isTextFilled = false;
