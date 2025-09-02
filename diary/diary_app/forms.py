@@ -184,7 +184,7 @@ class OtherSuccessForm(forms.Form):
                               })
     )
 OtherSuccessFormSet = forms.formset_factory(OtherSuccessForm, 
-                                            extra=1, max_num=3, can_delete=True, validate_max=True) 
+                                            extra=3, max_num=3, can_delete=True, validate_max=True) 
 
 
 class WeekReflectionForm(forms.ModelForm):
