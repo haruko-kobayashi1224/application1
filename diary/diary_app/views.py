@@ -177,7 +177,7 @@ def today_input(request, year, month, day):
             if f and f.get('other_success'):
                 DiarySuccess.objects.create(success=f['other_success'], diary=diary)
                     
-        messages.success(request, '今日の日記を作成しました')
+        messages.success(request,  str( month ) +'月'+ str( day )+'日の日記を作成しました')
         return redirect('diary_app:month', year=year, month=month)        
     
     else:
@@ -295,6 +295,7 @@ def edit_diary(request, pk,  year, month, day):
     if edit_diary_form.is_valid() and formset.is_valid():
         diary = edit_diary_form.save(commit=False)
         diary.user = request.user
+        diary.created_at = selected_date
         diary.save()
         
        
@@ -307,7 +308,7 @@ def edit_diary(request, pk,  year, month, day):
             if f and f.get('other_success'):
                 DiarySuccess.objects.create(success=f['other_success'], diary=diary)    
         
-        messages.success(request, '今日の日記を更新しました')
+        messages.success(request, str( month ) +'月'+ str( day )+'日の日記を更新しました')
         return redirect('diary_app:month', year=year, month=month )
         
     return render(
@@ -328,10 +329,13 @@ def edit_diary(request, pk,  year, month, day):
 @require_POST
 def delete_diary(request, pk,  year, month, day):
     diary = get_object_or_404(Diary, pk=pk, user=request.user)
+    diary_date = timezone.localtime(diary.created_at).date()
     diary.delete()
-    messages.success(request, '日記を削除しました')
+    messages.success(
+        request, f"{diary_date.month}月{diary_date.day}日の日記を削除しました")
     return redirect('diary_app:month', year=year, month=month )
-      
+
+          
     
     
 class ReflectionListView(ListView):
