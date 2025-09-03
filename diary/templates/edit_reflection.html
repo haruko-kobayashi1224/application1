@@ -44,9 +44,13 @@ table {
   font-size: 12px;
 }
 
+colgroup col {
+  width: auto; /* 固定幅ではなく自動調整にする */
+}
+
 th, td {
-  border: 1px solid #000;
-  padding: 8px 12px;
+  border: 1px solid #8d8c89e9;
+  padding: 8px ;
   vertical-align: top;
   word-break: break-word;
   white-space: normal;
@@ -55,24 +59,15 @@ th, td {
   overflow: visible;
 }
 
-.table-container textarea {
-  min-height: 300px;
-  width: 100%;
-  font-size: 14px;
-  overflow-y: hidden;
-  resize: none;
-  border: 1px solid #ccc;
-  line-height: 1.4;
-  border-radius: 8px;
-  box-sizing: border-box;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-}
-
 
 th {
   vertical-align: middle;
-  background-color: #f0f8ff;
+  background-color: #befafaff;
+  font-weight: bold;
   text-align: center;
+  padding: 5px;
+  height: 60px;    
+  font-size: 16px;
 }
 
 td {
@@ -124,7 +119,7 @@ td {
 
 .btn-cancel {
   background-color: #b4b4b4ff;
-   padding: 15px 40px;
+  padding: 15px 40px;
   color: #333;
 }
 
@@ -135,9 +130,9 @@ td {
 }
 
 
-textarea,
-input[type="text"] {
+textarea {
   border: 1px solid #ccc;
+  padding: 8px 12px;
   border-radius: 8px;
   font-size: 16px;
   line-height: 1.4;
@@ -146,6 +141,20 @@ input[type="text"] {
   min-height: 100px; /* 最低限の高さ */
   overflow: hidden;  /* スクロールバーを非表示 */
   resize: vertical;
+}
+
+.table-container textarea {
+  min-height: 320px;
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  overflow-y: hidden;
+  resize: none;
+  border: 1px solid #ccc;
+  line-height: 1.4;
+  border-radius: 8px;
+  box-sizing: border-box;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
 }
 </style>
 
@@ -161,22 +170,22 @@ input[type="text"] {
   <h5>1週間ごとの振り返り</h5>
    <table>
      <colgroup>
-      <col style="width: 5%;">
+      {% comment %} <col style="width: 5%;"> {% endcomment %}
       <col span="7" style="width: 7%;">
-      <col style="width: 10%;">
-      <col style="width: 10%;">
-      <col style="width: 10%;">
+      <col style="width: 11%;">
+      <col style="width: 11%;">
+      <col style="width: 11%;">
      </colgroup>
      <thead>
         <tr>
-          <th>週</th>
-          <th>1日目</th>
-          <th>2日目</th>
-          <th>3日目</th>
-          <th>4日目</th>
-          <th>5日目</th>
-          <th>6日目</th>
-          <th>7日目</th>
+          {% comment %} <th>週</th> {% endcomment %}
+          <th>月</th>
+          <th>火</th>
+          <th>水</th>
+          <th>木</th>
+          <th>金</th>
+          <th>土</th>
+          <th>日</th>
           <th>今週のハイライト</th>
           <th>できた理由</th>
           <th>今後はどのような<br>工夫をしたらよいか</th>
@@ -186,9 +195,14 @@ input[type="text"] {
         {% for form, week in week_form_pairs %}
           {% with week_num=week.0 data=week.1 %}
             <tr>
-              <td style="text-align: center; background-color: #f0f8ff; vertical-align: middle; font-weight: bold;">{{ week_num }}週目</td>
-              {% for diary in data.diaries %}
+              {% comment %} <td style="text-align: center; background-color: #f0f8ff; vertical-align: middle; font-weight: bold;">{{ week_num }}週目</td> {% endcomment %}
+              {% for day,diary in data.days_diaries %}
                 <td>
+                  {% if day.month == current.month and day.year == current.year  %}
+                    <div style="font-size:12px; color:#0000EE;">{{ day.day }}</div>
+                  {% else %}
+                    <div style="font-size:12px; color:#B0C4DE;">{{ day.day }}</div>
+                  {% endif %}
                   {% if diary %}
                     {% for success in diary.success_list %}
                       <span style="white-space: nowrap;">・{{ success.label|slice:":1" }}</span>{{ success.label|slice:"1:" }}<br>
@@ -208,14 +222,16 @@ input[type="text"] {
   </div>
 
 <div style="margin-top: 30px; ">
-  <h5>今月できたこと</h5>
+  <h5>今月の振り返り</h5>
+  <div style="margin-top: 30px; overflow: hidden;">
     <p><strong>■各週のハイライトに共通する点</strong><br>
     {{ month_form.common_ground }}</p>
     <p><strong>■自分の価値観や大切にしていること</strong><br>
     {{ month_form.my_values}}</p>
     <p><strong>■その他気づいたこと</strong><br>
     {{ month_form.awareness }}</p>
-</div>
+  </div>
+</div>  
 
  <div class="button-area">
    <button type="button" class="btn btn-cancel" onclick="location.href='{% url 'diary_app:reflection' year=year month=month  %}'">

@@ -39,7 +39,7 @@ table {
 }
 
 th, td {
-  border: 1px solid #000;
+  border: 1px solid #8d8c89e9;
   padding: 8px 12px;
   vertical-align: top;
   word-break: break-word;
@@ -55,9 +55,12 @@ th, td {
 
 th {
     vertical-align: middle;
-    background-color: #f0f8ff;
+    background-color: #befafaff;
+    font-weight: bold;
     text-align: center;
-    height: 50px;
+    padding: 5px;
+    height: 60px;    
+    font-size: 16px;
 }
 
 td {
@@ -219,7 +222,7 @@ h5{
 </div>   
 <table>
     <colgroup>
-     <col style="width: 5%;"> 
+     {% comment %} <col style="width: 5%;">  {% endcomment %}
     <col span="7" style="width: 7%;"> 
     <col style="width: 10%;"> 
     <col style="width: 10%;"> 
@@ -227,14 +230,14 @@ h5{
     </colgroup>
     <thead>              
         <tr>
-          <th >週</th>  
-          <th>1日目</th>
-          <th>2日目</th>
-          <th>3日目</th>
-          <th>4日目</th>
-          <th>5日目</th>
-          <th>6日目</th>
-          <th>7日目</th>
+          {% comment %} <th >週</th>   {% endcomment %}
+          <th>月</th>
+          <th>火</th>
+          <th>水</th>
+          <th>木</th>
+          <th>金</th>
+          <th>土</th>
+          <th>日</th>
           <th>今週のハイライト</th>
           <th>できた理由</th>
           <th>今後はどのような<br>工夫をしたらよいか</th>
@@ -243,14 +246,19 @@ h5{
     <tbody>
          {% for week_num, data in weeks.items %}
           <tr>
-              <td style="text-align: center; background-color: #f0f8ff; vertical-align: middle; font-weight: bold;">{{ week_num }}週目</td>
-              {% for diary in data.diaries %}
+              {% comment %} <td style="text-align: center; background-color: #f0f8ff; vertical-align: middle; font-weight: bold;">{{ week_num }}週目</td> {% endcomment %}
+              {% for day,diary in data.days_diaries %}
                   <td>
+                    {% if month_current.month != day.month %}
+                      <div style= "font-size:12px; color:#B0C4DE; ">{{ day.day }}</div>
+                    {% else %}  
+                      <div style= "font-size:12px; color:#0000EE;">{{ day.day }}</div>
+                    {% endif %}  
                     {% if diary %}
                       {% for success in diary.success_list %}
                         <span style="white-space: nowrap;">・{{ success.label|slice:":1" }}</span>{{ success.label|slice:"1:" }}<br>
                       {% endfor %}
-                    {% endif %} 
+                    {% endif %}           
                   </td>
               {% endfor %}      
                <td>{{ data.reflection.highlight|default_if_none:""|linebreaksbr }}</td>

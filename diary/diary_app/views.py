@@ -351,9 +351,9 @@ class ReflectionListView(ListView):
         
         diaries = []
         for data in self.weeks.values():
-            for diary in data['diaries']:
+            for day,diary in data['days_diaries']:
                 if diary:
-                    diaries.append(diary)
+                    diaries.append((day, diary))
         return diaries 
     
   
@@ -430,6 +430,8 @@ def edit_reflection(request, year, month):
             'month_previous': month_previous,
             'month_next': month_next,
             'month_reflection': month_reflection, 
+            'current': current,
+            
         }
     )   
 

@@ -74,8 +74,12 @@ def get_weeks_data(user, year, month):
             ).first()
             
         weeks_full[week_num] = {
-            "diaries": week_diaries,
+            "days_diaries": [],
             "reflection": week_reflection,
         }    
+        
+        for i , day in enumerate(month_calendar[week_num - 1]):
+            diary = week_diaries[i] if i < len(week_diaries) else None
+            weeks_full[week_num]["days_diaries"].append((day, diary))
 
     return weeks_full
