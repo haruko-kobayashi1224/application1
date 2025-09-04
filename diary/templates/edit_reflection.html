@@ -41,7 +41,7 @@ table {
   min-width: 1200px;
   width: 100%;
   table-layout: fixed;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 colgroup col {
@@ -199,9 +199,9 @@ textarea {
               {% for day,diary in data.days_diaries %}
                 <td>
                   {% if day.month == current.month and day.year == current.year  %}
-                    <div style="font-size:12px; color:#0000EE;">{{ day.day }}</div>
+                    <div style="font-size:14px; color:#0000EE; margin-bottom:5px;font-weight: bold; ">{{ day.day }}</div>
                   {% else %}
-                    <div style="font-size:12px; color:#B0C4DE;">{{ day.day }}</div>
+                    <div style="font-size:14px; color:#B0C4DE; margin-bottom:5px;font-weight: bold; ">{{ day.day }}</div>
                   {% endif %}
                   {% if diary %}
                     {% for success in diary.success_list %}
