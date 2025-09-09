@@ -43,12 +43,14 @@ h5 {
   margin-bottom: 10px;
 }  
 
-.other-success-form input {
+{% comment %} .other-success-form input {
   width: 300px;
   padding: 12px 16px;
   border: 1px solid #ccc;
-  font-size: 16px;
-}
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 15px;
+} {% endcomment %}
 
 p{
   margin-top: 40px;
@@ -56,9 +58,11 @@ p{
 }
 
 input[type="text"] {
+  width: 300px;
+  padding: 14px 16px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.4;
   box-sizing: border-box;
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
@@ -191,7 +195,8 @@ input[type="text"] {
            </label>
           {% endfor %}
         </div>  
-        <p><strong>その他にできたことがあれば、20文字以内で書いてください</strong>&emsp; 例：勉強ができた</p>
+        <h5>その他できたこと</h5>
+        {% comment %} <p><strong>その他にできたことがあれば、20文字以内で書いてください</strong>&emsp; 例：勉強ができた</p> {% endcomment %}
           {{ formset.management_form }}
         <div id="formset-area">
           <div class="formset-flex" id="formset-container"> 
@@ -205,7 +210,8 @@ input[type="text"] {
         {% comment %} <div style="text-align: center; margin-bottom: 20px;">
           <button type="button" id="add-form-btn">＋追加</button>
         </div>      {% endcomment %}
-        <p><strong>明日の目標があれば、20文字以内で書いてください</strong>&emsp; 例：朝6時に起きる</p>
+        <h5>明日の目標</h5>
+        {% comment %} <p><strong>明日の目標があれば、20文字以内で書いてください</strong>&emsp; 例：朝6時に起きる</p> {% endcomment %}
         <div class="other-success-form">
         {{ today_input_form.tomorrow_goal }}
         </div>

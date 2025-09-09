@@ -158,7 +158,7 @@ class TodayInputForm(forms.ModelForm):
         widgets = {
            'tomorrow_goal' : forms.TextInput(
                attrs={
-                #    'placeholder': '目標を書いてください（20文字以内）',
+                      'placeholder': '20字以内で書いてください 例：早起きする',
                       'class': 'form-control',},
            )
         }
@@ -179,7 +179,7 @@ class OtherSuccessForm(forms.Form):
         label='その他',
         widget=forms.TextInput(
             attrs={
-                # 'placeholder': 'その他にできたことを書いてください（20文字以内）',
+                 'placeholder': '20字以内書いてください 例：勉強ができた',
                 'class': 'form-control',                      
                               })
     )
