@@ -33,7 +33,7 @@
   overflow-x: auto;
   margin-top: 20px;
   margin-bottom: 20px;
-  max-width: 100%; /* 制限を外す */
+  max-width: 100%; 
 }
 
 table {
@@ -45,7 +45,7 @@ table {
 }
 
 colgroup col {
-  width: auto; /* 固定幅ではなく自動調整にする */
+  width: auto; 
 }
 
 th, td {
@@ -138,8 +138,8 @@ textarea {
   line-height: 1.4;
   box-sizing: border-box;
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-  min-height: 100px; /* 最低限の高さ */
-  overflow: hidden;  /* スクロールバーを非表示 */
+  min-height: 100px; 
+  overflow: hidden; 
   resize: vertical;
 }
 
@@ -156,90 +156,91 @@ textarea {
   box-sizing: border-box;
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
 }
+
+.container-bottom-space {
+  padding-bottom: 30px;
+} 
+
 </style>
 
-
-</style>
-
-    <h4>{{ year }}年{{ month }}月の振り返り編集</h4>
-
-<form method="post">
-  {% csrf_token %}
-  {{ week_formset.management_form }}
- <div class="table-container">
-  <h5>1週間ごとの振り返り</h5>
-   <table>
-     <colgroup>
-      {% comment %} <col style="width: 5%;"> {% endcomment %}
-      <col span="7" style="width: 7%;">
-      <col style="width: 11%;">
-      <col style="width: 11%;">
-      <col style="width: 11%;">
-     </colgroup>
-     <thead>
-        <tr>
-          {% comment %} <th>週</th> {% endcomment %}
-          <th>月</th>
-          <th>火</th>
-          <th>水</th>
-          <th>木</th>
-          <th>金</th>
-          <th>土</th>
-          <th>日</th>
-          <th>今週のハイライト</th>
-          <th>できた理由</th>
-          <th>今後はどのような<br>工夫をしたらよいか</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for form, week in week_form_pairs %}
-          {% with week_num=week.0 data=week.1 %}
-            <tr>
+<h4>{{ year }}年{{ month }}月の振り返り編集</h4>
+<div class="container container-bottom-space"> 
+  <form method="post">
+    {% csrf_token %}
+    {{ week_formset.management_form }}
+   <div class="table-container">
+    <h5>1週間ごとの振り返り</h5>
+     <table>
+       <colgroup>
+        <col span="7" style="width: 7%;">
+        <col style="width: 11%;">
+        <col style="width: 11%;">
+        <col style="width: 11%;">
+       </colgroup>
+       <thead>
+          <tr>
+            <th>月</th>
+            <th>火</th>
+            <th>水</th>
+            <th>木</th>
+            <th>金</th>
+            <th>土</th>
+            <th>日</th>
+            <th>今週のハイライト</th>
+            <th>できた理由</th>
+            <th>今後はどのような<br>工夫をしたらよいか</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for form, week in week_form_pairs %}
+            {% with week_num=week.0 data=week.1 %}
+              <tr>
               {% comment %} <td style="text-align: center; background-color: #f0f8ff; vertical-align: middle; font-weight: bold;">{{ week_num }}週目</td> {% endcomment %}
-              {% for day,diary in data.days_diaries %}
-                <td>
-                  {% if day.month == current.month and day.year == current.year  %}
-                    <div style="font-size:14px; color:#0000EE; margin-bottom:5px;font-weight: bold; ">{{ day.day }}</div>
-                  {% else %}
-                    <div style="font-size:14px; color:#B0C4DE; margin-bottom:5px;font-weight: bold; ">{{ day.day }}</div>
-                  {% endif %}
-                  {% if diary %}
-                    {% for success in diary.success_list %}
-                      <span style="white-space: nowrap;">・{{ success.label|slice:":1" }}</span>{{ success.label|slice:"1:" }}<br>
-                    {% endfor %}
-                  {% endif %}
-                </td>
-              {% endfor %}
-              <td style="display: none;">{{ form.id }}</td>
-              <td>{{ form.highlight }}</td>
-              <td>{{ form.reason }}</td>
-              <td>{{ form.next_plan }}</td>
-           </tr>
-          {% endwith %}
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+                {% for day,diary in data.days_diaries %}
+                  <td>
+                    {% if day.month == current.month and day.year == current.year  %}
+                      <div style="font-size:14px; color:#0000EE; margin-bottom:5px;font-weight: bold; ">{{ day.day }}</div>
+                    {% else %}
+                      <div style="font-size:14px; color:#B0C4DE; margin-bottom:5px;font-weight: bold; ">{{ day.day }}</div>
+                    {% endif %}
+                    {% if diary %}
+                      {% for success in diary.success_list %}
+                        <span style="white-space: nowrap;">・{{ success.label|slice:":1" }}</span>{{ success.label|slice:"1:" }}<br>
+                      {% endfor %}
+                    {% endif %}
+                  </td>
+                {% endfor %}
+                <td style="display: none;">{{ form.id }}</td>
+                <td>{{ form.highlight }}</td>
+                <td>{{ form.reason }}</td>
+                <td>{{ form.next_plan }}</td>
+             </tr>
+            {% endwith %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
 
-<div style="margin-top: 30px; ">
-  <h5>今月の振り返り</h5>
-  <div style="margin-top: 30px; overflow: hidden;">
-    <p><strong>■各週のハイライトに共通する点</strong><br>
-    {{ month_form.common_ground }}</p>
-    <p><strong>■自分の価値観や大切にしていること</strong><br>
-    {{ month_form.my_values}}</p>
-    <p><strong>■その他気づいたこと</strong><br>
-    {{ month_form.awareness }}</p>
-  </div>
-</div>  
+    <div style="margin-top: 30px; ">
+      <h5>今月の振り返り</h5>
+      <div style="margin-top: 30px; overflow: hidden;">
+        <p><strong>■各週のハイライトに共通する点</strong><br>
+        {{ month_form.common_ground }}</p>
+        <p><strong>■自分の価値観や大切にしていること</strong><br>
+        {{ month_form.my_values}}</p>
+        <p><strong>■その他気づいたこと</strong><br>
+        {{ month_form.awareness }}</p>
+      </div>
+    </div>  
 
- <div class="button-area">
-   <button type="button" class="btn btn-cancel" onclick="location.href='{% url 'diary_app:reflection' year=year month=month  %}'">
-    キャンセル
-   </button>
-   <button type="submit" class="btn btn-save">保存</button>
-  </div>
-</form>
+   <div class="button-area">
+     <button type="button" class="btn btn-cancel" onclick="location.href='{% url 'diary_app:reflection' year=year month=month  %}'">
+      キャンセル
+     </button>
+     <button type="submit" class="btn btn-save">保存</button>
+    </div>  
+  </form>
+</div>
 {% endblock %}
 
 

@@ -137,9 +137,9 @@ h5{
 }
 
 .btn-cancel-modal:hover {
-  background-color: #c7c7c7ff;  /* 少し濃いグレーに */
-  color: #333;              /* 文字色も濃く */
-  transition: 0.2s ease;      /* なめらかな変化 */
+  background-color: #c7c7c7ff; 
+  color: #333;              
+  transition: 0.2s ease;      
 }
 
 
@@ -186,17 +186,23 @@ h5{
   transition: 0.2s ease;      
 } 
 
+.container-bottom-space {
+  padding-bottom: 30px;
+} 
+
 
 </style>
 
 <h4>{{ year }}年{{ month }}月の振り返り</h4>
 
-<div class="container  text-center">
-{% if messages %}
+<div class="container container-bottom-space"> 
+  <div class="container  text-center">
+  {% if messages %}
     {% for message in messages %}
     <p>{{ message.message}}</p>
     {% endfor %}
-{% endif %}
+  {% endif %}
+  </div>
 
   <div class="navigation">
     <h5>
@@ -210,7 +216,7 @@ h5{
         </a>
       </h5> 
   </div> 
-</div>   
+
 
 <div class="table-container">
 <h5>1週間ごとの振り返り</h5> 
@@ -288,19 +294,18 @@ h5{
       {% endif %}
   </div>
 
-<div class="button-group">
-{% if month_reflection or  data.reflection %}  
-  <button type="button" class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">
-    削除
-  </button>
-{% else %}
-  <button type="button" class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#emptyModal">
-    削除
-  </button>
-{% endif %}
-   
-
-</div>
+  <div class="button-group">
+  {% if month_reflection or  data.reflection %}  
+    <button type="button" class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">
+      削除
+    </button>
+  {% else %}
+    <button type="button" class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#emptyModal">
+      削除
+    </button>
+  {% endif %}
+  </div>
+</div>   
 
           <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal-{{diary.id}}">
             <div class="modal-dialog" role="document">

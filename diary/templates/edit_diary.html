@@ -2,7 +2,7 @@
 {% block content %}
 
 <style>
-
+  
 .edit-form-wrapper {
   max-width: 1000px;
   margin: 60px auto;
@@ -135,7 +135,6 @@ input[type="text"] {
 
 
 .btn-delete {
-  
   background-color: #c82333;
   padding: 15px 55px;
   color: white;
@@ -203,8 +202,13 @@ input[type="text"] {
   transition: 0.2s ease;      
 }
 
+.container  {
+  padding-bottom: 30px;  
+}
+
 </style>
 
+<div class="container">
 {% if formset.non_form_errors %}
     <div>
       {% for error in formset.non_form_errors %}
@@ -255,7 +259,8 @@ input[type="text"] {
           </div>  
         </div>  
     </form>  
-  </div>  
+  </div>
+</div>    
 
 
 <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal-{{ diary.pk }}">

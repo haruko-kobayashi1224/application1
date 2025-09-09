@@ -163,8 +163,15 @@ input[type="text"] {
   transition: 0.2s ease;      
 }
 
+.container  {
+  padding-bottom: 30px;  
+}
+
+
+
 </style>
 
+<div class="container">
 {% if formset.non_form_errors %}
     <div>
       {% for error in formset.non_form_errors %}
@@ -210,7 +217,9 @@ input[type="text"] {
           <button type="submit" class="btn btn-input">作成</button>      
         </div>    
     </form>        
-  </div>  
+  </div>
+</div>
+
 <div id="emptyModal" >
     <p>できたことが入力されて<br>いないので作成できません</p>
     <button id="modalCloseBtn" >OK</button>
