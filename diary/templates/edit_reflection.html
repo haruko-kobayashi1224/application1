@@ -3,7 +3,7 @@
 
 <style>
 
-.table-container {
+{% comment %} .table-container {
   overflow-x: auto;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -27,20 +27,22 @@
 
 .table-container::-webkit-scrollbar-thumb:hover {
   background: #555;
-}
+} {% endcomment %}
 
 .table-container {
   overflow-x: auto;
   margin-top: 20px;
   margin-bottom: 20px;
-  max-width: 100%; 
+  width: 100%; 
 }
 
 table {
-  border-collapse: collapse;
-  min-width: 1200px;
+  {% comment %} border-collapse: collapse;
   width: 100%;
-  table-layout: fixed;
+  table-layout: fixed; {% endcomment %}
+  width: 100%;        /* ←これを追加 */
+  min-width: auto;    /* ←1200pxを消す */
+  table-layout: auto; 
   font-size: 14px;
 }
 
@@ -56,7 +58,8 @@ th, td {
   white-space: normal;
   overflow-wrap: break-word;
   line-height: 1.2;
-  overflow: visible;
+  overflow: auto;
+  {% comment %} overflow: visible; {% endcomment %}
 }
 
 
@@ -83,7 +86,6 @@ td {
 } {% endcomment %}
 
  h4 {
-    
     gap: 10px;
     margin-top: 20px;
     margin-bottom: 30px;

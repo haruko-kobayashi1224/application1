@@ -31,10 +31,14 @@
 }
 
 table {
-  border-collapse: collapse;
+  {% comment %} border-collapse: collapse;
   min-width: 1200px;
   width: 100%;
   table-layout: fixed;
+  font-size: 14px; {% endcomment %}
+  width: 100%;        
+  min-width: auto;    
+  table-layout: auto; 
   font-size: 14px;
 }
 
@@ -44,12 +48,12 @@ th, td {
   vertical-align: top;
   word-break: break-word;
   white-space: normal;
-  overflow-wrap: break-word;  
+  overflow-wrap: break-word;
   line-height: 1.2;
-  height: 80px;         
+  height: 80px;
   max-height: 80px;
-  overflow: auto; 
-  
+  overflow: auto;
+
 }
 
 
@@ -59,33 +63,32 @@ th {
     font-weight: bold;
     text-align: center;
     padding: 5px;
-    height: 60px;    
+    height: 60px;
     font-size: 16px;
 }
 
 td {
     max-height: 100px;
     background-color: #ffffff;
-    
+
 }
 
-.edit-btn h5 {
+.navigation h5 {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
 }
-  
+
 .container.text-center h5 {
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
 .button-group {
-  margin-top: 20px; 
-  margin-bottom: 20px; 
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
-
 
 
 p {
@@ -94,7 +97,7 @@ p {
   }
 
 h5{
-    margin-top: 20px;    
+    margin-top: 20px;
 }
 
 .btn  {
@@ -113,8 +116,8 @@ h5{
 
 .btn-input-edit:hover{
   background-color: #449cfbff;
-  color: white;                
-  transition: 0.2s ease;      
+  color: white;
+  transition: 0.2s ease;
 }
 
 .btn-cancel {
@@ -123,9 +126,9 @@ h5{
 }
 
 .btn-cancel:hover {
-  background-color: #c7c7c7ff;  
-  color: #333;              
-  transition: 0.2s ease;      
+  background-color: #c7c7c7ff;
+  color: #333;
+  transition: 0.2s ease;
 }
 
 .btn-cancel-modal{
@@ -135,14 +138,14 @@ h5{
 }
 
 .btn-cancel-modal:hover {
-  background-color: #c7c7c7ff; 
-  color: #333;              
-  transition: 0.2s ease;      
+  background-color: #c7c7c7ff;
+  color: #333;
+  transition: 0.2s ease;
 }
 
 
 .btn-delete {
-  
+
   background-color: #c82333;
   padding: 15px 55px;
   color: white;
@@ -150,8 +153,8 @@ h5{
 
 .btn-delete:hover  {
   background-color: #dc3545;
-  color: white;     
-  transition: 0.2s ease;      
+  color: white;
+  transition: 0.2s ease;
 }
 
 .btn-delete-modal{
@@ -162,38 +165,39 @@ h5{
 
 .btn-delete-modal:hover {
   background-color: #dc3545;
-  color: white;     
-  transition: 0.2s ease;      
+  color: white;
+  transition: 0.2s ease;
 }
 
 #emptyModal button {
   padding: 12px 30px;
   font-size: 18px;
-  background-color: #8d8c89e9; 
+  background-color: #8d8c89e9;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    
+
 }
 
 #emptyModal button:hover {
-  background-color: #c5c4c2e9;!important; 
-  color: white;           
-  transition: 0.2s ease;      
-} 
+  background-color: #c5c4c2e9;!important;
+  color: white;
+  transition: 0.2s ease;
+}
 
 .container-bottom-space {
   padding-bottom: 30px;
-} 
+}
+
 
 
 </style>
 
 <h4>{{ year }}年{{ month }}月の振り返り</h4>
 
-<div class="container container-bottom-space"> 
+<div class="container container-bottom-space">
   <div class="container  text-center">
   {% if messages %}
     {% for message in messages %}
@@ -202,36 +206,36 @@ h5{
   {% endif %}
   </div>
 
-  <div class="edit-btn">
+  <div class="navigation">
     <h5>
         <a href="{% url 'diary_app:reflection' month_previous.year month_previous.month %}"  class="triangle-link">
              <div class="triangle-left"></div>
         </a>
          {{ month_current | date:"Y年m月"}}
-        
+
         <a href="{% url 'diary_app:reflection' month_next.year month_next.month %}" class="triangle-link">
              <div class="triangle-right"></div>
         </a>
-      </h5> 
-  </div> 
+      </h5>
+  </div>
 
 
 <div class="table-container">
-<h5>1週間ごとの振り返り</h5> 
-<div class="d-flex justify-content-end mb-2"> 
+<h5>1週間ごとの振り返り</h5>
+<div class="d-flex justify-content-end mb-2">
   <button type="button" class="btn btn- btn btn-input-edit"
         onclick="location.href='{% url 'diary_app:edit_reflection' year=year month=month %}'">
     振り返りを入力・編集
   </button>
-</div>   
+</div>
 <table>
     <colgroup>
-    <col span="7" style="width: 7%;"> 
-    <col style="width: 17%;"> 
-    <col style="width: 17%;"> 
-    <col style="width: 17%;"> 
+    <col span="7" style="width: 7%;">
+    <col style="width: 10%;">
+    <col style="width: 10%;">
+    <col style="width: 10%;">
     </colgroup>
-    <thead>              
+    <thead>
         <tr>
           <th>月</th>
           <th>火</th>
@@ -246,46 +250,46 @@ h5{
         </tr>
     </thead>
     <tbody>
-        {% for week_num, data in weeks.items %}
+         {% for week_num, data in weeks.items %}
           <tr>
               {% for day,diary in data.days_diaries %}
                   <td>
                     {% if month_current.month != day.month %}
                       <div style= "font-size:14px; color:#B0C4DE; margin-bottom:5px;font-weight: bold; ">{{ day.day }}</div>
-                    {% else %}  
+                    {% else %}
                       <div style= "font-size:14px; color:#0000EE; margin-bottom:5px; font-weight: bold;">{{ day.day }}</div>
-                    {% endif %}  
+                    {% endif %}
                     {% if diary %}
                       {% for success in diary.success_list %}
                         <span style="white-space: nowrap;">・{{ success.label|slice:":1" }}</span>{{ success.label|slice:"1:" }}<br>
                       {% endfor %}
-                    {% endif %}           
+                    {% endif %}
                   </td>
-              {% endfor %}      
+              {% endfor %}
                <td>{{ data.reflection.highlight|default_if_none:""|linebreaksbr }}</td>
                <td>{{ data.reflection.reason|default_if_none:""|linebreaksbr }}</td>
                <td>{{ data.reflection.next_plan|default_if_none:""|linebreaksbr }}</td>
-          </tr>    
-        {% endfor %}
+          </tr>
+          {% endfor %}
     </tbody>
 </table>
 </div>
-<h5>今月の振り返り</h5>      
+<h5>今月の振り返り</h5>
   <div style="margin-top: 30px;">
-      <p><strong>■各週のハイライトに共通する点</strong><br> 
-      {% if month_reflection and month_reflection.common_ground %}   
+      <p><strong>■各週のハイライトに共通する点</strong><br>
+      {% if month_reflection and month_reflection.common_ground %}
         <p>{{ month_reflection.common_ground|default_if_none:""|linebreaksbr }}</p>
       {% else %}
         <p>まだ記入されていません。</p>
-      {% endif %}  
-      <p><strong>■自分の価値観や大切にしていること</strong><br> 
-      {% if month_reflection and month_reflection.my_values  %}   
+      {% endif %}
+      <p><strong>■自分の価値観や大切にしていること</strong><br>
+      {% if month_reflection and month_reflection.my_values  %}
         <p>{{ month_reflection.my_values|default_if_none:""|linebreaksbr }}</p>
       {% else %}
         <p>まだ記入されていません。</p>
-      {% endif %}    
-      <p><strong>■その他気づいたこと</strong><br> 
-      {% if month_reflection and month_reflection.awareness %}     
+      {% endif %}
+      <p><strong>■その他気づいたこと</strong><br>
+      {% if month_reflection and month_reflection.awareness %}
         <p>{{ month_reflection.awareness|default_if_none:""|linebreaksbr }}</p>
       {% else %}
         <p>まだ記入されていません。</p>
@@ -293,7 +297,7 @@ h5{
   </div>
 
   <div class="button-group">
-  {% if month_reflection or  data.reflection %}  
+  {% if month_reflection or  data.reflection %}
     <button type="button" class="btn btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal-{{diary.id}}">
       削除
     </button>
@@ -303,7 +307,7 @@ h5{
     </button>
   {% endif %}
   </div>
-</div>   
+</div>
 
           <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal-{{diary.id}}">
             <div class="modal-dialog" role="document">

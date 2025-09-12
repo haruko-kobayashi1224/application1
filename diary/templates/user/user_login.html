@@ -5,12 +5,12 @@
   
   body {
     margin: 0;
-    padding: 0;
     height: 100vh;
     display: flex;
     align-items: center;  
     justify-content: center;  
-    background-color: #E0FFFF;  
+    background-color: #E0FFFF; 
+    padding-bottom: 30px;   
   }
 
   .form-container {
@@ -68,9 +68,10 @@ label {
   margin-bottom: 15px;
   text-align: left;
 }
+
 </style>
 
-  
+
 <div class="form-container">
   <div class="form-title">できたこと日記</div>
   <div class="message-container">
@@ -103,5 +104,6 @@ label {
     <nav>
      <a href="{% url 'diary_app:regist' %}">新規登録はこちら</a>
     </nav>  
+</div>
 </div>
 {% endblock %}
