@@ -35,7 +35,7 @@
   width: 100%;
   table-layout: fixed; 
   border-collapse: collapse;
-  margin-top: 15px;
+  margin-top: 5px;
   {% comment %} margin-bottom: 50px;   {% endcomment %}
 }
 
@@ -137,12 +137,19 @@
   padding-bottom: 50px;  
 }
 
+h4 {
+  padding-top: 10px;
+}
+
+
+
+
 
 </style>
 
 {% if user.is_authenticated %}
 <div class="container">
-<p style= "font-weight: bold; font-size: 16px; margin-bottom: 5px;">★今日自分ができたことを書いてみましょう</p>
+<p style= "font-weight: bold; font-size: 16px; margin-bottom: 15px;">★今日自分ができたことを書いてみましょう</p>
     <div class="container  text-center">
       {% if messages %}
         {% for message in messages %}
