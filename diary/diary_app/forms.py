@@ -73,7 +73,6 @@ class UserMyPageForm(forms.ModelForm):
             }),
         }
     
-    
 class PasswordChangeForm(forms.ModelForm):
     current_password = forms.CharField(
          label="現在のパスワード", 
@@ -194,17 +193,17 @@ class WeekReflectionForm(forms.ModelForm):
         fields = ('highlight', 'reason', 'next_plan',)
         widgets = {
            'highlight' : forms.Textarea(
-               attrs={'placeholder': '例：プログラミングの勉強が2時間できた（150文字以内）',
+               attrs={'placeholder': '150字以内書いてください 例：プログラミングの勉強が2時間できた',
                       'rows': 6, 
                       'cols':15},
            ),
            'reason' : forms.Textarea(
-               attrs={'placeholder': '例：スキマ時間を使って学習したから（150文字以内）',
+               attrs={'placeholder': '150字以内書いてください 例：スキマ時間を使って学習したから',
                       'rows': 6, 
                       'cols':15},
            ),
            'next_plan' : forms.Textarea(
-               attrs={ 'placeholder': '例：もっと学習できるように、スマートフォンを自室に置かずに勉強をする（150文字以内）',
+               attrs={ 'placeholder': '150字以内書いてください 例：もっと学習できるように、スマートフォンを自室に置かずに勉強をする',
                        'rows': 6, 
                        'cols':15},
            )
@@ -233,15 +232,15 @@ class MonthReflectionForm(forms.ModelForm):
         fields = ('common_ground', 'my_values', 'awareness',)
         widgets = {
            'common_ground' : forms.Textarea(
-               attrs={'placeholder': '例：現実の課題に向き合えた（150文字以内）', 
+               attrs={'placeholder':  '150字以内書いてください 例：現実の課題に向き合えた', 
                       'rows': 4, 'cols':90},
            ),
            'my_values' : forms.Textarea(
-               attrs={'placeholder': '例：苦手なことでも1歩ずつ課題を達成する（150文字以内）',
+               attrs={'placeholder': '150字以内書いてください 例：苦手なことでも1歩ずつ課題を達成する',
                       'rows': 4, 'cols':90},
            ),
            'awareness' : forms.Textarea(
-               attrs={'placeholder': '例：目の前の課題をクリアしたら、生活が充実するようになった（150文字以内）', 
+               attrs={'placeholder': '150字以内書いてください 例：目の前の課題をクリアしたら、生活が充実するようになった', 
                       'rows': 4, 'cols':90},
            )
         }
