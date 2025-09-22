@@ -27,18 +27,15 @@
 
  .table-container {
   overflow-x: auto;
+  overflow-y: auto;
+  max-height: 600px;
   margin-top: 20px;
 }
 
 table {
-  {% comment %} border-collapse: collapse;
-  min-width: 1200px;
   width: 100%;
-  table-layout: fixed;
-  font-size: 14px; {% endcomment %}
-  width: 100%;        
-  min-width: auto;    
-  table-layout: auto; 
+  min-width: auto;
+  table-layout: auto;
   font-size: 14px;
 }
 
@@ -65,7 +62,9 @@ th {
     padding: 5px;
     height: 60px;
     font-size: 16px;
-    
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 
 td {
@@ -105,7 +104,7 @@ h5{
   min-width: 100px;
   gap: 10px;
   padding: 10px 25px;
-  font-size: 20px;
+  font-size: 1.2rem;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
@@ -146,6 +145,7 @@ h5{
 
 
 .btn-delete {
+
   background-color: #c82333;
   padding: 15px 55px;
   color: white;
@@ -219,7 +219,6 @@ h5{
   </div>
 
 
-<div class="table-container">
 <h5>1週間ごとの振り返り</h5>
 <div class="d-flex justify-content-end mb-2">
   <button type="button" class="btn btn- btn btn-input-edit"
@@ -227,6 +226,7 @@ h5{
     振り返りを入力・編集
   </button>
 </div>
+<div class="table-container">
 <table>
     <colgroup>
     <col span="7" style="width: 7%;">

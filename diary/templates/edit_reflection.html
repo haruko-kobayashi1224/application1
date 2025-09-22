@@ -3,63 +3,34 @@
 
 <style>
 
-{% comment %} .table-container {
-  overflow-x: auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  scrollbar-width: auto;
-  -ms-overflow-style: auto;
-}
-
-
-.table-container::-webkit-scrollbar {
-  height: 8px;
-}
-
-.table-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.table-container::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px;
-}
-
-.table-container::-webkit-scrollbar-thumb:hover {
-  background: #555;
-} {% endcomment %}
 
 .table-container {
   overflow-x: auto;
+  overflow-y: auto;
+  max-height: 600px;
   margin-top: 20px;
-  margin-bottom: 20px;
-  width: 100%; 
 }
 
 table {
-  {% comment %} border-collapse: collapse;
   width: 100%;
-  table-layout: fixed; {% endcomment %}
-  width: 100%;        /* ←これを追加 */
-  min-width: auto;    /* ←1200pxを消す */
-  table-layout: auto; 
+  min-width: auto;
+  table-layout: auto;
   font-size: 14px;
 }
 
 colgroup col {
-  width: auto; 
+  width: auto;
 }
 
 th, td {
   border: 1px solid #8d8c89e9;
-  padding: 8px 12px;
+  padding: 8px ;
   vertical-align: top;
   word-break: break-word;
   white-space: normal;
   overflow-wrap: break-word;
   line-height: 1.2;
   overflow: auto;
-  {% comment %} overflow: visible; {% endcomment %}
 }
 
 
@@ -69,8 +40,11 @@ th {
   font-weight: bold;
   text-align: center;
   padding: 5px;
-  height: 60px;    
+  height: 60px;
   font-size: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 td {
@@ -78,18 +52,12 @@ td {
     background-color: #ffffff;
 }
 
-{% comment %} .navigation h4 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-} {% endcomment %}
 
  h4 {
     gap: 10px;
     margin-top: 20px;
     margin-bottom: 30px;
-  }
+}
 
 .button-area {
   margin-top: 40px;
@@ -142,8 +110,8 @@ textarea {
   line-height: 1.4;
   box-sizing: border-box;
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-  min-height: 100px; 
-  overflow: hidden; 
+  min-height: 100px;
+  overflow: hidden;
   resize: vertical;
 }
 
@@ -161,10 +129,11 @@ textarea {
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
 }
 
+
 #emptyModal{
     display:none;
     position:fixed;
-    flex-direction: column;  
+    flex-direction: column;
     top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -194,30 +163,30 @@ textarea {
     display: inline-block;
     width: auto;
     min-width: unset;
-    max-width: 100px; 
+    max-width: 100px;
     margin: 0 auto;
 }
 
 #emptyModal button:hover {
-  background-color: #c5c4c2e9;!important; 
-  color: white;           
-  transition: 0.2s ease;      
+  background-color: #c5c4c2e9;!important;
+  color: white;
+  transition: 0.2s ease;
 }
 
 .container-bottom-space {
   padding-bottom: 50px;
-} 
+}
 
 
 </style>
 
 <h4>{{ year }}年{{ month }}月の振り返り編集</h4>
-<div class="container container-bottom-space"> 
+<div class="container container-bottom-space">
   <form method="post" id="reflectionForm">
     {% csrf_token %}
     {{ week_formset.management_form }}
-   <div class="table-container">
     <h5>1週間ごとの振り返り</h5>
+   <div class="table-container">
      <table>
        <colgroup>
         <col span="7" style="width: 8%;">
@@ -279,14 +248,14 @@ textarea {
         <p><strong>■その他気づいたこと</strong><br>
         {{ month_form.awareness }}</p>
       </div>
-    </div>  
+    </div>
 
    <div class="button-area">
      <button type="button" class="btn btn-cancel" onclick="location.href='{% url 'diary_app:reflection' year=year month=month  %}'">
       キャンセル
      </button>
      <button type="submit" class="btn btn-save">保存</button>
-    </div>  
+    </div>
   </form>
 </div>
 
@@ -296,7 +265,7 @@ textarea {
 </div>
 
 <script>
-const form = document.getElementById('reflectionForm'); 
+const form = document.getElementById('reflectionForm');
 const modal = document.getElementById('emptyModal');
 const modalCloseBtn = document.getElementById('modalCloseBtn');
 
@@ -325,7 +294,6 @@ modalCloseBtn.addEventListener('click', function() {
 });
 
 </script>
-
 
 {% endblock %}
 
