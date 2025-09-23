@@ -26,8 +26,8 @@
  }
 
  .table-container {
-  overflow-x: auto;
-  overflow-y: auto;
+  
+  
   max-height: 600px;
   margin-top: 20px;
 }
@@ -35,8 +35,11 @@
 table {
   width: 100%;
   min-width: auto;
-  table-layout: auto;
+  {% comment %} table-layout: auto; {% endcomment %}
   font-size: 14px;
+  border-spacing: 0;
+  table-layout: fixed; 
+  
 }
 
 th, td {
@@ -49,14 +52,13 @@ th, td {
   line-height: 1.2;
   height: 80px;
   max-height: 80px;
-  overflow: auto;
-
+  
 }
 
 
-th {
+thead th {
     vertical-align: middle;
-    background-color: #befafaff;
+    {% comment %} background-color: rgb(190, 250, 250); {% endcomment %}
     font-weight: bold;
     text-align: center;
     padding: 5px;
@@ -64,12 +66,71 @@ th {
     font-size: 16px;
     position: sticky;
     top: 0;
-    z-index: 2;
+    {% comment %} z-index: 1; {% endcomment %}
+    background: none;
+    border-top: none;
+    border-bottom: none;
+    {% comment %} border: 1px solid #8d8c89e9; {% endcomment %}
+}
+
+thead th::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    {% comment %} display: block; {% endcomment %}
+    {% comment %} border: 1px solid #8d8c89e9; {% endcomment %}
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    box-sizing: content-box;
+    z-index: -1;
+    border-top: 1px solid #8d8c89e9;
+    border-bottom: 1px solid #8d8c89e9;
+    background-color: rgb(190, 250, 250);
+  }
+
+
+
+
+.col-1 { width: 8%; }
+.col-2 { width: 8%; }
+.col-3 { width: 8%; }
+.col-4 { width: 8%; }
+.col-5 { width: 8%; }
+.col-6 { width: 8%; }
+.col-7 { width: 8%; }
+.col-8 { width: 14%; }
+.col-9 { width: 14%; }
+.col-10 { width: 16%; }
+
+
+
+{% comment %} .th:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-top: 1px solid #8d8c89e9;
+  border-bottom: 1px solid #8d8c89e9;
+  background: #befafaff;
+  z-index: -1;
+} {% endcomment %}
+
+
+th:first-child {
+  background-color: rgb(190, 250, 250); /* 1列目も背景を固定 */
+  position: sticky;
+  top: 0px;
+  /* ヘッダーより上にする */
 }
 
 td {
     max-height: 100px;
     background-color: #ffffff;
+    border: 1px solid #8d8c89e9;
+  
 
 }
 
@@ -228,24 +289,24 @@ h5{
 </div>
 <div class="table-container">
 <table>
-    <colgroup>
+    {% comment %} <colgroup>
     <col span="7" style="width: 7%;">
     <col style="width: 10%;">
     <col style="width: 10%;">
     <col style="width: 10%;">
-    </colgroup>
+    </colgroup> {% endcomment %}
     <thead>
         <tr>
-          <th>月</th>
-          <th>火</th>
-          <th>水</th>
-          <th>木</th>
-          <th>金</th>
-          <th>土</th>
-          <th>日</th>
-          <th>今週のハイライト</th>
-          <th>できた理由</th>
-          <th>今後はどのような<br>工夫をしたらよいか</th>
+          <th class="col-1">月</th>
+          <th class="col-2">火</th>
+          <th class="col-3">水</th>
+          <th class="col-4">木</th>
+          <th class="col-5">金</th>
+          <th class="col-6">土</th>
+          <th class="col-7">日</th>
+          <th class="col-8">今週のハイライト</th>
+          <th class="col-9">できた理由</th>
+          <th class="col-10">今後はどのような<br>工夫をしたらよいか</th>
         </tr>
     </thead>
     <tbody>

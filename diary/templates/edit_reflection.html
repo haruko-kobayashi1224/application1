@@ -18,25 +18,25 @@ table {
   font-size: 14px;
 }
 
-colgroup col {
+{% comment %} colgroup col {
   width: auto;
-}
+} {% endcomment %}
 
 th, td {
   border: 1px solid #8d8c89e9;
-  padding: 8px ;
+  padding: 8px 8px;
   vertical-align: top;
   word-break: break-word;
   white-space: normal;
   overflow-wrap: break-word;
   line-height: 1.2;
-  overflow: auto;
+  {% comment %} overflow: auto; {% endcomment %}
 }
 
 
-th {
+thead th {
   vertical-align: middle;
-  background-color: #befafaff;
+  {% comment %} background-color: #befafaff; {% endcomment %}
   font-weight: bold;
   text-align: center;
   padding: 5px;
@@ -44,12 +44,43 @@ th {
   font-size: 16px;
   position: sticky;
   top: 0;
-  z-index: 2;
+  background: none;
+  border-top: none;
+  border-bottom: none;  
 }
+
+thead th::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    {% comment %} display: block; {% endcomment %}
+    {% comment %} border: 1px solid #8d8c89e9; {% endcomment %}
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    box-sizing: content-box;
+    z-index: -1;
+    border-top: 1px solid #8d8c89e9;
+    border-bottom: 1px solid #8d8c89e9;
+    background-color: #befafaff;
+  }
+
+.col-1 { width: 8%; }
+.col-2 { width: 8%; }
+.col-3 { width: 8%; }
+.col-4 { width: 8%; }
+.col-5 { width: 8%; }
+.col-6 { width: 8%; }
+.col-7 { width: 8%; }
+.col-8 { width: 14%; }
+.col-9 { width: 14%; }
+.col-10 { width: 16%; }  
+
 
 td {
     max-height: 100px;
     background-color: #ffffff;
+    border: 1px solid #8d8c89e9;
 }
 
 
@@ -188,24 +219,24 @@ textarea {
     <h5>1週間ごとの振り返り</h5>
    <div class="table-container">
      <table>
-       <colgroup>
+       {% comment %} <colgroup>
         <col span="7" style="width: 8%;">
         <col style="width: 14%;">
         <col style="width: 14%;">
         <col style="width: 16%;">
-       </colgroup>
+       </colgroup> {% endcomment %}
        <thead>
           <tr>
-            <th>月</th>
-            <th>火</th>
-            <th>水</th>
-            <th>木</th>
-            <th>金</th>
-            <th>土</th>
-            <th>日</th>
-            <th>今週のハイライト</th>
-            <th>できた理由</th>
-            <th>今後はどのような<br>工夫をしたらよいか</th>
+            <th class="col-1">月</th>
+            <th class="col-2">火</th>
+            <th class="col-3">水</th>
+            <th class="col-4">木</th>
+            <th class="col-5">金</th>
+            <th class="col-6">土</th>
+            <th class="col-7">日</th>
+            <th class="col-8">今週のハイライト</th>
+            <th class="col-9">できた理由</th>
+            <th class="col-10">今後はどのような<br>工夫をしたらよいか</th>
           </tr>
         </thead>
         <tbody>
